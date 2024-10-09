@@ -7,6 +7,7 @@ import { cookieToInitialState } from 'wagmi'
 
 import { getConfig } from '../wagmi'
 import { Providers } from './providers'
+import Nav from '@/components/layout/Nav'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,10 +18,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout(props: { children: ReactNode }) {
   const initialState = cookieToInitialState(getConfig(), headers().get('cookie'))
+
   return (
-    <html lang='en'>
+    <html lang='en' suppressHydrationWarning>
       <body className={`${inter.className} antialiased`}>
-        <Providers initialState={initialState}>{props.children}</Providers>
+        <Providers initialState={initialState}>
+          <Nav />
+
+          {props.children}
+        </Providers>
       </body>
     </html>
   )
