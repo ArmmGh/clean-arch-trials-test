@@ -1,3 +1,5 @@
+'use client'
+
 import { useAccount, useDisconnect } from 'wagmi'
 import { Button } from '@/components/ui/button'
 import { trimAddress } from '@/app/utils/trimAddress'
@@ -17,7 +19,7 @@ export default function AccountDialog() {
   const { disconnect } = useDisconnect()
 
   return (
-    <div className='flex items-center gap-1'>
+    <div className='flex items-center gap-1' suppressHydrationWarning={true}>
       <Dialog>
         <DialogTrigger asChild>
           <Button variant={'outline'} className='flex gap-1'>

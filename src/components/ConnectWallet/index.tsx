@@ -1,6 +1,6 @@
 'use client'
 
-import { useAccount, useConnect } from 'wagmi'
+import { useAccount } from 'wagmi'
 import ConnectWalletDialog from './ConnectWalletDialog'
 import AccountDialog from './AccountDialog'
 

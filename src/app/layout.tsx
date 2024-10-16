@@ -5,9 +5,10 @@ import { headers } from 'next/headers'
 import { type ReactNode } from 'react'
 import { cookieToInitialState } from 'wagmi'
 
-import { getConfig } from '../wagmi'
 import { Providers } from './providers'
 import Nav from '@/components/layout/Nav'
+import { Toaster } from '@/components/ui/toaster'
+import { getConfig } from '@/lib/config/wagmi'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,10 +24,14 @@ export default function RootLayout(props: { children: ReactNode }) {
     <html lang='en' suppressHydrationWarning>
       <body className={`${inter.className} antialiased`}>
         <Providers initialState={initialState}>
-          <Nav />
+          {/* bg-gray-900 */}
+          <div className='flex h-screen flex-col'>
+            <Nav />
 
-          {props.children}
+            {props.children}
+          </div>
         </Providers>
+        <Toaster />
       </body>
     </html>
   )
