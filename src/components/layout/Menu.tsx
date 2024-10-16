@@ -3,21 +3,17 @@
 import {
   NavigationMenu,
   NavigationMenuContent,
-  NavigationMenuIndicator,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-  NavigationMenuViewport,
 } from '@/components/ui/navigation-menu'
 import Link from 'next/link'
 import { useAccount } from 'wagmi'
+import { ListItem } from '../ListItem'
 
 export default function Menu() {
   const { isConnected } = useAccount()
-
-  console.log('isConnected: ', isConnected)
 
   if (!isConnected) return null
 
@@ -26,13 +22,16 @@ export default function Menu() {
       <NavigationMenuList>
         <NavigationMenuItem>
           <Link href='/dashboard' legacyBehavior passHref>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>Dashboard</NavigationMenuLink>
+            <NavigationMenuTrigger className={navigationMenuTriggerStyle()}>Dashboard</NavigationMenuTrigger>
           </Link>
 
-          {/* <NavigationMenuTrigger>Dashboard</NavigationMenuTrigger> */}
-          {/* <NavigationMenuContent>
-            <NavigationMenuLink>Create Post</NavigationMenuLink>
-          </NavigationMenuContent> */}
+          <NavigationMenuContent className=''>
+            <ul className='bg-red flex w-[300px] flex-col'>
+              <ListItem className='w-full' title='Create Article' href='/dashboard/create-article'>
+                Mint NFT of your Article
+              </ListItem>
+            </ul>
+          </NavigationMenuContent>
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>

@@ -1,9 +1,12 @@
-export default function Dashboard() {
-  return (
-    <main className='mx-auto max-w-screen-xl'>
-      <title>Dashboard</title>
+import Main from '@/components/layout/Main'
+import DashboardArticles from './components/DashboardArticles'
 
-      <div></div>
-    </main>
+export default async function Dashboard() {
+  return (
+    <Main className='flex flex-col items-center'>
+      <header>Dashboard</header>
+
+      <DashboardArticles />
+    </Main>
   )
 }
