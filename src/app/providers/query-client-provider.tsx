@@ -1,6 +1,6 @@
 'use client'
 
-import { isServer, QueryClient, QueryClientProvider as WagmiQueryClientProvider } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider as WagmiQueryClientProvider, isServer } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 function makeQueryClient() {
@@ -19,7 +19,6 @@ let browserQueryClient: QueryClient | undefined = undefined
 
 export function getQueryClient() {
   if (isServer) {
-    console.log("----- Tanstack ------ I'm on the server")
     // Server: always make a new query client
     return makeQueryClient()
   } else {
@@ -27,7 +26,6 @@ export function getQueryClient() {
     // This is very important, so we don't re-make a new client if React
     // suspends during the initial render. This may not be needed if we
     // have a suspense boundary BELOW the creation of the query client
-    console.log("----- Tanstack ------ I'm on the client")
     if (!browserQueryClient) browserQueryClient = makeQueryClient()
     return browserQueryClient
   }

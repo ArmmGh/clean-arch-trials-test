@@ -1,32 +1,88 @@
 export const factoryAbi = [
   {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_metadataAttributes',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'nonpayable',
+    type: 'constructor',
+  },
+  {
     anonymous: false,
     inputs: [
       {
         indexed: true,
         internalType: 'address',
-        name: 'user',
+        name: 'publisher',
         type: 'address',
       },
       {
         indexed: false,
         internalType: 'address',
-        name: 'erc721Address',
+        name: 'channel',
         type: 'address',
       },
     ],
-    name: 'UserRegistered',
+    name: 'PublisherRegistered',
     type: 'event',
   },
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'channels',
+    outputs: [
+      {
         internalType: 'address',
-        name: '_user',
+        name: '',
         type: 'address',
       },
     ],
-    name: 'getUserERC721Address',
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getAllChannels',
+    outputs: [
+      {
+        internalType: 'address[]',
+        name: '',
+        type: 'address[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_publisher',
+        type: 'address',
+      },
+    ],
+    name: 'getChannels',
+    outputs: [
+      {
+        internalType: 'address[]',
+        name: '',
+        type: 'address[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'metadataAttributes',
     outputs: [
       {
         internalType: 'address',
@@ -40,19 +96,25 @@ export const factoryAbi = [
   {
     inputs: [
       {
-        internalType: 'string',
-        name: 'nftName',
-        type: 'string',
+        internalType: 'address',
+        name: '',
+        type: 'address',
       },
       {
-        internalType: 'string',
-        name: 'description',
-        type: 'string',
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
       },
     ],
-    name: 'register',
-    outputs: [],
-    stateMutability: 'nonpayable',
+    name: 'publisherToChannels',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -63,7 +125,7 @@ export const factoryAbi = [
         type: 'uint256',
       },
     ],
-    name: 'userAddresses',
+    name: 'publishers',
     outputs: [
       {
         internalType: 'address',
@@ -77,25 +139,19 @@ export const factoryAbi = [
   {
     inputs: [
       {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    name: 'users',
-    outputs: [
-      {
-        internalType: 'address',
-        name: 'userAddress',
-        type: 'address',
+        internalType: 'string',
+        name: '_channelName',
+        type: 'string',
       },
       {
-        internalType: 'address',
-        name: 'erc721Address',
-        type: 'address',
+        internalType: 'string',
+        name: '_channelDescription',
+        type: 'string',
       },
     ],
-    stateMutability: 'view',
+    name: 'register',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
 ] as const

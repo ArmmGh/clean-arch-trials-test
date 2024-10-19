@@ -26,7 +26,10 @@ export default function Menu() {
           </Link>
 
           <NavigationMenuContent className=''>
-            <ul className='bg-red flex w-[300px] flex-col'>
+            <ul className='grid w-[320px] gap-1 p-3'>
+              <ListItem className='w-full' title='Create Channel' href='/dashboard/create-channel'>
+                Create NFT Collection for your Articles
+              </ListItem>
               <ListItem className='w-full' title='Create Article' href='/dashboard/create-article'>
                 Mint NFT of your Article
               </ListItem>

@@ -1,14 +1,14 @@
-import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { headers } from 'next/headers'
 import { type ReactNode } from 'react'
 import { cookieToInitialState } from 'wagmi'
+import './globals.css'
 
-import { Providers } from './providers'
 import Nav from '@/components/layout/Nav'
 import { Toaster } from '@/components/ui/toaster'
 import { getConfig } from '@/lib/config/wagmi'
+import { Providers } from './providers'
 
 const inter = Inter({ subsets: ['latin'] })
 

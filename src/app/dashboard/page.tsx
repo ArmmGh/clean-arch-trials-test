@@ -1,12 +1,22 @@
-import Main from '@/components/layout/Main'
-import DashboardArticles from './components/DashboardArticles'
+import DashboardChannels from './components/DashboardChannels'
+import NoChannels from './components/NoChannels'
+import getPublisherAllChannelsAction from '@/app/actions/getPublisherAllChannels.action'
+import { getPublisherAddressFromSession } from '@/lib/utils/getPublisherAddressFromSession'
 
 export default async function Dashboard() {
-  return (
-    <Main className='flex flex-col items-center'>
-      <header>Dashboard</header>
+  const publisherAddress = getPublisherAddressFromSession()
+  const channels = await getPublisherAllChannelsAction({ publisherAddress })
 
-      <DashboardArticles />
-    </Main>
+  return (
+    <div className='mx-auto flex w-full max-w-screen-xl flex-1 flex-col overflow-hidden py-6'>
+      {channels.length === 0 ? (
+        <NoChannels />
+      ) : (
+        <>
+          <h1 className='mb-4 px-4 text-xl font-bold'>My Channels</h1>
+          <DashboardChannels addressFromCookie={publisherAddress} channels={channels} />
+        </>
+      )}
+    </div>
   )
 }

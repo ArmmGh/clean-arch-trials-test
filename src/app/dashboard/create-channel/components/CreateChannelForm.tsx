@@ -12,9 +12,13 @@ import { useToast } from '@/hooks/use-toast'
 import { useState } from 'react'
 import { Loader2 } from 'lucide-react'
 import { ContractFunctionExecutionError, ContractFunctionRevertedError, TransactionExecutionError } from 'viem'
+import { useRouter } from 'next/navigation'
+import { revalidateTag } from 'next/cache'
 
-export default function RegisterPublisherForm({ refetch }: { refetch: () => void }) {
+// export default function CreateChannelForm({ refetch }: { refetch: () => void }) {
+export default function CreateChannelForm() {
   const { toast } = useToast()
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const form = useForm<z.infer<typeof registerPublisherSchema>>({
     resolver: zodResolver(registerPublisherSchema),
@@ -30,16 +34,16 @@ export default function RegisterPublisherForm({ refetch }: { refetch: () => void
       setIsLoading(true)
 
       await writeContractAsync({ args: [values.nftName, values.description] })
+      // TODO: add waiting mechanism client or server side to revalidate data
 
       toast({
         title: 'Success',
         description: 'You have successfully registered as a publisher.',
       })
 
-      refetch()
+      // revalidateTag('channels')
+      router.push('/dashboard')
     } catch (error) {
-      console.dir(error)
-
       let description
 
       if (error instanceof ContractFunctionExecutionError) {
@@ -52,8 +56,10 @@ export default function RegisterPublisherForm({ refetch }: { refetch: () => void
         }
       }
 
+      console.error(error)
+
       if (!description) {
-        description = 'Something went wrong while registering as a publisher.'
+        description = 'Something went wrong while creating Channel'
       }
 
       toast({
@@ -67,9 +73,11 @@ export default function RegisterPublisherForm({ refetch }: { refetch: () => void
   }
 
   return (
-    <div className='mx-auto max-w-2xl rounded-lg p-4 shadow-lg'>
-      <h2 className='text-lg font-semibold'>Register as publisher</h2>
-      <p className='text-sm text-gray-600'>You need to register as a publisher to create articles.</p>
+    <div className='mx-auto max-w-2xl rounded-lg p-4 shadow-lg dark:border'>
+      <h2 className='text-lg font-semibold'>Create a Channel</h2>
+      <p className='text-sm text-gray-600 dark:text-muted-foreground'>
+        You need to create a channel to become a publisher and add articles to channel.
+      </p>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='mt-8 space-y-8'>
@@ -78,13 +86,11 @@ export default function RegisterPublisherForm({ refetch }: { refetch: () => void
             name='nftName'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>NFT Collection Name</FormLabel>
+                <FormLabel>Channel Name</FormLabel>
                 <FormControl>
-                  <Input placeholder='My Interesting name' {...field} />
+                  <Input placeholder='Interesting Name' {...field} />
                 </FormControl>
-                <FormDescription>
-                  This is the name of the NFT collection you want to publish articles under.
-                </FormDescription>
+                <FormDescription>Name of the NFT collection.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -94,18 +100,16 @@ export default function RegisterPublisherForm({ refetch }: { refetch: () => void
             name='description'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>NFT Description</FormLabel>
+                <FormLabel>Channel Description</FormLabel>
                 <FormControl>
-                  <Input placeholder='My pretty description' {...field} />
+                  <Input placeholder='Attractive Description' {...field} />
                 </FormControl>
-                <FormDescription>
-                  This is the description of the NFT collection you want to publish articles under.
-                </FormDescription>
+                <FormDescription>Description of the NFT collection.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type='submit' disabled={isLoading}>
+          <Button type='submit' className='w-full' disabled={isLoading}>
             {isLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />} Submit
           </Button>
         </form>

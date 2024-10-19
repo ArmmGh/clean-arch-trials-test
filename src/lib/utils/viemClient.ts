@@ -1,6 +1,6 @@
-import { createPublicClient, http } from 'viem'
-import { getSupportedChains, defaultChain } from '@/lib/config/chains'
+import { defaultChain, getSupportedChains } from '@/lib/config/chains'
 import { transports } from '@/lib/config/transports'
+import { createPublicClient, http } from 'viem'
 
 export function createViemClient() {
   const supportedChains = getSupportedChains()

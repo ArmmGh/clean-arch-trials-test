@@ -1,31 +1,39 @@
 import Article from './Article'
-import { getAddress } from 'viem'
-import getArticlesByChannelIdAction from '@/app/actions/getArticlesByChannelId.action'
-import type { Channel } from '@/entities/models/channel'
 import { Loader2 } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
+import { getAddress } from 'viem'
+import getArticlesByChannelAddressAction from '@/app/actions/getArticlesByChannelAddress.action'
+import { useAccount } from 'wagmi'
+import NoArticles from '@/app/dashboard/components/NoArticles'
 
-export default function Articles({ activeChannel }: { activeChannel: any }) {
-  const activeAddress = activeChannel?.address
-  const activeOwner = activeChannel?.owner
+export default function Articles({ channelAddress, channelOwner }: { channelAddress: string; channelOwner: string }) {
+  const { address } = useAccount()
   const { data: articles = [], isLoading } = useQuery({
-    queryKey: ['articles-by-channel-id', { address: activeAddress, owner: activeOwner }],
-    queryFn: () =>
-      getArticlesByChannelIdAction({ channelId: getAddress(activeChannel.address), owner: activeChannel.owner }),
-    enabled: !!activeChannel && !!activeAddress && !!activeOwner,
+    queryKey: ['articles-by-channel-address', { channelAddress, channelOwner }],
+    queryFn: () => getArticlesByChannelAddressAction({ channelAddress: getAddress(channelAddress) }),
+    enabled: !!channelAddress && !!channelOwner,
     staleTime: 1000 * 60 * 10, // 10 minutes - keep the data fresh for 10 minutes
     gcTime: 1000 * 60 * 60,
   })
 
+  const isOwner = channelOwner === address
+
   if (isLoading) {
     return (
-      <div className='flex h-full items-center justify-center'>
+      <div className='flex h-full justify-center'>
         <Loader2 className='h-10 w-10 animate-spin' />
       </div>
     )
   }
 
+  if (!articles.length) {
+    return <NoArticles isOwner={isOwner} channelAddress={channelAddress} />
+  }
+
   return (
-    <div className='grid gap-6'>{articles?.map((article: any) => <Article key={article.id} article={article} />)}</div>
+    <div className='grid gap-6'>
+      {/* {isOwner && (<Button>Create Article</Button>)} */}
+      {articles?.map((article: any) => <Article key={article.date} {...article} />)}
+    </div>
   )
 }

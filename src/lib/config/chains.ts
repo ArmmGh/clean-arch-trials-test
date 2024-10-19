@@ -1,4 +1,4 @@
-import { bahamut, hardhat, type Chain } from 'wagmi/chains'
+import { type Chain, bahamut, hardhat } from 'wagmi/chains'
 
 const availableChains: Record<Chain['id'], Chain> = {
   [bahamut.id]: bahamut,

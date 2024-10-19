@@ -3,21 +3,26 @@
 import type { Channel } from '@/entities/models/channel'
 import { Circle, Star } from 'lucide-react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Address } from 'viem'
+import { cn } from '@/lib/utils'
 
 export default function Channel({
+  isActive,
   channel,
   onChannelClick,
-  activeChannelOwner,
+  className,
 }: {
+  isActive: boolean
   channel: Channel
   onChannelClick: () => void
-  activeChannelOwner: Address | string | undefined
+  className?: string
 }) {
   return (
     <div
       key={channel.symbol}
-      className={`cursor-pointer p-4 transition-colors duration-200 ${activeChannelOwner === channel.owner ? 'bg-accent' : 'hover:bg-accent/50'}`}
+      className={cn(
+        `cursor-pointer p-4 transition-colors duration-200 ${isActive ? 'bg-accent' : 'hover:bg-accent/50'}`,
+        className,
+      )}
       onClick={onChannelClick}
     >
       <div className='mb-2 flex items-center gap-3'>
@@ -26,10 +31,10 @@ export default function Channel({
         </Avatar>
         <h2 className='text-lg font-semibold'>{channel.name}</h2>
       </div>
-      <p className='mb-2 text-sm text-muted-foreground'>Here should be channel description</p>
+      {/* <p className='mb-2 text-sm text-muted-foreground'>Here should be channel description</p> */}
       <div className='flex items-center text-xs text-muted-foreground'>
         <Circle className='mr-1 h-3 w-3 text-blue-600' />
-        <span className='mr-2'>{channel.symbol}</span>
+        <span className='mr-2 max-w-[80px] overflow-hidden text-ellipsis text-nowrap'>{channel.symbol}</span>
         <Star className='mr-1 h-3 w-3' />
         <span className='mr-2'>{(20).toFixed(0)}k</span>
         <span>Updated June 13 2024</span>

@@ -4,9 +4,25 @@ import webpack from 'webpack'
 const nextConfig = {
   experimental: {
     serverActions: {
-      bodySizeLimit: '10mb',
+      bodySizeLimit: '3mb',
     },
   },
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'ipfs.io',
+        port: '',
+        pathname: '/ipfs/**',
+      },
+    ],
+  },
+
   webpack: (config, { isServer }) => {
     if (isServer) {
       config.plugins.push(

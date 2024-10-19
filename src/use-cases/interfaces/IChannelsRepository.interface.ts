@@ -1,15 +1,11 @@
+import { Channel } from '@/entities/models/channel'
 import { Address } from 'viem'
 
 export interface IChannelsRepository {
-  getAllChannelIds({ publisherAddress }: { publisherAddress: Address }): Promise<Address[]>
-  getChannelById({ id }: { id: Address }): Promise<{ name: string; symbol: string; owner: string }>
+  getAllChannelAddresses(): Promise<readonly `0x${string}`[]>
+  getAllPublisherChannelAddresses(publisherAddress: Address): Promise<string[]>
+  getChannelByAddress(channelAddress: Address): Promise<Channel>
   getChannelOwnerById({ id }: { id: Address }): Promise<any>
-  getArticleById({ channelId, id }: { channelId: Address; id: bigint }): Promise<any>
-  getArticlesCountByChannelId({
-    id,
-    publisherAddress,
-  }: {
-    id: string | Address
-    publisherAddress: string | Address
-  }): Promise<any>
+  getArticleById(channelAddress: Address, articleId: number): Promise<string> //TODO: article
+  getLastArticleId(channelAddress: Address): Promise<bigint>
 }

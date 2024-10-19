@@ -1,10 +1,10 @@
 import { factoryAbi } from '@/abi/factoryAbi'
-import { IChannelsRepository } from '@/use-cases/interfaces/IChannelsRepository.interface'
-import { Address, getAddress, PublicClient } from 'viem'
-import { injectable } from 'inversify'
-import { articleFactoryAbi } from '@/abi/articleFactoryAbi'
+import { channelAbi } from '@/generated'
 import { contracts } from '@/lib/config/contracts'
 import { createViemClient } from '@/lib/utils/viemClient'
+import { IChannelsRepository } from '@/use-cases/interfaces/IChannelsRepository.interface'
+import { injectable } from 'inversify'
+import { Address, PublicClient } from 'viem'
 
 @injectable()
 export class ChannelsRepository implements IChannelsRepository {
@@ -14,36 +14,44 @@ export class ChannelsRepository implements IChannelsRepository {
     this.client = createViemClient()
   }
 
-  // Fetch IDs from your smart contract
-  async getAllChannelIds({ publisherAddress }: { publisherAddress: Address }) {
-    // TODO: return array of addresses
-    const ids = await this.client.readContract({
+  async getAllChannelAddresses() {
+    const addresses = await this.client.readContract({
       abi: factoryAbi,
-      functionName: 'getUserERC721Address',
+      functionName: 'getAllChannels',
+      address: contracts.factoryAddress,
+    })
+
+    return addresses
+  }
+
+  async getAllPublisherChannelAddresses(publisherAddress: Address) {
+    const addresses = await this.client.readContract({
+      abi: factoryAbi,
+      functionName: 'getChannels',
       args: [publisherAddress],
       address: contracts.factoryAddress,
     })
 
-    return [ids]
+    return addresses as Address[]
   }
 
-  async getChannelById({ id }: { id: Address }) {
-    const channelFactoryContract = {
-      abi: articleFactoryAbi,
-      address: id,
+  async getChannelByAddress(channelAddress: Address) {
+    const channelContract = {
+      abi: channelAbi,
+      address: channelAddress,
     }
 
     const [name, symbol, owner] = await Promise.all([
       this.client.readContract({
-        ...channelFactoryContract,
+        ...channelContract,
         functionName: 'name',
       }),
       this.client.readContract({
-        ...channelFactoryContract,
+        ...channelContract,
         functionName: 'symbol',
       }),
       this.client.readContract({
-        ...channelFactoryContract,
+        ...channelContract,
         functionName: 'owner',
       }),
     ])
@@ -52,12 +60,13 @@ export class ChannelsRepository implements IChannelsRepository {
       name,
       symbol,
       owner,
+      address: channelAddress,
     }
   }
 
   async getChannelOwnerById({ id }: { id: Address }) {
     const owner = await this.client.readContract({
-      abi: articleFactoryAbi,
+      abi: channelAbi,
       address: id,
       functionName: 'owner',
     })
@@ -65,39 +74,25 @@ export class ChannelsRepository implements IChannelsRepository {
     return owner
   }
 
-  async getArticlesCountByChannelId({
-    id,
-    publisherAddress,
-  }: {
-    id: string | Address
-    publisherAddress: string | Address
-  }) {
-    const articlesCount = await this.client.readContract({
-      abi: articleFactoryAbi,
-      address: getAddress(id),
-      functionName: 'balanceOf',
-      args: [getAddress(publisherAddress)],
+  async getLastArticleId(channelAddress: Address) {
+    const lastArticleId = await this.client.readContract({
+      abi: channelAbi,
+      address: channelAddress,
+      functionName: 'articleIDs',
+      args: [],
     })
 
-    return articlesCount
+    return lastArticleId
   }
 
-  async getArticleById({ channelId, id }: { channelId: Address; id: bigint }) {
-    const [tokenURI, tokenURIContract] = await Promise.all([
-      this.client.readContract({
-        abi: articleFactoryAbi,
-        address: channelId,
-        functionName: 'tokenURI',
-        args: [id],
-      }),
-      this.client.readContract({
-        abi: articleFactoryAbi,
-        address: channelId,
-        functionName: 'tokenURIContracts',
-        args: [id],
-      }),
-    ])
+  async getArticleById(channelAddress: Address, articleId: number): Promise<string> {
+    const tokenURI = await this.client.readContract({
+      abi: channelAbi,
+      address: channelAddress,
+      functionName: 'tokenURI',
+      args: [BigInt(articleId)],
+    })
 
-    return { tokenURI, tokenURIContract }
+    return tokenURI
   }
 }

@@ -1,19 +1,24 @@
-export const articleFactoryAbi = [
+export const channelAbi = [
   {
     inputs: [
       {
         internalType: 'string',
-        name: 'name',
+        name: '_name',
         type: 'string',
       },
       {
         internalType: 'string',
-        name: 'symbol',
+        name: '_symbol',
         type: 'string',
       },
       {
         internalType: 'address',
-        name: 'owner',
+        name: '_owner',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: '_metadataAttributes',
         type: 'address',
       },
     ],
@@ -68,6 +73,38 @@ export const articleFactoryAbi = [
       },
     ],
     name: 'ApprovalForAll',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: '_articleID',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: '_articleAddress',
+        type: 'address',
+      },
+    ],
+    name: 'ArticleCreated',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: '_articleID',
+        type: 'uint256',
+      },
+    ],
+    name: 'ArticleEdited',
     type: 'event',
   },
   {
@@ -135,6 +172,62 @@ export const articleFactoryAbi = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'articleHistory',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'articleIDs',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'articles',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'address',
         name: 'owner',
         type: 'address',
@@ -152,41 +245,33 @@ export const articleFactoryAbi = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'defaultMetadata',
-    outputs: [
+    inputs: [
       {
-        internalType: 'string',
-        name: 'name',
-        type: 'string',
+        internalType: 'uint256',
+        name: 'articleID',
+        type: 'uint256',
       },
       {
-        internalType: 'string',
-        name: 'description',
-        type: 'string',
-      },
-      {
-        internalType: 'string',
-        name: 'image',
-        type: 'string',
-      },
-      {
-        internalType: 'string',
-        name: 'externalUrl',
-        type: 'string',
-      },
-      {
-        internalType: 'string',
-        name: 'date',
-        type: 'string',
-      },
-      {
-        internalType: 'string',
-        name: 'attributes',
-        type: 'string',
+        components: [
+          {
+            internalType: 'string',
+            name: 'key',
+            type: 'string',
+          },
+          {
+            internalType: 'string',
+            name: 'value',
+            type: 'string',
+          },
+        ],
+        internalType: 'struct Article.KeyValuePair[]',
+        name: 'newMetadata',
+        type: 'tuple[]',
       },
     ],
-    stateMutability: 'view',
+    name: 'editArticle',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -203,24 +288,6 @@ export const articleFactoryAbi = [
         internalType: 'address',
         name: '',
         type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'getDefaultMetadataAsArray',
-    outputs: [
-      {
-        internalType: 'string[]',
-        name: 'keys',
-        type: 'string[]',
-      },
-      {
-        internalType: 'string[]',
-        name: 'values',
-        type: 'string[]',
       },
     ],
     stateMutability: 'view',
@@ -265,7 +332,7 @@ export const articleFactoryAbi = [
             type: 'string',
           },
         ],
-        internalType: 'struct TokenURIStorage.KeyValuePair[]',
+        internalType: 'struct Article.KeyValuePair[]',
         name: 'userMetadata',
         type: 'tuple[]',
       },
@@ -285,9 +352,22 @@ export const articleFactoryAbi = [
             type: 'string',
           },
         ],
-        internalType: 'struct TokenURIStorage.KeyValuePair[]',
+        internalType: 'struct Article.KeyValuePair[]',
         name: '',
         type: 'tuple[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'metadataAttributes',
+    outputs: [
+      {
+        internalType: 'contract IMetadataAttributes',
+        name: '',
+        type: 'address',
       },
     ],
     stateMutability: 'view',
@@ -313,7 +393,7 @@ export const articleFactoryAbi = [
             type: 'string',
           },
         ],
-        internalType: 'struct TokenURIStorage.KeyValuePair[]',
+        internalType: 'struct Article.KeyValuePair[]',
         name: 'userMetadata',
         type: 'tuple[]',
       },
@@ -480,30 +560,6 @@ export const articleFactoryAbi = [
     inputs: [
       {
         internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    name: 'tokenHistory',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
         name: 'tokenId',
         type: 'uint256',
       },
@@ -514,25 +570,6 @@ export const articleFactoryAbi = [
         internalType: 'string',
         name: '',
         type: 'string',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    name: 'tokenURIContracts',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
       },
     ],
     stateMutability: 'view',
@@ -578,11 +615,11 @@ export const articleFactoryAbi = [
     inputs: [
       {
         internalType: 'uint256',
-        name: 'tokenId',
+        name: 'articleID',
         type: 'uint256',
       },
     ],
-    name: 'viewTokenHistory',
+    name: 'viewArticleHistory',
     outputs: [
       {
         internalType: 'address[]',

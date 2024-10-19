@@ -1,9 +1,9 @@
+import { cn } from '@/lib/utils'
+import { NavigationMenuLinkProps } from '@radix-ui/react-navigation-menu'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import React from 'react'
 import { NavigationMenuLink } from './ui/navigation-menu'
-import { cn } from '@/lib/utils'
-import Link from 'next/link'
-import { NavigationMenuLinkProps } from '@radix-ui/react-navigation-menu'
-import { usePathname } from 'next/navigation'
 
 export const ListItem = React.forwardRef<React.ElementRef<'a'>, Omit<NavigationMenuLinkProps, 'onSelect'>>(
   ({ className, href = '/', title, children, ...props }, ref) => {
