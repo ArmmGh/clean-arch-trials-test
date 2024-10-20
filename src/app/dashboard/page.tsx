@@ -1,10 +1,12 @@
-import DashboardChannels from './components/DashboardChannels'
-import NoChannels from './components/NoChannels'
 import getPublisherAllChannelsAction from '@/app/actions/getPublisherAllChannels.action'
 import { getPublisherAddressFromSession } from '@/lib/utils/getPublisherAddressFromSession'
+import { cookies } from 'next/headers'
+import DashboardChannels from './components/DashboardChannels'
+import NoChannels from './components/NoChannels'
 
 export default async function Dashboard() {
-  const publisherAddress = getPublisherAddressFromSession()
+  const cookiesData = cookies()
+  const publisherAddress = getPublisherAddressFromSession(cookiesData)
   const channels = await getPublisherAllChannelsAction({ publisherAddress })
 
   return (

@@ -1,7 +1,5 @@
-import { cookies } from 'next/headers'
-
-export const getPublisherAddressFromSession = () => {
-  const wagmiStore = cookies().get('wagmi.store')
+export const getPublisherAddressFromSession = (cookies: any) => {
+  const wagmiStore = cookies.get('wagmi.store')
 
   if (!wagmiStore) {
     // Return early if the cookie is not present
