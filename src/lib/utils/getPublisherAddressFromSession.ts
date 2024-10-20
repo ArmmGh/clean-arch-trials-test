@@ -2,10 +2,35 @@ import { cookies } from 'next/headers'
 
 export const getPublisherAddressFromSession = () => {
   const wagmiStore = cookies().get('wagmi.store')
-  const parsedWagmiStore = wagmiStore && JSON.parse(wagmiStore.value)
-  const currentConnectionId = parsedWagmiStore.state.current
-  const connections = parsedWagmiStore.state.connections.value
+
+  if (!wagmiStore) {
+    // Return early if the cookie is not present
+    return null
+  }
+
+  let parsedWagmiStore
+  try {
+    parsedWagmiStore = JSON.parse(wagmiStore.value)
+  } catch (error) {
+    console.error('Failed to parse wagmi.store cookie:', error)
+    return null
+  }
+
+  // Safely access the state object
+  const currentConnectionId = parsedWagmiStore?.state?.current
+  const connections = parsedWagmiStore?.state?.connections?.value
+
+  if (!connections || !currentConnectionId) {
+    // Return early if state properties are undefined or invalid
+    return null
+  }
+
   const currentConnection = connections.find(([id]: [id: number]) => id === currentConnectionId)
+
+  if (!currentConnection) {
+    return null
+  }
+
   const [, connectionData] = currentConnection
-  return connectionData?.accounts[0]
+  return connectionData?.accounts[0] ?? null
 }

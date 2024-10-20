@@ -1,10 +1,10 @@
 'use client'
 
-import type { Channel as ChannelType } from '@/entities/models/channel'
-import Channel from './Channel'
 import Articles from '@/components/articles/Articles'
-import { useState } from 'react'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import type { Channel as ChannelType } from '@/entities/models/channel'
+import { useState } from 'react'
+import Channel from './Channel'
 
 export default function Channels({ channels }: { channels: ChannelType[] }) {
   const [activeChannel, setActiveChannel] = useState<ChannelType>()

@@ -11,11 +11,6 @@ export class ArticlesRepository implements IArticlesRepository {
   private kuboClient: KuboRPCClient
 
   constructor() {
-    // const ipfs = create({
-    //   host: '',
-    //   port: '5001',
-    //   protocol: 'http'
-    // });
     this.kuboClient = create({
       host: '35.159.162.134',
       port: '5001',
