@@ -28,7 +28,7 @@ function CreateArticleFlow({ channels }: { channels: ChannelType[] }) {
   if (channels.length === 0) return <NoChannels />
 
   return (
-    <div className='flex flex-col items-center'>
+    <div className='flex flex-col items-center py-4'>
       <ChannelChooser
         channels={channels}
         activeChannelAddress={activeChannelAddress}

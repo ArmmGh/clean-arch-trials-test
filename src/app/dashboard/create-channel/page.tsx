@@ -10,12 +10,8 @@ export default function CreateChannel() {
   if (!publisherAddress) redirect('/')
 
   return (
-    <Main>
-      <header>Create Channel</header>
-
-      <div>
-        <CreateChannelForm />
-      </div>
+    <Main className='py-4'>
+      <CreateChannelForm />
     </Main>
   )
 }
