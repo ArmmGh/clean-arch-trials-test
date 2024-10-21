@@ -12,12 +12,12 @@ export class ArticlesRepository implements IArticlesRepository {
 
   constructor() {
     this.kuboClient = create({
-      host: '35.159.162.134',
-      port: '5001',
-      protocol: 'http',
-    }) // TODO: add support for different urls per env
+      host: process.env.KUBO_HOST,
+      port: process.env.KUBO_PORT,
+      protocol: process.env.KUBO_PROTOCOL,
+    })
     this.PUBLIC_GATEWAY = process.env.IPFS_PUBLIC_GATEWAY!
-    this.LOCAL_GATEWAY = process.env.IPFS_LOCAL_GATEWAY!
+    this.LOCAL_GATEWAY = `${process.env.KUBO_PROTOCOL}://${process.env.KUBO_HOST}:${process.env.KUBO_GATEWAY_PORT}/ipfs/`
   }
 
   async prepareImagesGateway(content: string): Promise<string> {
@@ -105,9 +105,9 @@ export class ArticlesRepository implements IArticlesRepository {
 
   async getContentByCID(cid: string): Promise<string> {
     const isKuboOnline = await this.kuboClient?.isOnline()
-    console.log('isKuboOnline: ', isKuboOnline)
+
     if (!isKuboOnline) {
-      const res = await fetch(`${this.PUBLIC_GATEWAY}/ipfs/${cid}`)
+      const res = await fetch(`${this.PUBLIC_GATEWAY}${cid}`)
 
       if (res.status === 200) {
         return res.text()

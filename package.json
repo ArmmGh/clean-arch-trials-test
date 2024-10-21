@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "yarn wagmi generate && next build",
+    "generate:dev": "NODE_ENV=development yarn wagmi generate",
     "start": "next start",
     "lint": "next lint",
     "prettier": "prettier --write src/**/*.{js,jsx,ts,tsx}"

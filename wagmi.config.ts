@@ -1,17 +1,19 @@
-import { defineConfig, loadEnv } from '@wagmi/cli'
-import { factoryAbi } from '@/abi/factoryAbi'
-import { actions, react } from '@wagmi/cli/plugins'
-import { defaultChain } from '@/lib/config/chains'
 import { articleAbi } from '@/abi/articleAbi'
 import { channelAbi } from '@/abi/channelAbi'
+import { factoryAbi } from '@/abi/factoryAbi'
 import { metadataAttributesAbi } from '@/abi/metadataAttributesAbi'
+import { availableChains } from '@/lib/config/chains'
+import nextEnv from '@next/env'
+import { defineConfig } from '@wagmi/cli'
+import { actions, react } from '@wagmi/cli/plugins'
 import { getAddress } from 'viem'
 
 export default defineConfig(() => {
-  loadEnv({
-    mode: process.env.NODE_ENV,
-    envDir: process.cwd(),
-  })
+  const { loadEnvConfig } = nextEnv
+  const projectDir = process.cwd()
+  loadEnvConfig(projectDir, process.env.NODE_ENV === 'development')
+
+  const defaultChain = availableChains[Number(process.env.NEXT_PUBLIC_DEFAULT_CHAIN)]
 
   return {
     out: 'src/generated.ts',

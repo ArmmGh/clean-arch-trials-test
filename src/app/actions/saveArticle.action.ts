@@ -2,6 +2,7 @@
 
 import { DraftLimitExceed, InputParseError } from '@/entities/errors/common'
 import saveArticleUseCase from '@/use-cases/save-article.use-case'
+import { revalidatePath } from 'next/cache'
 import { isAddress } from 'viem'
 import { z } from 'zod'
 
@@ -23,6 +24,7 @@ export default async function saveArticleAction(input: z.infer<typeof inputSchem
 
     const article = await saveArticleUseCase(data.channelAddress, data.article.content, data.article.metadata)
 
+    revalidatePath('/dashboard')
     if (!article) {
       throw new Error()
     }
