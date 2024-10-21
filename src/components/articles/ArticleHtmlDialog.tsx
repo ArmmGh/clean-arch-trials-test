@@ -1,3 +1,5 @@
+import ArticleEditor from '@/app/dashboard/create-article/components/ArticleEditor'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -6,8 +8,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import ArticleEditor from '@/app/dashboard/create-article/components/ArticleEditor'
 
 export default function ArticleHtmlDialog({
   html,

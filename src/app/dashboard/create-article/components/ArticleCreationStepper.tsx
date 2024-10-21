@@ -84,7 +84,13 @@ function PreviewTab() {
   return (
     <div className='space-y-4'>
       <h3>Content Preview:</h3>
-      <p>{content}</p>
+      <ArticleEditor
+        containerClassName={'overflow-hidden'}
+        className={'overflow-y-scroll'}
+        editable={false}
+        autofocus={false}
+        value={content}
+      />
       <h3>Metadata Preview:</h3>
       <ul>
         {metadata.map((item, index) => (
