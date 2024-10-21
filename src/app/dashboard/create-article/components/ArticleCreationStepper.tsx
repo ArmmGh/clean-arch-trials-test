@@ -192,19 +192,17 @@ export default function ArticleCreationStepper({
         args: [publisherAddress, article.metadata],
       })
 
-      const { status } = await waitForTransactionReceipt(config, { hash })
+      toast({
+        title: 'Transaction Confirmation',
+        description: (
+          <div className='flex gap-2'>
+            <Loader2 className='w-5 h-5 animate-spin' /> Wait for transaction confirmation!
+          </div>
+        ),
+        duration: 24_500,
+      })
 
-      if (!status) {
-        toast({
-          title: 'Transaction Confirmation',
-          description: (
-            <div className='flex gap-2'>
-              <Loader2 className='w-5 h-5 animate-spin' /> Wait for transaction confirmation!
-            </div>
-          ),
-          duration: 24_500,
-        })
-      }
+      const { status } = await waitForTransactionReceipt(config, { hash })
 
       if (status === 'success') {
         toast({
