@@ -6,6 +6,7 @@ import { cookieToInitialState } from 'wagmi'
 import './globals.css'
 
 import Nav from '@/components/layout/Nav'
+import WrongNetworkNotifier from '@/components/layout/WrongNetworkNotifier'
 import { Toaster } from '@/components/ui/toaster'
 import { getConfig } from '@/lib/config/wagmi'
 import { Providers } from './providers'
@@ -26,6 +27,7 @@ export default function RootLayout(props: { children: ReactNode }) {
         <Providers initialState={initialState}>
           {/* bg-gray-900 */}
           <div className='flex h-screen flex-col'>
+            <WrongNetworkNotifier />
             <Nav />
 
             {props.children}
