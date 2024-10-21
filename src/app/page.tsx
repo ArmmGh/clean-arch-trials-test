@@ -1,4 +1,5 @@
 import Channels from '@/components/channels/Channels'
+import { cookies } from 'next/headers'
 import getAllChannelsAction from './actions/getAllChannels.action'
 
 // TODO: maybe worth to check?
@@ -8,6 +9,7 @@ import getAllChannelsAction from './actions/getAllChannels.action'
 //   { tags: ['channels'] }, //revalidate: 3600,
 // )
 export default async function App() {
+  cookies()
   // const channels = await getAllChannelsAction()
   const channels = await getAllChannelsAction()
 
