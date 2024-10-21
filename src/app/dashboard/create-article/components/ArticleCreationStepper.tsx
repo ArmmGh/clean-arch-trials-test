@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { ToastAction } from '@/components/ui/toast'
 import { useReadMetadataAttributesGetDefaultMetadataAsArray, useWriteChannelMint } from '@/generated'
 import { useToast } from '@/hooks/use-toast'
 import { config } from '@/lib/config/wagmi'
@@ -193,10 +194,33 @@ export default function ArticleCreationStepper({
 
       const { status } = await waitForTransactionReceipt(config, { hash })
 
+      if (!status) {
+        toast({
+          title: 'Transaction Confirmation',
+          description: (
+            <div className='flex gap-2'>
+              <Loader2 className='w-5 h-5 animate-spin' /> Wait for transaction confirmation!
+            </div>
+          ),
+          duration: 24_500,
+        })
+      }
+
       if (status === 'success') {
         toast({
-          title: 'Article Minted!',
-          description: 'Your article has been successfully minted!',
+          title: 'Success',
+          description: 'Article minted successfully!',
+          duration: 30000,
+          action: (
+            <ToastAction
+              onClick={() => {
+                router.refresh()
+              }}
+              altText='Refresh list'
+            >
+              Refresh list
+            </ToastAction>
+          ),
         })
 
         router.push('/dashboard')
