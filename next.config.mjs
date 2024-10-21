@@ -15,6 +15,12 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
+        protocol: 'http',
+        hostname: '35.159.162.134',
+        port: '8080',
+        pathname: '/ipfs/**',
+      },
+      {
         protocol: 'https',
         hostname: 'ipfs.io',
         port: '',
