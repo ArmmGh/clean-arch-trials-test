@@ -15,6 +15,12 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
+        protocol: 'https',
+        hostname: 'brave-quail-62.telebit.io',
+        port: '',
+        pathname: '/ipfs/**',
+      },
+      {
         protocol: 'http',
         hostname: '35.159.162.134',
         port: '8080',
