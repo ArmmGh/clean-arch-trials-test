@@ -2,11 +2,13 @@ import getPublisherAllChannelsAction from '@/app/actions/getPublisherAllChannels
 import Main from '@/components/layout/Main'
 import { getPublisherAddressFromSession } from '@/lib/utils/getPublisherAddressFromSession'
 import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 import CreateArticleFlow from './components/CreateArticleFlow'
 
 export default async function CreateArticle() {
   const cookiesData = cookies()
   const publisherAddress = getPublisherAddressFromSession(cookiesData)
+  if (!publisherAddress) redirect('/')
   const channels = await getPublisherAllChannelsAction({ publisherAddress })
 
   return (

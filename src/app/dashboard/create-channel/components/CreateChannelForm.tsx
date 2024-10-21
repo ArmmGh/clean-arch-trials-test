@@ -1,22 +1,22 @@
 'use client'
 
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useWriteFactoryRegister } from '@/generated'
-import { useForm } from 'react-hook-form'
-import { registerPublisherSchema } from '@/entities/schemas/registerPublisherSchema'
+import WithAuth from '@/components/HOC/withAuth'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { registerPublisherSchema } from '@/entities/schemas/registerPublisherSchema'
+import { useWriteFactoryRegister } from '@/generated'
 import { useToast } from '@/hooks/use-toast'
-import { useState } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
-import { ContractFunctionExecutionError, ContractFunctionRevertedError, TransactionExecutionError } from 'viem'
 import { useRouter } from 'next/navigation'
-import { revalidateTag } from 'next/cache'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { ContractFunctionExecutionError, ContractFunctionRevertedError, TransactionExecutionError } from 'viem'
+import { z } from 'zod'
 
 // export default function CreateChannelForm({ refetch }: { refetch: () => void }) {
-export default function CreateChannelForm() {
+function CreateChannelForm() {
   const { toast } = useToast()
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
@@ -117,3 +117,5 @@ export default function CreateChannelForm() {
     </div>
   )
 }
+
+export default WithAuth(CreateChannelForm)

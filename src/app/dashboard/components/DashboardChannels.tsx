@@ -2,33 +2,16 @@
 
 import Articles from '@/components/articles/Articles'
 import Channel from '@/components/channels/Channel'
+import WithAuth from '@/components/HOC/withAuth'
+import NoChannels from '@/components/NoChannels'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import type { Channel as ChannelType } from '@/entities/models/channel'
-import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { useAccount } from 'wagmi'
+import { useState } from 'react'
 
-export default function DashboardChannels({
-  channels,
-  addressFromCookie,
-}: {
-  channels: ChannelType[]
-  addressFromCookie: string
-}) {
-  const { address } = useAccount()
-  const router = useRouter()
+function DashboardChannels({ channels }: { channels: ChannelType[] }) {
   const [activeChannel, setActiveChannel] = useState<ChannelType>()
 
-  useEffect(() => {
-    if (address) {
-      if (addressFromCookie !== address) {
-        router.refresh()
-      }
-      return
-    }
-
-    router.replace('/')
-  }, [address, router, addressFromCookie])
+  if (channels.length === 0) return <NoChannels />
 
   return (
     <div className='border-1 flex flex-1 flex-row overflow-hidden'>
@@ -49,3 +32,5 @@ export default function DashboardChannels({
     </div>
   )
 }
+
+export default WithAuth(DashboardChannels)

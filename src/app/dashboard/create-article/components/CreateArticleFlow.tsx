@@ -1,15 +1,17 @@
 'use client'
 
-import { useState } from 'react'
-import ChannelChooser from './ChannelChooser'
+import getDraftedArticlesAction from '@/app/actions/getDraftedArticles.action'
+import WithAuth from '@/components/HOC/withAuth'
+import NoChannels from '@/components/NoChannels'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import type { Channel as ChannelType } from '@/entities/models/channel'
 import { useQuery } from '@tanstack/react-query'
-import getDraftedArticlesAction from '@/app/actions/getDraftedArticles.action'
-import DraftedArticles from './DraftedArticles'
+import { useState } from 'react'
 import ArticleCreationStepper from './ArticleCreationStepper'
+import ChannelChooser from './ChannelChooser'
+import DraftedArticles from './DraftedArticles'
 
-export default function CreateArticleFlow({ channels }: { channels: ChannelType[] }) {
+function CreateArticleFlow({ channels }: { channels: ChannelType[] }) {
   const [activeChannelAddress, setActiveChannelAddress] = useState<ChannelType['address']>()
   const [tab, setTab] = useState<'create' | 'drafts'>('create')
 
@@ -22,6 +24,8 @@ export default function CreateArticleFlow({ channels }: { channels: ChannelType[
     queryFn: () => getDraftedArticlesAction({ channelAddress: activeChannelAddress! }),
     enabled: !!activeChannelAddress,
   })
+
+  if (channels.length === 0) return <NoChannels />
 
   return (
     <div className='flex flex-col items-center'>
@@ -47,3 +51,5 @@ export default function CreateArticleFlow({ channels }: { channels: ChannelType[
     </div>
   )
 }
+
+export default WithAuth(CreateArticleFlow)
