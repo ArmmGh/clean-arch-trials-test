@@ -17,7 +17,9 @@ export class ArticlesRepository implements IArticlesRepository {
       protocol: process.env.KUBO_PROTOCOL,
     })
     this.PUBLIC_GATEWAY = process.env.IPFS_PUBLIC_GATEWAY!
-    this.LOCAL_GATEWAY = `${process.env.KUBO_PROTOCOL}://${process.env.KUBO_HOST}:${process.env.KUBO_GATEWAY_PORT}/ipfs/`
+    this.LOCAL_GATEWAY =
+      process.env.IPFS_LOCAL_GATEWAY ??
+      `${process.env.KUBO_PROTOCOL}://${process.env.KUBO_HOST}:${process.env.KUBO_GATEWAY_PORT}/ipfs/`
   }
 
   async prepareImagesGateway(content: string): Promise<string> {
