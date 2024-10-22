@@ -1,11 +1,9 @@
 'use client'
 
-import getDraftedArticlesAction from '@/app/actions/getDraftedArticles.action'
 import WithAuth from '@/components/HOC/withAuth'
 import NoChannels from '@/components/NoChannels'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import type { Channel as ChannelType } from '@/entities/models/channel'
-import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import ArticleCreationStepper from './ArticleCreationStepper'
 import ChannelChooser from './ChannelChooser'
@@ -18,12 +16,6 @@ function CreateArticleFlow({ channels }: { channels: ChannelType[] }) {
   const onTabChange = (value: string) => {
     setTab(value as 'create' | 'drafts')
   }
-
-  const { data: draftedArticles = [], isLoading } = useQuery<any[]>({
-    queryKey: ['drafted-articles', { channelAddress: activeChannelAddress }],
-    queryFn: () => getDraftedArticlesAction({ channelAddress: activeChannelAddress! }),
-    enabled: !!activeChannelAddress,
-  })
 
   if (channels.length === 0) return <NoChannels />
 
@@ -42,10 +34,9 @@ function CreateArticleFlow({ channels }: { channels: ChannelType[] }) {
         </TabsList>
         <TabsContent value='create' className='mt-0'>
           <ArticleCreationStepper setTab={setTab} activeChannelAddress={activeChannelAddress} />
-          {/* <CreateArticleForm /> */}
         </TabsContent>
-        <TabsContent value='drafts'>
-          <DraftedArticles draftedArticles={draftedArticles} />
+        <TabsContent value='drafts' className='mt-0'>
+          <DraftedArticles />
         </TabsContent>
       </Tabs>
     </div>

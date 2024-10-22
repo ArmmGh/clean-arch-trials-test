@@ -2,7 +2,6 @@
 
 import { InputParseError } from '@/entities/errors/common'
 import { DraftedArticle } from '@/entities/schemas/draftArticleSchema'
-import getDraftedArticlesUseCase from '@/use-cases/get-drafted-articles.use-case'
 import { isAddress } from 'viem'
 import { z } from 'zod'
 
@@ -25,9 +24,9 @@ export default async function getDraftedArticlesAction(input: z.infer<typeof inp
       throw new InputParseError(inputParseError.message, { cause: inputParseError })
     }
 
-    const draftedArticles = await getDraftedArticlesUseCase(data.channelAddress)
+    // Call usecase
 
-    return presenter(draftedArticles)
+    // return presenter(draftedArticles)
   } catch (error) {
     console.error(error)
   }

@@ -177,19 +177,12 @@ export default function ArticleCreationStepper({
 
     // const isDrafted = await draftArticleUseCase(channelAddress, articleContent)
 
-    const { article, error } = await saveArticleAction({ channelAddress: activeChannelAddress, article: data })
+    const { metadata, error } = await saveArticleAction({ channelAddress: activeChannelAddress, article: data })
 
-    setIsSaving(false)
-
-    if (article) {
-      toast({
-        title: 'Article Drafted!',
-        description: 'Your article has been successfully drafted!',
-      })
-
+    if (metadata) {
       const hash = await writeContractAsync({
         address: activeChannelAddress,
-        args: [publisherAddress, article.metadata],
+        args: [publisherAddress, metadata],
       })
 
       toast({
@@ -226,20 +219,20 @@ export default function ArticleCreationStepper({
         toast({
           title: 'Article Minting Failed!',
           description: 'Your article could not be minted!',
+          variant: 'destructive',
         })
 
         setTab('drafts')
       }
+
+      setIsSaving(false)
     } else {
       toast({
         variant: 'destructive',
-        title: 'Article Draft Failed!',
+        title: 'Article Save Failed!',
         description: error,
       })
     }
-
-    // console.log('Minting article with data:', data)
-    // Handle minting process here
   }
 
   const handleNavigation = (e: React.MouseEvent<HTMLButtonElement>, nextStep: string) => {

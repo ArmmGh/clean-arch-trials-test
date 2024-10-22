@@ -1,28 +1,11 @@
-import { MinimalTiptapEditor } from '@/components/minimal-tiptap'
-import { DraftedArticle } from '@/entities/schemas/draftArticleSchema'
+import { Card, CardDescription, CardHeader } from '@/components/ui/card'
 
-export default function DraftedArticles({ draftedArticles }: { draftedArticles: DraftedArticle[] }) {
+export default function DraftedArticles() {
   return (
-    <div>
-      {draftedArticles.map(({ articleContent }, index) => (
-        <div key={index} className='rounded-lg border'>
-          Draft Article #{index + 1}
-          {/* // <div key={index}>{articleContent}</div>
-          // <iframe src='' frameborder='0'></iframe> */}
-          <MinimalTiptapEditor
-            value={articleContent}
-            onChange={() => {}}
-            className='w-full rounded-lg'
-            editorContentClassName='p-5'
-            output='html'
-            // placeholder='Type your description here...'
-            autofocus={false}
-            editable={false}
-            // editorClassName='focus:outline-none'
-            immediatelyRender={false}
-          />
-        </div>
-      ))}
-    </div>
+    <Card className='mx-auto w-full rounded-t-none border-2 border-t-0 border-muted'>
+      <CardHeader>
+        <CardDescription className='text-center'>Coming Soon!</CardDescription>
+      </CardHeader>
+    </Card>
   )
 }

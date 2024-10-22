@@ -4,24 +4,26 @@ import WithAuth from '@/components/HOC/withAuth'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { registerPublisherSchema } from '@/entities/schemas/registerPublisherSchema'
+import { ToastAction } from '@/components/ui/toast'
+import { createChannelSchema } from '@/entities/schemas/createChannelSchema'
 import { useWriteFactoryRegister } from '@/generated'
 import { useToast } from '@/hooks/use-toast'
+import { config } from '@/lib/config/wagmi'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { ContractFunctionExecutionError, ContractFunctionRevertedError, TransactionExecutionError } from 'viem'
+import { waitForTransactionReceipt } from 'wagmi/actions'
 import { z } from 'zod'
 
-// export default function CreateChannelForm({ refetch }: { refetch: () => void }) {
 function CreateChannelForm() {
   const { toast } = useToast()
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
-  const form = useForm<z.infer<typeof registerPublisherSchema>>({
-    resolver: zodResolver(registerPublisherSchema),
+  const form = useForm<z.infer<typeof createChannelSchema>>({
+    resolver: zodResolver(createChannelSchema),
     defaultValues: {
       nftName: '',
       description: '',
@@ -29,19 +31,49 @@ function CreateChannelForm() {
   })
   const { writeContractAsync } = useWriteFactoryRegister()
 
-  async function onSubmit(values: z.infer<typeof registerPublisherSchema>) {
+  async function onSubmit(values: z.infer<typeof createChannelSchema>) {
     try {
       setIsLoading(true)
 
-      await writeContractAsync({ args: [values.nftName, values.description] })
+      const hash = await writeContractAsync({ args: [values.nftName, values.description] })
       // TODO: add waiting mechanism client or server side to revalidate data
 
       toast({
-        title: 'Success',
-        description: 'You have successfully registered as a publisher.',
+        title: 'Transaction Confirmation',
+        description: (
+          <div className='flex gap-2'>
+            <Loader2 className='w-5 h-5 animate-spin' /> Wait for transaction confirmation!
+          </div>
+        ),
+        duration: 24_500,
       })
 
-      // revalidateTag('channels')
+      const tx = await waitForTransactionReceipt(config, { hash })
+
+      if (tx.status === 'success') {
+        toast({
+          title: 'Success',
+          description: 'Channel created successfully!',
+          duration: 30000,
+          action: (
+            <ToastAction
+              onClick={() => {
+                router.refresh()
+              }}
+              altText='Refresh list'
+            >
+              Refresh list
+            </ToastAction>
+          ),
+        })
+      } else {
+        toast({
+          title: 'Channel Creation Failed!',
+          description: 'Your channel could not be created!',
+          variant: 'destructive',
+        })
+      }
+
       router.push('/dashboard')
     } catch (error) {
       let description

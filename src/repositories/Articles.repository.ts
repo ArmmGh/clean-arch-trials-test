@@ -1,5 +1,3 @@
-import { Article } from '@/entities/models/article'
-import { getMongoDb } from '@/lib/mongodb'
 import { IArticlesRepository } from '@/use-cases/interfaces/IArticlesRepository.interface'
 import { injectable } from 'inversify'
 import { type KuboRPCClient, create } from 'kubo-rpc-client'
@@ -36,7 +34,7 @@ export class ArticlesRepository implements IArticlesRepository {
     return isPinned
   }
 
-  async uploadHtmlFromString(content: string): Promise<{ html: string; cid: string }> {
+  async uploadHtmlFromString(content: string): Promise<string> {
     const htmlContent = `
       <!DOCTYPE html>
       <html lang="en">
@@ -53,50 +51,12 @@ export class ArticlesRepository implements IArticlesRepository {
 
     const { cid } = await this.kuboClient.add(htmlContent)
 
-    return { cid: cid.toString(), html: htmlContent }
+    return cid.toString()
   }
 
   async uploadFile(file: File): Promise<string> {
     const { cid } = await this.kuboClient.add(file)
     return cid.toString()
-  }
-
-  async draftArticle(
-    channelAddress: string,
-    articleContent: string,
-    articleMetadata: {
-      value: string
-      key: string
-    }[],
-  ): Promise<Article | null> {
-    const db = await getMongoDb()
-
-    const articleToInsert = {
-      channelAddress,
-      content: articleContent,
-      metadata: articleMetadata,
-      createdAt: new Date(),
-    }
-
-    const result = await db.collection('articles').insertOne(articleToInsert)
-
-    return result.insertedId ? articleToInsert : null
-  }
-
-  async getDraftedArticlesCount(channelAddress: string): Promise<number> {
-    const db = await getMongoDb()
-
-    const count = await db.collection('articles').countDocuments({ channelAddress })
-
-    return count
-  }
-
-  async getDraftedArticles(channelAddress: string): Promise<any[]> {
-    const db = await getMongoDb()
-
-    const articles = await db.collection('articles').find({ channelAddress }).toArray()
-
-    return articles
   }
 
   async uploadHtmlContent(content: string): Promise<string> {

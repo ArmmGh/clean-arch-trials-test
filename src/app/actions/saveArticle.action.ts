@@ -22,21 +22,21 @@ export default async function saveArticleAction(input: z.infer<typeof inputSchem
       throw new InputParseError(inputParseError.message, { cause: inputParseError })
     }
 
-    const article = await saveArticleUseCase(data.channelAddress, data.article.content, data.article.metadata)
+    const metadata = await saveArticleUseCase(data.channelAddress, data.article.content, data.article.metadata)
 
     revalidatePath('/dashboard')
-    if (!article) {
+    if (!metadata) {
       throw new Error()
     }
 
-    return { success: true, article }
+    return { success: true, metadata }
   } catch (error) {
     console.log('error', error)
 
     if (error instanceof InputParseError || error instanceof DraftLimitExceed) {
-      return { error: error.message, article: null }
+      return { error: error.message, metadata: null }
     }
 
-    return { error: 'Something went wrong while saving the article', article: null }
+    return { error: 'Something went wrong while saving the article', metadata: null }
   }
 }

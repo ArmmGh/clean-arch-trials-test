@@ -1,10 +1,10 @@
-import Article from './Article'
-import { Loader2 } from 'lucide-react'
-import { useQuery } from '@tanstack/react-query'
-import { getAddress } from 'viem'
 import getArticlesByChannelAddressAction from '@/app/actions/getArticlesByChannelAddress.action'
-import { useAccount } from 'wagmi'
 import NoArticles from '@/app/dashboard/components/NoArticles'
+import { useQuery } from '@tanstack/react-query'
+import { Loader2 } from 'lucide-react'
+import { getAddress } from 'viem'
+import { useAccount } from 'wagmi'
+import Article from './Article'
 
 export default function Articles({ channelAddress, channelOwner }: { channelAddress: string; channelOwner: string }) {
   const { address } = useAccount()
@@ -12,8 +12,6 @@ export default function Articles({ channelAddress, channelOwner }: { channelAddr
     queryKey: ['articles-by-channel-address', { channelAddress, channelOwner }],
     queryFn: () => getArticlesByChannelAddressAction({ channelAddress: getAddress(channelAddress) }),
     enabled: !!channelAddress && !!channelOwner,
-    staleTime: 1000 * 60 * 10, // 10 minutes - keep the data fresh for 10 minutes
-    gcTime: 1000 * 60 * 60,
   })
 
   const isOwner = channelOwner === address
@@ -31,9 +29,6 @@ export default function Articles({ channelAddress, channelOwner }: { channelAddr
   }
 
   return (
-    <div className='grid gap-6'>
-      {/* {isOwner && (<Button>Create Article</Button>)} */}
-      {articles?.map((article: any) => <Article key={article.date} {...article} />)}
-    </div>
+    <div className='grid gap-6'>{articles?.map((article: any) => <Article key={article.date} {...article} />)}</div>
   )
 }
