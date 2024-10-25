@@ -1,8 +1,6 @@
 import { IArticlesRepository } from '@/use-cases/interfaces/IArticlesRepository.interface'
-import { injectable } from 'inversify'
 import { type KuboRPCClient, create } from 'kubo-rpc-client'
 
-@injectable()
 export class ArticlesRepository implements IArticlesRepository {
   public PUBLIC_GATEWAY
   public LOCAL_GATEWAY

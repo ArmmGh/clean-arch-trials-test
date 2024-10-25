@@ -5,11 +5,13 @@ import { type ReactNode } from 'react'
 import { cookieToInitialState } from 'wagmi'
 import './globals.css'
 
+import AddressChangeHandler from '@/components/layout/AddressChangeHandler'
 import Nav from '@/components/layout/Nav'
 import WrongNetworkNotifier from '@/components/layout/WrongNetworkNotifier'
 import { Toaster } from '@/components/ui/toaster'
 import { getConfig } from '@/lib/config/wagmi'
 import { Providers } from './providers'
+import NextTopLoader from 'nextjs-toploader'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,14 +26,17 @@ export default function RootLayout(props: { children: ReactNode }) {
   return (
     <html lang='en' suppressHydrationWarning>
       <body className={`${inter.className} antialiased`}>
+        <NextTopLoader color='hsl(var(--primary))' showSpinner={false} height={2} />
+
         <Providers initialState={initialState}>
-          {/* bg-gray-900 */}
           <div className='flex h-screen flex-col'>
             <WrongNetworkNotifier />
             <Nav />
 
             {props.children}
           </div>
+
+          <AddressChangeHandler />
         </Providers>
         <Toaster />
       </body>

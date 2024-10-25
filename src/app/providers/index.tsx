@@ -3,10 +3,10 @@
 import { type ReactNode, useState } from 'react'
 import { type State, WagmiProvider } from 'wagmi'
 
-import { ThemeProvider } from './theme-provider'
 import { TooltipProvider } from '@/components/ui/tooltip'
-import QueryClientProvider from './query-client-provider'
 import { getConfig } from '@/lib/config/wagmi'
+import QueryClientProvider from './query-client-provider'
+import { ThemeProvider } from './theme-provider'
 
 export function Providers(props: { children: ReactNode; initialState?: State }) {
   const [config] = useState(() => getConfig())

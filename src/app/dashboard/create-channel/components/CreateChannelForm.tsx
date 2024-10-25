@@ -1,3 +1,4 @@
+// TODO: think about moving to RSC
 'use client'
 
 import WithAuth from '@/components/HOC/withAuth'

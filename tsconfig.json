@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "forceConsistentCasingInFileNames": false,
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -11,9 +12,6 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "types": ["reflect-metadata"],
     "jsx": "preserve",
     "incremental": true,
     "plugins": [

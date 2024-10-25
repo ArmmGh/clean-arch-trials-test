@@ -4,7 +4,6 @@ import { WagmiStore } from './entities/types/cookie'
 
 export function middleware(request: NextRequest) {
   const wagmiStore = request.cookies.get('wagmi.store')
-  console.log('In middleware')
 
   if (!wagmiStore) {
     console.error('No wagmi store found in cookies')

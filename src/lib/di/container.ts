@@ -1,29 +1,18 @@
-import { Container } from 'inversify'
+import { createInjector, Scope } from 'typed-inject'
+import { DIContext, TOKENS } from './types'
+import { ArticlesRepository } from '@/repositories/Articles.repository'
+import { ChannelsRepository } from '@/repositories/Channels.repository'
 
-import { DI_RETURN_TYPES, DI_SYMBOLS } from './types'
-import { ChannelsModule } from './modules/channels.module'
-import { ArticlesModule } from './modules/articles.module'
+// Create and configure the injector
+let injector = createInjector()
+  .provideClass(TOKENS.IArticlesRepository, ArticlesRepository, Scope.Singleton)
+  .provideClass(TOKENS.IChannelsRepository, ChannelsRepository, Scope.Singleton)
 
-const ApplicationContainer = new Container({
-  defaultScope: 'Singleton',
-})
-
-export const initializeContainer = () => {
-  ApplicationContainer.load(ChannelsModule)
-  ApplicationContainer.load(ArticlesModule)
+// Export a getter function for dependencies
+export function getInjection<K extends keyof DIContext>(token: K): DIContext[K] {
+  try {
+    return injector.resolve(token)
+  } catch (error) {
+    throw new Error(`Failed to resolve dependency for token ${token}: ${error}`)
+  }
 }
-
-export const destroyContainer = () => {
-  ApplicationContainer.unload(ChannelsModule)
-  ApplicationContainer.unload(ArticlesModule)
-}
-
-if (process.env.NODE_ENV !== 'test') {
-  initializeContainer()
-}
-
-export function getInjection<K extends keyof typeof DI_SYMBOLS>(symbol: K): DI_RETURN_TYPES[K] {
-  return ApplicationContainer.get(DI_SYMBOLS[symbol])
-}
-
-export { ApplicationContainer }

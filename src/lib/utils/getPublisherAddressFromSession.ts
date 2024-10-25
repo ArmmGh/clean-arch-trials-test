@@ -1,9 +1,11 @@
+import { getAddress } from 'viem'
+
 export const getPublisherAddressFromSession = (cookies: any) => {
   const wagmiStore = cookies.get('wagmi.store')
 
   if (!wagmiStore) {
     // Return early if the cookie is not present
-    return null
+    return
   }
 
   let parsedWagmiStore
@@ -11,7 +13,7 @@ export const getPublisherAddressFromSession = (cookies: any) => {
     parsedWagmiStore = JSON.parse(wagmiStore.value)
   } catch (error) {
     console.error('Failed to parse wagmi.store cookie:', error)
-    return null
+    return
   }
 
   // Safely access the state object
@@ -20,15 +22,15 @@ export const getPublisherAddressFromSession = (cookies: any) => {
 
   if (!connections || !currentConnectionId) {
     // Return early if state properties are undefined or invalid
-    return null
+    return
   }
 
   const currentConnection = connections.find(([id]: [id: number]) => id === currentConnectionId)
 
   if (!currentConnection) {
-    return null
+    return
   }
 
   const [, connectionData] = currentConnection
-  return connectionData?.accounts[0] ?? null
+  return connectionData?.accounts[0] ? getAddress(connectionData?.accounts[0]) : undefined
 }

@@ -1,11 +1,11 @@
 'use server'
 
 import getAllChannelsUseCase from '@/use-cases/get-all-channels.use-case'
-import { ContractFunctionExecutionError, ContractFunctionZeroDataError } from 'viem'
+import { Address, ContractFunctionExecutionError, ContractFunctionZeroDataError } from 'viem'
 
-export default async function getAllChannelsAction() {
+export default async function getAllChannelsAction(userAddress?: Address) {
   try {
-    const channels = await getAllChannelsUseCase()
+    const channels = await getAllChannelsUseCase(userAddress)
 
     return channels
   } catch (error) {

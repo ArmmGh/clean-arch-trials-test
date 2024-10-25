@@ -1,12 +1,18 @@
 import { factoryAbi } from '@/abi/factoryAbi'
+import { SupabaseError } from '@/entities/errors/common'
 import { channelAbi } from '@/generated'
 import { contracts } from '@/lib/config/contracts'
+import { createClient } from '@/lib/utils/supabase/server'
 import { createViemClient } from '@/lib/utils/viemClient'
 import { IChannelsRepository } from '@/use-cases/interfaces/IChannelsRepository.interface'
-import { injectable } from 'inversify'
 import { Address, PublicClient } from 'viem'
 
-@injectable()
+// TODO: move to a common file
+enum SUPABASE_STATUSES {
+  SUCCESS = 201,
+  DELETE_SUCCESS = 204,
+}
+
 export class ChannelsRepository implements IChannelsRepository {
   private client: PublicClient
 
@@ -94,5 +100,124 @@ export class ChannelsRepository implements IChannelsRepository {
     })
 
     return tokenURI
+  }
+
+  async isUserFollowingChannel(channelAddress: Address, userAddress: Address): Promise<boolean> {
+    const supabase = createClient()
+
+    const { data } = await supabase
+      .from('followers')
+      .select()
+      .eq('user_address', userAddress)
+      .eq('channel_address', channelAddress)
+
+    return !!data?.length
+  }
+
+  async followChannel(channelAddress: Address, userAddress: Address): Promise<boolean> {
+    const supabase = createClient()
+
+    const { status, error } = await supabase.from('followers').insert({
+      user_address: userAddress,
+      channel_address: channelAddress,
+    })
+
+    if (error) {
+      throw new SupabaseError(error.message)
+    }
+
+    return status === SUPABASE_STATUSES.SUCCESS
+  }
+
+  async unfollowChannel(channelAddress: Address, userAddress: Address): Promise<boolean> {
+    const supabase = createClient()
+
+    const { status, error } = await supabase
+      .from('followers')
+      .delete()
+      .eq('user_address', userAddress)
+      .eq('channel_address', channelAddress)
+
+    if (error) {
+      throw new SupabaseError(error.message)
+    }
+
+    return status === SUPABASE_STATUSES.DELETE_SUCCESS
+  }
+
+  async getFollowedChannels(userAddress: Address) {
+    const supabase = createClient()
+
+    const { data, error } = await supabase.from('followers').select('channel_address').eq('user_address', userAddress)
+
+    if (error) {
+      throw new SupabaseError(error.message)
+    }
+
+    return data
+  }
+
+  async getFollowers(channelAddress: Address) {
+    const supabase = createClient()
+
+    const { data: followers, error } = await supabase
+      .from('followers')
+      .select('user_address')
+      .eq('channel_address', channelAddress)
+
+    if (error) {
+      throw new SupabaseError(error.message)
+    }
+
+    return followers
+  }
+
+  async getFollowersCount(channelAddress: Address) {
+    const supabase = createClient()
+
+    const { count } = await supabase
+      .from('followers')
+      .select('*', { count: 'exact', head: true })
+      .eq('channel_address', channelAddress)
+
+    return count || 0
+  }
+
+  async addChannelNotifications(notifications: { channel_address: string; user_address: string }[]): Promise<boolean> {
+    const supabase = createClient()
+
+    const { data, error } = await supabase
+      .from('channel_notifications')
+      .upsert(notifications, { onConflict: 'user_address,channel_address' })
+      .select()
+
+    if (error) {
+      throw new SupabaseError(error.message)
+    }
+
+    return !!data.length
+  }
+
+  async markChannelAsRead(userAddress: Address, channelAddress: Address): Promise<boolean> {
+    const supabase = createClient()
+
+    const result = await supabase
+      .from('channel_notifications')
+      .delete()
+      .eq('user_address', userAddress)
+      .eq('channel_address', channelAddress)
+
+    return result.status === SUPABASE_STATUSES.DELETE_SUCCESS
+  }
+
+  async getNotifications(userAddress: Address) {
+    const supabase = createClient()
+
+    const { data } = await supabase
+      .from('channel_notifications')
+      .select('channel_address')
+      .eq('user_address', userAddress)
+
+    return data?.map(({ channel_address }) => channel_address) || []
   }
 }

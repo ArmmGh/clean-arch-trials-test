@@ -25,6 +25,7 @@ export default async function saveArticleAction(input: z.infer<typeof inputSchem
     const metadata = await saveArticleUseCase(data.channelAddress, data.article.content, data.article.metadata)
 
     revalidatePath('/dashboard')
+
     if (!metadata) {
       throw new Error()
     }

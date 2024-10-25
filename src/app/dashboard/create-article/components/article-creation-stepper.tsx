@@ -1,6 +1,7 @@
 'use client'
 
 import saveArticleAction from '@/app/actions/saveArticle.action'
+import waitForTxAndNotifyAllChannelsAction from '@/app/actions/wait-for-tx-and-notify-all-channels.action'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -9,13 +10,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ToastAction } from '@/components/ui/toast'
 import { useReadMetadataAttributesGetDefaultMetadataAsArray, useWriteChannelMint } from '@/generated'
 import { useToast } from '@/hooks/use-toast'
-import { config } from '@/lib/config/wagmi'
-import { waitForTransactionReceipt } from '@wagmi/core'
 import { Loader2 } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'nextjs-toploader/app'
 import { useEffect, useState } from 'react'
 import { Controller, FormProvider, useFieldArray, useForm, useFormContext } from 'react-hook-form'
-import { Address } from 'viem'
+import { getAddress } from 'viem'
 import { useAccount } from 'wagmi'
 import ArticleEditor from './ArticleEditor'
 
@@ -104,18 +103,12 @@ function PreviewTab() {
   )
 }
 
-export default function ArticleCreationStepper({
-  setTab,
-  activeChannelAddress,
-}: {
-  setTab: (tab: 'create' | 'drafts') => void
-  activeChannelAddress?: Address
-}) {
+export default function ArticleCreationStepper({ activeChannelAddress }: { activeChannelAddress?: string }) {
   const [activeStep, setActiveStep] = useState('content')
-  const { toast } = useToast()
-  const { address: publisherAddress } = useAccount()
   const [isSaving, setIsSaving] = useState(false)
+  const { address: publisherAddress } = useAccount()
   const { writeContractAsync } = useWriteChannelMint()
+  const { toast } = useToast()
   const router = useRouter()
 
   const { data: defaultMetadata } = useReadMetadataAttributesGetDefaultMetadataAsArray({
@@ -144,12 +137,6 @@ export default function ArticleCreationStepper({
 
   const { handleSubmit, watch, setValue } = methods
 
-  useEffect(() => {
-    if (defaultMetadata && defaultMetadata.length > 0) {
-      setValue('metadata', defaultMetadata)
-    }
-  }, [defaultMetadata, setValue])
-
   const content = watch('content')
   const metadata = watch('metadata')
 
@@ -165,23 +152,16 @@ export default function ArticleCreationStepper({
       return
     }
     setIsSaving(true)
-    // 0. (Save) button clicked
-    // 1. Change Article content images to IPFS public gatewayed links
-    // 2. Save that Article as HTML on IPFS and put CID as htmlCid in the metadata field
-    // 3. Save Article as Draft in MongoDB and return
-    // 4. If is drafted successfully show (Mint) button or ask to MINT
-    // 5. Maybe allow only one draft for now
 
-    // const isDrafted = await checkIsDraftedAction()
-    // draftArticleAction
-
-    // const isDrafted = await draftArticleUseCase(channelAddress, articleContent)
-
-    const { metadata, error } = await saveArticleAction({ channelAddress: activeChannelAddress, article: data })
+    // TODO: check this getAddres part and decide about one standard acroos project
+    const { metadata, error } = await saveArticleAction({
+      channelAddress: getAddress(activeChannelAddress),
+      article: data,
+    })
 
     if (metadata) {
       const hash = await writeContractAsync({
-        address: activeChannelAddress,
+        address: getAddress(activeChannelAddress),
         args: [publisherAddress, metadata],
       })
 
@@ -189,15 +169,15 @@ export default function ArticleCreationStepper({
         title: 'Transaction Confirmation',
         description: (
           <div className='flex gap-2'>
-            <Loader2 className='w-5 h-5 animate-spin' /> Wait for transaction confirmation!
+            <Loader2 className='h-5 w-5 animate-spin' /> Wait for transaction confirmation!
           </div>
         ),
         duration: 24_500,
       })
 
-      const { status } = await waitForTransactionReceipt(config, { hash })
+      const { success, error } = await waitForTxAndNotifyAllChannelsAction(hash, getAddress(activeChannelAddress))
 
-      if (status === 'success') {
+      if (success) {
         toast({
           title: 'Success',
           description: 'Article minted successfully!',
@@ -214,7 +194,7 @@ export default function ArticleCreationStepper({
           ),
         })
 
-        router.push('/dashboard')
+        router.push(`/dashboard?channel=${activeChannelAddress}`)
       } else {
         toast({
           title: 'Article Minting Failed!',
@@ -222,16 +202,18 @@ export default function ArticleCreationStepper({
           variant: 'destructive',
         })
 
-        setTab('drafts')
+        router.refresh()
       }
 
       setIsSaving(false)
     } else {
       toast({
         variant: 'destructive',
-        title: 'Article Save Failed!',
+        title: 'Article creation Failed!',
         description: error,
       })
+
+      setIsSaving(false)
     }
   }
 
@@ -239,6 +221,12 @@ export default function ArticleCreationStepper({
     e.preventDefault() // Prevent form submission
     setActiveStep(nextStep)
   }
+
+  useEffect(() => {
+    if (defaultMetadata && defaultMetadata.length > 0) {
+      setValue('metadata', defaultMetadata)
+    }
+  }, [defaultMetadata, setValue])
 
   return (
     <FormProvider {...methods}>
