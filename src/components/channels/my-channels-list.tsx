@@ -1,15 +1,13 @@
 import { getPublisherAddressFromSession } from '@/lib/utils/getPublisherAddressFromSession'
 import { cookies } from 'next/headers'
 import ChannelItem from './channel-item'
-import { unstable_noStore as noStore } from 'next/cache'
 import React from 'react'
 import getPublisherAllChannelsAction from '@/app/actions/getPublisherAllChannels.action'
 import { redirect } from 'next/navigation'
 
 export default async function MyChannelsList({ className }: { className?: string }) {
-  noStore()
-
-  const address = getPublisherAddressFromSession(cookies())
+  const cookiesData = await cookies()
+  const address = getPublisherAddressFromSession(cookiesData)
 
   if (!address) return redirect('/')
 
@@ -23,8 +21,6 @@ export default async function MyChannelsList({ className }: { className?: string
           key={index}
           channel={channel}
           isOwner={address === channel.owner}
-          isFollowing={channel.isFollowing}
-          followersCount={channel.followersCount}
           userAddress={address}
         />
       ))}

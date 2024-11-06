@@ -1,4 +1,4 @@
-import ArticleEditor from '@/app/dashboard/create-article/components/ArticleEditor'
+import ArticleEditor from '@/components/articles/article-editor'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -10,12 +10,10 @@ import {
 } from '@/components/ui/dialog'
 
 export default function ArticleHtmlDialog({
-  html,
   name,
   description,
   htmlContent,
 }: {
-  html: string
   name: string
   description: string
   htmlContent?: string
@@ -31,17 +29,13 @@ export default function ArticleHtmlDialog({
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
 
-        {htmlContent ? (
-          <ArticleEditor
-            containerClassName={'overflow-hidden'}
-            className={'overflow-y-scroll'}
-            editable={false}
-            autofocus={false}
-            value={htmlContent}
-          />
-        ) : (
-          <iframe src={html} className='h-full w-full max-w-full' />
-        )}
+        <ArticleEditor
+          containerClassName={'overflow-hidden'}
+          className={'overflow-y-scroll'}
+          editable={false}
+          autofocus={false}
+          value={htmlContent}
+        />
       </DialogContent>
     </Dialog>
   )

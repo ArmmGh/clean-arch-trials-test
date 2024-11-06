@@ -1,14 +1,12 @@
 'use client'
 
-import saveArticleAction from '@/app/actions/saveArticle.action'
-import waitForTxAndNotifyAllChannelsAction from '@/app/actions/wait-for-tx-and-notify-all-channels.action'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ToastAction } from '@/components/ui/toast'
-import { useReadMetadataAttributesGetDefaultMetadataAsArray, useWriteChannelMint } from '@/generated'
+import { useReadMetadataAttributesGetDefaultMetadataAsArray, useWriteChannelCreateArticle } from '@/generated'
 import { useToast } from '@/hooks/use-toast'
 import { Loader2 } from 'lucide-react'
 import { useRouter } from 'nextjs-toploader/app'
@@ -16,17 +14,18 @@ import { useEffect, useState } from 'react'
 import { Controller, FormProvider, useFieldArray, useForm, useFormContext } from 'react-hook-form'
 import { getAddress } from 'viem'
 import { useAccount } from 'wagmi'
-import ArticleEditor from './ArticleEditor'
+import ArticleEditor from '@/components/articles/article-editor'
+import CoverImageTab from './cover-image-tab'
+import createArticleAction from '@/app/actions/articles/create-article.action'
+import prepareArticleMetadataAction from '@/app/actions/articles/prepare-article-metadata.action'
+import { prepareImagesGateway } from '@/lib/utils'
 
-export type MetadataItem = { key: string; value: string; isDefault: boolean }
+export type ArticleFormData = { content: string; metadata: MetadataItem[] }
 
-type FormData = {
-  content: string
-  metadata: MetadataItem[]
-}
+export type MetadataItem = { key: string; value: string; isDefault?: boolean }
 
 function ContentTab() {
-  const { control } = useFormContext<FormData>()
+  const { control } = useFormContext<ArticleFormData>()
   return (
     <div className='space-y-4'>
       <div>
@@ -42,7 +41,7 @@ function ContentTab() {
 }
 
 function MetadataTab() {
-  const { control } = useFormContext<FormData>()
+  const { control } = useFormContext<ArticleFormData>()
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'metadata',
@@ -50,25 +49,30 @@ function MetadataTab() {
 
   return (
     <div className='space-y-4'>
-      {fields.map((field, index) => (
-        <div key={field.id} className='flex space-x-2'>
-          <Controller
-            name={`metadata.${index}.key`}
-            control={control}
-            render={({ field: keyField }) => <Input {...keyField} placeholder='Key' disabled={field.isDefault} />}
-          />
-          <Controller
-            name={`metadata.${index}.value`}
-            control={control}
-            render={({ field: valueField }) => <Input {...valueField} placeholder='Value' />}
-          />
-          {!field.isDefault && (
-            <Button type='button' variant='destructive' onClick={() => remove(index)}>
-              Remove
-            </Button>
-          )}
-        </div>
-      ))}
+      {fields.map((field, index) => {
+        if (field.key === 'image') return null
+
+        return (
+          <div key={field.id} className='flex space-x-2'>
+            <Controller
+              name={`metadata.${index}.key`}
+              control={control}
+              render={({ field: keyField }) => <Input {...keyField} placeholder='Key' disabled={field.isDefault} />}
+            />
+            <Controller
+              name={`metadata.${index}.value`}
+              control={control}
+              render={({ field: valueField }) => <Input {...valueField} placeholder='Value' />}
+            />
+            {!field.isDefault && (
+              <Button type='button' variant='destructive' onClick={() => remove(index)}>
+                Remove
+              </Button>
+            )}
+          </div>
+        )
+      })}
+
       <Button type='button' onClick={() => append({ key: '', value: '', isDefault: false })}>
         Add New Metadata Field
       </Button>
@@ -77,7 +81,7 @@ function MetadataTab() {
 }
 
 function PreviewTab() {
-  const { watch } = useFormContext<FormData>()
+  const { watch } = useFormContext<ArticleFormData>()
   const content = watch('content')
   const metadata = watch('metadata')
 
@@ -107,7 +111,7 @@ export default function ArticleCreationStepper({ activeChannelAddress }: { activ
   const [activeStep, setActiveStep] = useState('content')
   const [isSaving, setIsSaving] = useState(false)
   const { address: publisherAddress } = useAccount()
-  const { writeContractAsync } = useWriteChannelMint()
+  const { writeContractAsync } = useWriteChannelCreateArticle()
   const { toast } = useToast()
   const router = useRouter()
 
@@ -118,7 +122,10 @@ export default function ArticleCreationStepper({ activeChannelAddress }: { activ
           const [keys, values] = data
           return keys.reduce((acc, key, index) => {
             if (key && values[index]) {
-              acc.push({ key, value: values[index], isDefault: true })
+              const isImage = key === 'image'
+              const defaultImage = `ipfs://${process.env.NEXT_PUBLIC_DEFAULT_METADATA_IMAGE}`
+
+              acc.push({ key, value: isImage ? defaultImage : values[index], isDefault: true })
             }
             return acc
           }, [] as MetadataItem[])
@@ -128,7 +135,7 @@ export default function ArticleCreationStepper({ activeChannelAddress }: { activ
     },
   })
 
-  const methods = useForm<FormData>({
+  const methods = useForm<ArticleFormData>({
     defaultValues: {
       content: '',
       metadata: [],
@@ -139,10 +146,9 @@ export default function ArticleCreationStepper({ activeChannelAddress }: { activ
 
   const content = watch('content')
   const metadata = watch('metadata')
-
   const isPreviewDisabled = !content || metadata.length === 0 || metadata.some((item) => !item.key || !item.value)
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: ArticleFormData) => {
     if (!activeChannelAddress || !publisherAddress) {
       toast({
         variant: 'destructive',
@@ -153,11 +159,8 @@ export default function ArticleCreationStepper({ activeChannelAddress }: { activ
     }
     setIsSaving(true)
 
-    // TODO: check this getAddres part and decide about one standard acroos project
-    const { metadata, error } = await saveArticleAction({
-      channelAddress: getAddress(activeChannelAddress),
-      article: data,
-    })
+    const articleContent = prepareImagesGateway(data.content)
+    const { metadata } = await prepareArticleMetadataAction({ content: articleContent, metadata: data.metadata })
 
     if (metadata) {
       const hash = await writeContractAsync({
@@ -175,7 +178,10 @@ export default function ArticleCreationStepper({ activeChannelAddress }: { activ
         duration: 24_500,
       })
 
-      const { success, error } = await waitForTxAndNotifyAllChannelsAction(hash, getAddress(activeChannelAddress))
+      const { success } = await createArticleAction({
+        hash,
+        channelAddress: getAddress(activeChannelAddress),
+      })
 
       if (success) {
         toast({
@@ -210,18 +216,20 @@ export default function ArticleCreationStepper({ activeChannelAddress }: { activ
       toast({
         variant: 'destructive',
         title: 'Article creation Failed!',
-        description: error,
       })
 
       setIsSaving(false)
     }
   }
 
-  const handleNavigation = (e: React.MouseEvent<HTMLButtonElement>, nextStep: string) => {
+  const handleNavigation = (e: React.MouseEvent<HTMLButtonElement>, direction: 'next' | 'previous') => {
     e.preventDefault() // Prevent form submission
-    setActiveStep(nextStep)
+    const steps = ['content', 'metadata', 'cover-image', 'preview']
+    const currentIndex = steps.indexOf(activeStep)
+    const nextIndex = direction === 'next' ? currentIndex + 1 : currentIndex - 1
+    setActiveStep(steps[nextIndex])
   }
-
+  9
   useEffect(() => {
     if (defaultMetadata && defaultMetadata.length > 0) {
       setValue('metadata', defaultMetadata)
@@ -238,18 +246,23 @@ export default function ArticleCreationStepper({ activeChannelAddress }: { activ
           </CardHeader>
           <CardContent>
             <Tabs value={activeStep} onValueChange={setActiveStep} className='w-full'>
-              <TabsList className='grid w-full grid-cols-3'>
+              <TabsList className='grid w-full grid-cols-4'>
                 <TabsTrigger value='content'>Content</TabsTrigger>
                 <TabsTrigger value='metadata'>Metadata</TabsTrigger>
+                <TabsTrigger value='cover-image'>Cover Image</TabsTrigger>
                 <TabsTrigger value='preview' disabled={isPreviewDisabled}>
                   Preview
                 </TabsTrigger>
               </TabsList>
+
               <TabsContent value='content'>
                 <ContentTab />
               </TabsContent>
               <TabsContent value='metadata'>
                 <MetadataTab />
+              </TabsContent>
+              <TabsContent value='cover-image'>
+                <CoverImageTab />
               </TabsContent>
               <TabsContent value='preview'>
                 <PreviewTab />
@@ -260,7 +273,7 @@ export default function ArticleCreationStepper({ activeChannelAddress }: { activ
             <Button
               type='button'
               variant='outline'
-              onClick={(e) => handleNavigation(e, activeStep === 'metadata' ? 'content' : 'metadata')}
+              onClick={(e) => handleNavigation(e, 'previous')}
               disabled={activeStep === 'content'}
             >
               Previous
@@ -273,8 +286,8 @@ export default function ArticleCreationStepper({ activeChannelAddress }: { activ
             ) : (
               <Button
                 type='button'
-                onClick={(e) => handleNavigation(e, activeStep === 'content' ? 'metadata' : 'preview')}
-                disabled={isPreviewDisabled}
+                onClick={(e) => handleNavigation(e, 'next')}
+                disabled={isPreviewDisabled && activeStep === 'cover-image'}
               >
                 Next
               </Button>

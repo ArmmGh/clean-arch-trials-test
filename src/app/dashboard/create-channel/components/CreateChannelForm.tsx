@@ -1,6 +1,7 @@
 // TODO: think about moving to RSC
 'use client'
 
+import AddChannelRequestAction from '@/app/actions/channels/add-channel-request.action'
 import WithAuth from '@/components/HOC/withAuth'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -37,21 +38,23 @@ function CreateChannelForm() {
       setIsLoading(true)
 
       const hash = await writeContractAsync({ args: [values.nftName, values.description] })
-      // TODO: add waiting mechanism client or server side to revalidate data
 
       toast({
         title: 'Transaction Confirmation',
         description: (
           <div className='flex gap-2'>
-            <Loader2 className='w-5 h-5 animate-spin' /> Wait for transaction confirmation!
+            <Loader2 className='h-5 w-5 animate-spin' /> Wait for transaction confirmation!
           </div>
         ),
         duration: 24_500,
       })
 
-      const tx = await waitForTransactionReceipt(config, { hash })
+      const { status } = await waitForTransactionReceipt(config, { hash })
 
-      if (tx.status === 'success') {
+      // TODO: Maybe remove the logics
+      // const { success } = await AddChannelRequestAction(hash)
+
+      if (status === 'success') {
         toast({
           title: 'Success',
           description: 'Channel created successfully!',
@@ -75,6 +78,7 @@ function CreateChannelForm() {
         })
       }
 
+      // TODO: navigate to specific route with channel address
       router.push('/dashboard')
     } catch (error) {
       let description

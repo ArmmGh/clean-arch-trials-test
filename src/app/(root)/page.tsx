@@ -1,11 +1,12 @@
 import ArticlesList from '@/components/articles/articles-list'
 import { isAddress } from 'viem'
 
-type SearchParams = {
+export type SearchParams = {
   channel?: string
 }
 
-export default function RootPage({ searchParams }: { searchParams: SearchParams }) {
+export default async function RootPage(props: { searchParams: Promise<SearchParams> }) {
+  const searchParams = await props.searchParams
   const { channel } = searchParams
   const isValidChannel = channel && isAddress(channel)
 

@@ -1,18 +1,13 @@
-import { createInjector, Scope } from 'typed-inject'
-import { DIContext, TOKENS } from './types'
-import { ArticlesRepository } from '@/repositories/Articles.repository'
-import { ChannelsRepository } from '@/repositories/Channels.repository'
+import { createContainer } from '@evyweb/ioctopus'
+import { registerChannelsModule } from './modules/channels.module'
+import { registerArticlesModule } from './modules/articles.module'
+import { DI_RETURN_TYPES, DI_SYMBOLS } from './types'
 
-// Create and configure the injector
-let injector = createInjector()
-  .provideClass(TOKENS.IArticlesRepository, ArticlesRepository, Scope.Singleton)
-  .provideClass(TOKENS.IChannelsRepository, ChannelsRepository, Scope.Singleton)
+const ApplicationContainer = createContainer()
 
-// Export a getter function for dependencies
-export function getInjection<K extends keyof DIContext>(token: K): DIContext[K] {
-  try {
-    return injector.resolve(token)
-  } catch (error) {
-    throw new Error(`Failed to resolve dependency for token ${token}: ${error}`)
-  }
+registerChannelsModule(ApplicationContainer)
+registerArticlesModule(ApplicationContainer)
+
+export function getInjection<K extends keyof typeof DI_SYMBOLS>(symbol: K): DI_RETURN_TYPES[K] {
+  return ApplicationContainer.get(DI_SYMBOLS[symbol])
 }

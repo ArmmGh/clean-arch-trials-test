@@ -1,7 +1,11 @@
 import Article from '@/components/articles/Article'
-import { getAddress, isAddress } from 'viem'
+import { Address, isAddress } from 'viem'
 import NoArticles from './no-articles'
-import getArticlesByChannelAddressAction from '@/app/actions/getArticlesByChannelAddress.action'
+import getArticlesByChannelAddressController from '@/controllers/articles/get-articles-by-channel-address.controller'
+
+async function getArticles(channelAddress: Address) {
+  return getArticlesByChannelAddressController({ channelAddress })
+}
 
 export default async function ArticlesList({
   channelAddress,
@@ -14,15 +18,15 @@ export default async function ArticlesList({
 
   if (!isValidChannel) return null
 
-  const articles = await getArticlesByChannelAddressAction({ channelAddress: getAddress(channelAddress) })
+  const articles = await getArticles(channelAddress)
 
   // TODO: fix isOwner
   if (!articles.length) return <NoArticles isOwner={isOwner} channelAddress={channelAddress} />
 
   return (
     <div className='grid gap-6'>
-      {articles.map((article: any) => (
-        <Article key={article.date} {...article} />
+      {articles.map((article, index) => (
+        <Article key={index} {...article} />
       ))}
     </div>
   )

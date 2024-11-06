@@ -4,9 +4,9 @@ import { ModeToggle } from '../ModeToggle'
 import Menu from './Menu'
 import Main from './Main'
 
+// sticky top-0 backdrop-blur-sm
 export default function Nav() {
   return (
-    // sticky top-0 backdrop-blur-sm
     <nav className='z-10'>
       <Main className='flex items-center justify-between px-4 py-4'>
         <div className='flex items-center gap-6'>

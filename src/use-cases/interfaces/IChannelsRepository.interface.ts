@@ -1,10 +1,11 @@
-import { Channel } from '@/entities/models/channel'
+import { ChannelInContract } from '@/entities/models/channel'
+import { ChannelRequest } from '@/entities/types/channel/channel-request.type'
 import { Address } from 'viem'
 
 export interface IChannelsRepository {
-  getAllChannelAddresses(): Promise<readonly `0x${string}`[]>
+  getWhitelistedChannelAddresses(): Promise<Address[]>
   getAllPublisherChannelAddresses(publisherAddress: Address): Promise<string[]>
-  getChannelByAddress(channelAddress: Address): Promise<Channel>
+  getChannelByAddress(channelAddress: Address): Promise<ChannelInContract>
   getChannelOwnerById({ id }: { id: Address }): Promise<any>
   getArticleById(channelAddress: Address, articleId: number): Promise<string> //TODO: article
   getLastArticleId(channelAddress: Address): Promise<bigint>
@@ -16,7 +17,6 @@ export interface IChannelsRepository {
       channel_address: string | null
     }[]
   >
-  // TODO: check how getNotifications is used for return Types
   getFollowersCount(channelAddress: Address): Promise<number>
   getFollowers(channelAddress: Address): Promise<
     {
@@ -25,5 +25,14 @@ export interface IChannelsRepository {
   >
   addChannelNotifications(notifications: { channel_address: string; user_address: string }[]): Promise<boolean>
   markChannelAsRead(userAddress: Address, channelAddress: Address): Promise<boolean>
-  getNotifications(userAddress: Address): Promise<string[]>
+  getChannelRequests(): Promise<ChannelRequest[]>
+  addChannelRequest(
+    channelAddress: Address,
+    channelOwner: Address,
+    status?: ChannelRequest['status'],
+  ): Promise<ChannelRequest>
+  whitelistChannelRequest(channelAddress: Address): Promise<ChannelRequest>
+  blacklistChannelRequest(channelAddress: Address): Promise<ChannelRequest>
+  getOtherChannelRequests(): Promise<ChannelRequest[]>
+  getAllChannelAddresses(): Promise<Address[]>
 }

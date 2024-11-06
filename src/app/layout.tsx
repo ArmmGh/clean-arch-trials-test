@@ -16,12 +16,13 @@ import NextTopLoader from 'nextjs-toploader'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Sociam Media',
+  title: 'Social Media',
   description: 'Decentralized social media platform',
 }
 
-export default function RootLayout(props: { children: ReactNode }) {
-  const initialState = cookieToInitialState(getConfig(), headers().get('cookie'))
+export default async function RootLayout(props: { children: ReactNode }) {
+  const headersData = await headers()
+  const initialState = cookieToInitialState(getConfig(), headersData.get('cookie'))
 
   return (
     <html lang='en' suppressHydrationWarning>

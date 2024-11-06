@@ -15,7 +15,8 @@ const inputSchema = z.object({
 
 export default async function unfollowChannelAction(input: z.infer<typeof inputSchema>) {
   try {
-    const serverUserAddress = getPublisherAddressFromSession(cookies())
+    const cookiesData = await cookies()
+    const serverUserAddress = getPublisherAddressFromSession(cookiesData)
 
     if (!serverUserAddress) {
       throw new Error('No user address found in session')

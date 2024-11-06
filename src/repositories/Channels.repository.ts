@@ -1,11 +1,13 @@
-import { factoryAbi } from '@/abi/factoryAbi'
+import { channelLedgerAbi } from '@/abi/channel-ledger-abi'
+import { mediaPlatformAbi } from '@/abi/media-platform-abi'
 import { SupabaseError } from '@/entities/errors/common'
+import { ChannelRequest } from '@/entities/types/channel/channel-request.type'
 import { channelAbi } from '@/generated'
 import { contracts } from '@/lib/config/contracts'
 import { createClient } from '@/lib/utils/supabase/server'
 import { createViemClient } from '@/lib/utils/viemClient'
 import { IChannelsRepository } from '@/use-cases/interfaces/IChannelsRepository.interface'
-import { Address, PublicClient } from 'viem'
+import { Address, PublicClient, zeroAddress } from 'viem'
 
 // TODO: move to a common file
 enum SUPABASE_STATUSES {
@@ -20,22 +22,12 @@ export class ChannelsRepository implements IChannelsRepository {
     this.client = createViemClient()
   }
 
-  async getAllChannelAddresses() {
-    const addresses = await this.client.readContract({
-      abi: factoryAbi,
-      functionName: 'getAllChannels',
-      address: contracts.factoryAddress,
-    })
-
-    return addresses
-  }
-
   async getAllPublisherChannelAddresses(publisherAddress: Address) {
     const addresses = await this.client.readContract({
-      abi: factoryAbi,
-      functionName: 'getChannels',
+      abi: channelLedgerAbi,
+      functionName: 'allChannelsForPublisher',
       args: [publisherAddress],
-      address: contracts.factoryAddress,
+      address: contracts.channelLedger,
     })
 
     return addresses as Address[]
@@ -56,10 +48,11 @@ export class ChannelsRepository implements IChannelsRepository {
         ...channelContract,
         functionName: 'symbol',
       }),
-      this.client.readContract({
-        ...channelContract,
-        functionName: 'owner',
-      }),
+      zeroAddress,
+      // this.client.readContract({
+      //   ...channelContract,
+      //   functionName: 'owner',
+      // }),
     ])
 
     return {
@@ -71,13 +64,14 @@ export class ChannelsRepository implements IChannelsRepository {
   }
 
   async getChannelOwnerById({ id }: { id: Address }) {
-    const owner = await this.client.readContract({
-      abi: channelAbi,
-      address: id,
-      functionName: 'owner',
-    })
+    return zeroAddress
+    // const owner = await this.client.readContract({
+    //   abi: channelAbi,
+    //   address: id,
+    //   functionName: 'owner',
+    // })
 
-    return owner
+    // return owner
   }
 
   async getLastArticleId(channelAddress: Address) {
@@ -103,7 +97,7 @@ export class ChannelsRepository implements IChannelsRepository {
   }
 
   async isUserFollowingChannel(channelAddress: Address, userAddress: Address): Promise<boolean> {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     const { data } = await supabase
       .from('followers')
@@ -115,7 +109,7 @@ export class ChannelsRepository implements IChannelsRepository {
   }
 
   async followChannel(channelAddress: Address, userAddress: Address): Promise<boolean> {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     const { status, error } = await supabase.from('followers').insert({
       user_address: userAddress,
@@ -130,7 +124,7 @@ export class ChannelsRepository implements IChannelsRepository {
   }
 
   async unfollowChannel(channelAddress: Address, userAddress: Address): Promise<boolean> {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     const { status, error } = await supabase
       .from('followers')
@@ -146,7 +140,7 @@ export class ChannelsRepository implements IChannelsRepository {
   }
 
   async getFollowedChannels(userAddress: Address) {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     const { data, error } = await supabase.from('followers').select('channel_address').eq('user_address', userAddress)
 
@@ -158,7 +152,7 @@ export class ChannelsRepository implements IChannelsRepository {
   }
 
   async getFollowers(channelAddress: Address) {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     const { data: followers, error } = await supabase
       .from('followers')
@@ -173,7 +167,7 @@ export class ChannelsRepository implements IChannelsRepository {
   }
 
   async getFollowersCount(channelAddress: Address) {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     const { count } = await supabase
       .from('followers')
@@ -184,7 +178,7 @@ export class ChannelsRepository implements IChannelsRepository {
   }
 
   async addChannelNotifications(notifications: { channel_address: string; user_address: string }[]): Promise<boolean> {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     const { data, error } = await supabase
       .from('channel_notifications')
@@ -199,7 +193,7 @@ export class ChannelsRepository implements IChannelsRepository {
   }
 
   async markChannelAsRead(userAddress: Address, channelAddress: Address): Promise<boolean> {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     const result = await supabase
       .from('channel_notifications')
@@ -210,14 +204,116 @@ export class ChannelsRepository implements IChannelsRepository {
     return result.status === SUPABASE_STATUSES.DELETE_SUCCESS
   }
 
-  async getNotifications(userAddress: Address) {
-    const supabase = createClient()
+  async getChannelRequests() {
+    const supabase = await createClient()
 
-    const { data } = await supabase
-      .from('channel_notifications')
-      .select('channel_address')
-      .eq('user_address', userAddress)
+    const { data, error } = await supabase
+      .from('channel_requests')
+      .select('channel_address, channel_owner, status, created_at')
+      .eq('environment', process.env.NODE_ENV)
 
-    return data?.map(({ channel_address }) => channel_address) || []
+    if (error) {
+      throw new SupabaseError(error.message)
+    }
+
+    return data
+  }
+
+  async addChannelRequest(
+    channelAddress: Address,
+    channelOwner: Address,
+    status: ChannelRequest['status'] = 'pending',
+  ) {
+    const supabase = await createClient()
+
+    const { data, error } = await supabase
+      .from('channel_requests')
+      .upsert(
+        {
+          channel_address: channelAddress,
+          channel_owner: channelOwner,
+          status,
+          environment: process.env.NODE_ENV,
+        },
+        { onConflict: 'channel_address,channel_owner,environment' },
+      )
+      .eq('environment', process.env.NODE_ENV)
+      .select('channel_address, channel_owner, status, created_at')
+      .limit(1)
+
+    if (error) {
+      throw new SupabaseError(error.message)
+    }
+
+    return data[0]
+  }
+
+  async blacklistChannelRequest(channelAddress: Address) {
+    const supabase = await createClient()
+
+    const { data, error } = await supabase
+      .from('channel_requests')
+      .update({ status: 'blacklisted' })
+      .eq('channel_address', channelAddress)
+      .eq('environment', process.env.NODE_ENV)
+      .select('channel_address, channel_owner, status, created_at')
+
+    if (error) {
+      throw new SupabaseError(error.message)
+    }
+
+    return data[0]
+  }
+
+  async whitelistChannelRequest(channelAddress: Address) {
+    const supabase = await createClient()
+    const { data, error } = await supabase
+      .from('channel_requests')
+      .update({ status: 'whitelisted' })
+      .eq('channel_address', channelAddress)
+      .eq('environment', process.env.NODE_ENV)
+      .select('channel_address, channel_owner, status, created_at')
+
+    if (error) {
+      throw new SupabaseError(error.message)
+    }
+
+    return data[0]
+  }
+
+  async getWhitelistedChannelAddresses(): Promise<Address[]> {
+    const addresses = await this.client.readContract({
+      abi: mediaPlatformAbi,
+      functionName: 'whitelistedChannelsList',
+      address: contracts.mediaPlatform,
+    })
+
+    return addresses as Address[]
+  }
+
+  async getAllChannelAddresses(): Promise<Address[]> {
+    const addresses = await this.client.readContract({
+      abi: channelLedgerAbi,
+      functionName: 'allChannels',
+      address: contracts.channelLedger,
+    })
+
+    return addresses as Address[]
+  }
+
+  async getOtherChannelRequests() {
+    const supabase = await createClient()
+
+    const { data, error } = await supabase
+      .from('channel_requests')
+      .select('channel_address, channel_owner, status, created_at')
+      .neq('status', 'whitelisted')
+      .eq('environment', process.env.NODE_ENV)
+
+    if (error) {
+      throw new SupabaseError(error.message)
+    }
+
+    return data
   }
 }

@@ -9,6 +9,33 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      admins: {
+        Row: {
+          address: string
+          environment: Database["public"]["Enums"]["env_type"]
+          id: string
+          last_login: string | null
+          session_expiry: string | null
+          session_token: string | null
+        }
+        Insert: {
+          address: string
+          environment: Database["public"]["Enums"]["env_type"]
+          id?: string
+          last_login?: string | null
+          session_expiry?: string | null
+          session_token?: string | null
+        }
+        Update: {
+          address?: string
+          environment?: Database["public"]["Enums"]["env_type"]
+          id?: string
+          last_login?: string | null
+          session_expiry?: string | null
+          session_token?: string | null
+        }
+        Relationships: []
+      }
       channel_notifications: {
         Row: {
           channel_address: string
@@ -30,6 +57,33 @@ export type Database = {
           id?: number
           last_read_timestamp?: string
           user_address?: string
+        }
+        Relationships: []
+      }
+      channel_requests: {
+        Row: {
+          channel_address: string
+          channel_owner: string
+          created_at: string
+          environment: Database["public"]["Enums"]["env_type"]
+          id: number
+          status: Database["public"]["Enums"]["channel_request_status"]
+        }
+        Insert: {
+          channel_address: string
+          channel_owner: string
+          created_at?: string
+          environment?: Database["public"]["Enums"]["env_type"]
+          id?: number
+          status: Database["public"]["Enums"]["channel_request_status"]
+        }
+        Update: {
+          channel_address?: string
+          channel_owner?: string
+          created_at?: string
+          environment?: Database["public"]["Enums"]["env_type"]
+          id?: number
+          status?: Database["public"]["Enums"]["channel_request_status"]
         }
         Relationships: []
       }
@@ -62,7 +116,8 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      channel_request_status: "pending" | "whitelisted" | "blacklisted"
+      env_type: "development" | "test" | "production"
     }
     CompositeTypes: {
       [_ in never]: never

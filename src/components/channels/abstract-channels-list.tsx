@@ -20,8 +20,6 @@ export default function AbstractChannelsList({
           key={index}
           channel={channel}
           isOwner={address === channel.owner}
-          isFollowing={channel.isFollowing}
-          followersCount={channel.followersCount}
           userAddress={address}
         />
       ))}

@@ -18,9 +18,10 @@ export class ArticlesRepository implements IArticlesRepository {
       `${process.env.KUBO_PROTOCOL}://${process.env.KUBO_HOST}:${process.env.KUBO_GATEWAY_PORT}/ipfs/`
   }
 
+  // TODO: need to move this kind of stuff outside of the repo
   async prepareImagesGateway(content: string): Promise<string> {
-    const regex = new RegExp(this.LOCAL_GATEWAY, 'g')
-    const newContent = content.replace(regex, this.PUBLIC_GATEWAY)
+    const regex = new RegExp(`${this.LOCAL_GATEWAY}(\\w+)`, 'g')
+    const newContent = content.replace(regex, 'ipfs://$1')
 
     return newContent
   }
@@ -30,26 +31,6 @@ export class ArticlesRepository implements IArticlesRepository {
     const isPinned = pinned ? !!pinned.toString() : false
 
     return isPinned
-  }
-
-  async uploadHtmlFromString(content: string): Promise<string> {
-    const htmlContent = `
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Article</title>
-      </head>
-      <body>
-        ${content}
-      </body>
-      </html>
-    `
-
-    const { cid } = await this.kuboClient.add(htmlContent)
-
-    return cid.toString()
   }
 
   async uploadFile(file: File): Promise<string> {

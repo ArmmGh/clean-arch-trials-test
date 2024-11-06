@@ -9,23 +9,20 @@ import { Address } from 'viem'
 import FollowButton from './follow-button'
 import Ping from './ping'
 import { useSearchParams } from 'next/navigation'
+import ChannelStatusBadge from './channel-status-badge'
 
 export default function ChannelItem({
-  isActive = false,
+  isOwner,
   channel,
   className,
   userAddress,
-  isFollowing,
-  followersCount,
-  isOwner = false,
+  showStatusBadge = false,
 }: {
   channel: Channel
+  isOwner: boolean
   className?: string
-  followersCount?: number
   userAddress?: Address
-  isFollowing?: boolean
-  isOwner?: boolean
-  isActive?: boolean
+  showStatusBadge?: boolean
 }) {
   const searchParams = useSearchParams()
   const avatarFallback = channel.name.slice(0, 2)
@@ -40,7 +37,7 @@ export default function ChannelItem({
       href={`?channel=${channel.address}`}
       prefetch={true}
     >
-      {isFollowing && userAddress && <Ping channelAddress={channel.address} userAddress={userAddress} />}
+      {channel.isFollowing && userAddress && <Ping channelAddress={channel.address} userAddress={userAddress} />}
 
       <div className='mb-3 flex items-center justify-between gap-1'>
         <div className='flex flex-1 items-center gap-1 overflow-hidden'>
@@ -55,7 +52,7 @@ export default function ChannelItem({
             className=''
             channelAddress={channel.address}
             userAddress={userAddress}
-            isFollowing={isFollowing}
+            isFollowing={channel.isFollowing}
           />
         )}
       </div>
@@ -67,9 +64,13 @@ export default function ChannelItem({
           <span className='mr-2 overflow-hidden text-ellipsis text-nowrap'>{channel.symbol}</span>
         </div>
         <div className='flex items-center gap-1'>
-          <Star className='h-full max-h-3 w-full max-w-3' />
-          {/* <span className='mr-2'>{(20).toFixed(0)}k</span> */}
-          <span className=''>{followersCount}</span>
+          {showStatusBadge && <ChannelStatusBadge status={channel.status} />}
+          <div className='flex items-center gap-1'>
+            <Star className='h-full max-h-3 w-full max-w-3' />
+            {/* <span className='mr-2'>{(20).toFixed(0)}k</span> */}
+            <span className=''>{channel.followersCount || 0}</span>
+            {/* TODO: || 0 is business logic, move to other place */}
+          </div>
         </div>
 
         {/* <span>Updated June 13 2024</span> */}

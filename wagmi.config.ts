@@ -1,7 +1,10 @@
-import { articleAbi } from '@/abi/articleAbi'
-import { channelAbi } from '@/abi/channelAbi'
-import { factoryAbi } from '@/abi/factoryAbi'
-import { metadataAttributesAbi } from '@/abi/metadataAttributesAbi'
+import { articleAbi } from '@/abi/article-abi'
+import { channelAbi } from '@/abi/channel-abi'
+import { channelLedgerAbi } from '@/abi/channel-ledger-abi'
+import { factoryAbi } from '@/abi/factory-abi'
+import { mainTowerAbi } from '@/abi/main-tower-abi'
+import { mediaPlatformAbi } from '@/abi/media-platform-abi'
+import { metadataAttributesAbi } from '@/abi/metadata-attributes-abi'
 import { availableChains } from '@/lib/config/chains'
 import nextEnv from '@next/env'
 import { defineConfig } from '@wagmi/cli'
@@ -19,6 +22,13 @@ export default defineConfig(() => {
     out: 'src/generated.ts',
     contracts: [
       {
+        name: 'MediaPlatform',
+        abi: mediaPlatformAbi,
+        address: {
+          [defaultChain.id]: getAddress(process.env.NEXT_PUBLIC_MEDIA_PLATFORM_ADDRESS!),
+        },
+      },
+      {
         name: 'MetadataAttributes',
         abi: metadataAttributesAbi,
         address: {
@@ -33,12 +43,26 @@ export default defineConfig(() => {
         },
       },
       {
+        name: 'ChannelLedger',
+        abi: channelLedgerAbi,
+        address: {
+          [defaultChain.id]: getAddress(process.env.NEXT_PUBLIC_CHANNEL_LEDGER_ADDRESS!),
+        },
+      },
+      {
         name: 'Channel',
         abi: channelAbi,
       },
       {
         name: 'Article',
         abi: articleAbi,
+      },
+      {
+        name: 'MainTower',
+        abi: mainTowerAbi,
+        address: {
+          [defaultChain.id]: getAddress(process.env.NEXT_PUBLIC_MAIN_TOWER_ADDRESS!),
+        },
       },
     ],
     plugins: [actions(), react()],

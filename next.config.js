@@ -11,7 +11,17 @@ module.exports = {
     },
   },
   images: {
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+
     remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: '127.0.0.1',
+        port: '8081',
+        pathname: '/ipfs/**',
+      },
       {
         protocol: 'https',
         hostname: 'brave-quail-62.telebit.io',

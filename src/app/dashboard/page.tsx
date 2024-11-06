@@ -14,10 +14,11 @@ type SearchParams = {
   channel?: string
 }
 
-export default async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
+export default async function Dashboard(props: { searchParams: Promise<SearchParams> }) {
+  const searchParams = await props.searchParams
   const { channel: activeChannelAddress } = searchParams
-
-  const address = getPublisherAddressFromSession(cookies())
+  const cookiesData = await cookies()
+  const address = getPublisherAddressFromSession(cookiesData)
 
   if (!address) return redirect('/')
 

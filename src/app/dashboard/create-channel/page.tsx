@@ -4,8 +4,8 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import CreateChannelForm from './components/CreateChannelForm'
 
-export default function CreateChannel() {
-  const cookiesData = cookies()
+export default async function CreateChannel() {
+  const cookiesData = await cookies()
   const publisherAddress = getPublisherAddressFromSession(cookiesData)
   if (!publisherAddress) redirect('/')
 

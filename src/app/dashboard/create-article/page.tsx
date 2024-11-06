@@ -7,7 +7,8 @@ import DraftedArticles from './components/DraftedArticles'
 
 export const maxDuration = 30
 
-export default async function CreateArticle({ searchParams }: { searchParams: { channel?: string } }) {
+export default async function CreateArticle(props: { searchParams: Promise<{ channel?: string }> }) {
+  const searchParams = await props.searchParams
   const { channel: activeChannelAddress } = searchParams
 
   // if (channels.length === 0) {
@@ -23,7 +24,7 @@ export default async function CreateArticle({ searchParams }: { searchParams: { 
       <div className='flex flex-col items-center py-4'>
         <ChannelChooser activeChannelAddress={activeChannelAddress} />
 
-        <Tabs defaultValue='create' className='w-[450px]'>
+        <Tabs defaultValue='create' className='w-[650px]'>
           <TabsList className='grid w-full grid-cols-2 rounded-none'>
             <TabsTrigger value='create'>Create Article</TabsTrigger>
             <TabsTrigger value='drafts'>Drafts</TabsTrigger>
