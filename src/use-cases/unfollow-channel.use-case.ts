@@ -1,4 +1,4 @@
-import { AuthorizeError } from '@/entities/errors/common'
+import { UnauthorizeError } from '@/entities/errors/common'
 import { getInjection } from '@/lib/di/container'
 import { Address } from 'viem'
 
@@ -17,7 +17,7 @@ export default async function unfollowChannelUseCase(
   const isFollowing = await channelRepo.isUserFollowingChannel(channelAddress, clientUserAddress)
 
   if (!isFollowing) {
-    throw new AuthorizeError('User is not following the channel') // TODO: Add a custom error class
+    throw new UnauthorizeError('User is not following the channel') // TODO: Add a custom error class
   }
 
   const followResult = await channelRepo.unfollowChannel(channelAddress, clientUserAddress)

@@ -2,7 +2,7 @@
 
 import { ColumnDef } from '@tanstack/react-table'
 import type { PresenterType } from '@/controllers/get-channel-requests-for-admin.controller'
-import { trimAddress } from '@/app/utils/trimAddress'
+import { trimAddress } from '@/utils/trimAddress'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,38 +18,13 @@ import { writeMediaPlatformRemoveWhitelistedChannel, writeMediaPlatformWhitelist
 import { config } from '@/lib/config/wagmi'
 import { getAddress } from 'viem'
 import { toast } from '@/hooks/use-toast'
-import markChannelAsBlacklistedAction from '@/app/actions/admin/mark-channel-as-blacklisted.action'
-import whitelistChannelAction from '@/app/actions/admin/whitelist-channel.action'
-import blacklistChannelAction from '@/app/actions/admin/blacklist-channel.action'
+import markChannelAsBlacklistedAction from '@/actions/admin/mark-channel-as-blacklisted.action'
+import whitelistChannelAction from '@/actions/admin/whitelist-channel.action'
+import blacklistChannelAction from '@/actions/admin/blacklist-channel.action'
+import { openStatusToast, openWaitingToast } from '@/lib/utils'
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-
-// TODO: move to shared place
-function openStatusToast(error: boolean = false) {
-  if (error) {
-    toast({
-      title: 'Error!',
-      variant: 'destructive',
-    })
-  } else {
-    toast({
-      title: 'Success!',
-      variant: 'success',
-    })
-  }
-}
-
-function openWaitingToast(title = 'Transaction Confirmation', description = 'Wait for transaction confirmation!') {
-  toast({
-    title,
-    description: (
-      <div className='flex gap-2'>
-        <Loader2 className='h-5 w-5 animate-spin' /> {description}
-      </div>
-    ),
-    duration: 24_500,
-  })
-}
+//
 
 function addressFormatter({ ...props }) {
   const formattedAddress = trimAddress(props.getValue('channelAddress'))

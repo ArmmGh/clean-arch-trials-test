@@ -1,4 +1,4 @@
-import { AuthorizeError, InputParseError } from '@/entities/errors/common'
+import { UnauthorizeError, InputParseError } from '@/entities/errors/common'
 import whitelistChannelUseCase from '@/use-cases/admin/whitelist-channel.use-case'
 import { Address, isAddress, isHash } from 'viem'
 import { z } from 'zod'
@@ -10,7 +10,7 @@ const inputSchema = z.object({
 
 export default async function whitelistChannelController(input: z.infer<typeof inputSchema>, sessionAddress: Address) {
   if (!sessionAddress) {
-    throw new AuthorizeError('Unauthorized')
+    throw new UnauthorizeError('Unauthorized')
   }
 
   const { data, error: inputParseError } = inputSchema.safeParse(input)

@@ -16,8 +16,8 @@ export default function WrongNetworkNotifier() {
   if (!isWrongNetwork || !supportedChain) return null
 
   return (
-    <div className='flex text-sm gap-1 flex-col items-center w-full bg-orange-600/10 border-b-2 border-orange-600/20 text-center p-4'>
-      <div className='flex items-center gap-1 text-orange-700'>
+    <div className='absolute left-0 right-0 z-20 flex w-full flex-col items-center gap-1 border-b-2 border-orange-600/20 bg-orange-600/40 p-4 text-center text-sm'>
+      <div className='flex items-center gap-1 text-orange-950'>
         <TriangleAlert />
         <p>
           Unsupported chain. Please switch to <span className='font-bold'>{supportedChain.name}</span> in your wallet.

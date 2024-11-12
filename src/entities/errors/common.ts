@@ -15,7 +15,7 @@ export class SupabaseError extends Error {
   }
 }
 
-export class AuthorizeError extends Error {
+export class UnauthorizeError extends Error {
   constructor(message: string, options?: ErrorOptions) {
     super(message, options)
   }

@@ -1,18 +1,38 @@
-import ArticlesList from '@/components/articles/articles-list'
-import { isAddress } from 'viem'
+import getAddressFromSession from '@/actions/utils/get-address-from-session.util'
+import ArticleItemSmall from '@/components/articles/article-item-small'
+import getLatestArticlesController from '@/controllers/articles/get-latest-articles.controller'
+import React from 'react'
+import { Address } from 'viem'
 
 export type SearchParams = {
   channel?: string
 }
 
-export default async function RootPage(props: { searchParams: Promise<SearchParams> }) {
-  const searchParams = await props.searchParams
-  const { channel } = searchParams
-  const isValidChannel = channel && isAddress(channel)
+const getLatestArticles = async (userAddress?: Address) => {
+  try {
+    return getLatestArticlesController({ userAddress })
+  } catch (error) {
+    console.error(error)
 
-  if (!isValidChannel) {
-    return <p className='text-center text-sm text-muted-foreground'>Choose a channel</p>
+    return []
   }
+}
 
-  return <ArticlesList channelAddress={channel} />
+export default async function RootPage(props: { searchParams: Promise<SearchParams> }) {
+  const userAddress = await getAddressFromSession()
+  const articles = await getLatestArticles(userAddress)
+
+  return (
+    <div className='grid grid-cols-3 gap-[30px] py-6'>
+      {articles.map((article, index) => (
+        <ArticleItemSmall
+          date={article.date}
+          name={article.name}
+          description={article.description}
+          image={article.image}
+          key={index}
+        />
+      ))}
+    </div>
+  )
 }

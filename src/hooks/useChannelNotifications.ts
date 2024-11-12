@@ -1,6 +1,6 @@
 'use client'
 
-import markChannelAsReadAction from '@/app/actions/mark-channel-as-read.action'
+import markChannelAsReadAction from '@/actions/mark-channel-as-read.action'
 import { createClient } from '@/lib/utils/supabase/client'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'

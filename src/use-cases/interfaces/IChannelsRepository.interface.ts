@@ -35,4 +35,5 @@ export interface IChannelsRepository {
   blacklistChannelRequest(channelAddress: Address): Promise<ChannelRequest>
   getOtherChannelRequests(): Promise<ChannelRequest[]>
   getAllChannelAddresses(): Promise<Address[]>
+  getFollowingChannels(userAddress: Address): Promise<Address[]>
 }

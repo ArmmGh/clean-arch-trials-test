@@ -3,8 +3,8 @@
 import { useAccount } from 'wagmi'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { checkAuth } from '@/app/actions/utils/with-admin-auth.util'
-import logoutAdmin from '@/app/actions/admin/admin-logout.action'
+import { checkAuth } from '@/actions/utils/with-admin-auth.util'
+import logoutAdmin from '@/actions/admin/admin-logout.action'
 import { Admin } from '@/entities/types/admin/index.type'
 
 export function useAuth() {

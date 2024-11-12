@@ -6,9 +6,9 @@ export default async function getAllChannelsUseCase(userAddress?: Address): Prom
   const channelsRepo = getInjection('IChannelsRepository')
   const channelAddresses = await channelsRepo.getAllChannelAddresses()
 
-  const [channels, followersCounts] = await Promise.all([
+  const [channels /*followersCounts*/] = await Promise.all([
     Promise.all(channelAddresses.map((channelAddress) => channelsRepo.getChannelByAddress(channelAddress))),
-    Promise.all(channelAddresses.map((channelAddress) => channelsRepo.getFollowersCount(channelAddress))),
+    //TODO: might be needed soon Promise.all(channelAddresses.map((channelAddress) => channelsRepo.getFollowersCount(channelAddress))),
   ])
 
   const followingStatuses = userAddress
@@ -19,7 +19,7 @@ export default async function getAllChannelsUseCase(userAddress?: Address): Prom
 
   return channelAddresses.map((address, index) => ({
     ...channels[index],
-    followersCount: followersCounts[index],
+    // followersCount: followersCounts[index],
     status: 'whitelisted',
     address,
     isFollowing: followingStatuses ? followingStatuses[index] : false,

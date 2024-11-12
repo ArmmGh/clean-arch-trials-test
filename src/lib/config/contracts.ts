@@ -6,4 +6,5 @@ export const contracts = {
   mediaPlatform: getAddress(process.env.NEXT_PUBLIC_MEDIA_PLATFORM_ADDRESS!),
   channelLedger: getAddress(process.env.NEXT_PUBLIC_CHANNEL_LEDGER_ADDRESS!),
   mainTower: getAddress(process.env.NEXT_PUBLIC_MAIN_TOWER_ADDRESS!),
+  followChannels: getAddress(process.env.NEXT_PUBLIC_FOLLOW_CHANNELS_ADDRESS!),
 }

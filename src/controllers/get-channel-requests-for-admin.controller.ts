@@ -1,4 +1,4 @@
-import { withAdminAuth } from '@/app/actions/utils/with-admin-auth.util'
+import { withAdminAuth } from '@/actions/utils/with-admin-auth.util'
 import { InputParseError } from '@/entities/errors/common'
 import { ChannelRequest } from '@/entities/types/channel/channel-request.type'
 import getChannelRequestsForAdminUseCase from '@/use-cases/admin/get-channel-requests-for-admin.use-case'

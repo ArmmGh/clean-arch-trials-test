@@ -2,8 +2,8 @@
 
 import { useAccount, useSignMessage } from 'wagmi'
 import { useRouter } from 'next/navigation'
-import ConnectWallet from '@/components/ConnectWallet'
-import adminLoginAction from '@/app/actions/admin/admin-login.action'
+import ConnectWallet from '@/components/connect-wallet'
+import adminLoginAction from '@/actions/admin/admin-login.action'
 import { useToast } from '@/hooks/use-toast'
 
 export default function AdminLogin() {

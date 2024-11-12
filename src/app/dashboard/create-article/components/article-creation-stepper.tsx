@@ -16,8 +16,8 @@ import { getAddress } from 'viem'
 import { useAccount } from 'wagmi'
 import ArticleEditor from '@/components/articles/article-editor'
 import CoverImageTab from './cover-image-tab'
-import createArticleAction from '@/app/actions/articles/create-article.action'
-import prepareArticleMetadataAction from '@/app/actions/articles/prepare-article-metadata.action'
+import createArticleAction from '@/actions/articles/create-article.action'
+import prepareArticleMetadataAction from '@/actions/articles/prepare-article-metadata.action'
 import { prepareImagesGateway } from '@/lib/utils'
 
 export type ArticleFormData = { content: string; metadata: MetadataItem[] }

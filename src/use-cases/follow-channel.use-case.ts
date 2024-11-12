@@ -1,4 +1,4 @@
-import { AuthorizeError } from '@/entities/errors/common'
+import { UnauthorizeError } from '@/entities/errors/common'
 import { getInjection } from '@/lib/di/container'
 import { Address } from 'viem'
 
@@ -17,7 +17,7 @@ export default async function followChannelUseCase(
   const isAlreadyFollower = await channelRepo.isUserFollowingChannel(channelAddress, clientUserAddress)
 
   if (isAlreadyFollower) {
-    throw new AuthorizeError('User is already subscribed to channel') // TODO: Add a custom error class
+    throw new UnauthorizeError('User is already subscribed to channel') // TODO: Add a custom error class
   }
 
   const followResult = await channelRepo.followChannel(channelAddress, clientUserAddress)

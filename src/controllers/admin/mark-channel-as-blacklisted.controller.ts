@@ -1,4 +1,4 @@
-import { AuthorizeError, InputParseError } from '@/entities/errors/common'
+import { UnauthorizeError, InputParseError } from '@/entities/errors/common'
 import markChannelAsBlacklistedUseCase from '@/use-cases/admin/mark-channel-as-blacklisted.use-case'
 
 import { Address, isAddress } from 'viem'
@@ -13,7 +13,7 @@ export default async function markChannelAsBlacklistedController(
   sessionAddress: Address,
 ) {
   if (!sessionAddress) {
-    throw new AuthorizeError('Unauthorized')
+    throw new UnauthorizeError('Unauthorized')
   }
 
   const { data, error: inputParseError } = inputSchema.safeParse(input)

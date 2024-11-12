@@ -1,17 +1,16 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { headers } from 'next/headers'
+import { cookies, headers } from 'next/headers'
 import { type ReactNode } from 'react'
-import { cookieToInitialState } from 'wagmi'
 import './globals.css'
-
 import AddressChangeHandler from '@/components/layout/AddressChangeHandler'
-import Nav from '@/components/layout/Nav'
+import AppNav from '@/components/layout/nav/app-nav'
 import WrongNetworkNotifier from '@/components/layout/WrongNetworkNotifier'
 import { Toaster } from '@/components/ui/toaster'
-import { getConfig } from '@/lib/config/wagmi'
-import { Providers } from './providers'
+import { Providers } from '../providers'
 import NextTopLoader from 'nextjs-toploader'
+import AppSidebar from '@/components/layout/sidebar/app-sidebar'
+import { getPublisherAddressFromSession } from '@/lib/utils/getPublisherAddressFromSession'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,22 +21,26 @@ export const metadata: Metadata = {
 
 export default async function RootLayout(props: { children: ReactNode }) {
   const headersData = await headers()
-  const initialState = cookieToInitialState(getConfig(), headersData.get('cookie'))
+  const cookiesData = await cookies()
+  const serverAddress = getPublisherAddressFromSession(cookiesData)
 
   return (
     <html lang='en' suppressHydrationWarning>
       <body className={`${inter.className} antialiased`}>
-        <NextTopLoader color='hsl(var(--primary))' showSpinner={false} height={2} />
+        <NextTopLoader zIndex={10000} color='hsl(var(--primary))' showSpinner={false} height={2} />
 
-        <Providers initialState={initialState}>
-          <div className='flex h-screen flex-col'>
-            <WrongNetworkNotifier />
-            <Nav />
+        <Providers cookies={headersData.get('cookie')}>
+          <WrongNetworkNotifier />
+
+          <AppSidebar serverAddress={serverAddress} />
+
+          <main className='mx-auto max-w-screen-xl flex-1 py-5 pr-8'>
+            <AppNav />
 
             {props.children}
-          </div>
+          </main>
 
-          <AddressChangeHandler />
+          <AddressChangeHandler serverAddress={serverAddress} />
         </Providers>
         <Toaster />
       </body>

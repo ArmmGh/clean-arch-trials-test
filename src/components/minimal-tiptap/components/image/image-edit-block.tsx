@@ -3,7 +3,7 @@ import type { Editor } from '@tiptap/react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
-import uploadArticleImageToIPFSAction from '@/app/actions/upload-article-image-to-ipfs.action'
+import uploadArticleImageToIPFSAction from '@/actions/upload-article-image-to-ipfs.action'
 import { useToast } from '@/hooks/use-toast'
 
 interface ImageEditBlockProps {

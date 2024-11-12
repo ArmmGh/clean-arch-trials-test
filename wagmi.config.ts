@@ -2,6 +2,7 @@ import { articleAbi } from '@/abi/article-abi'
 import { channelAbi } from '@/abi/channel-abi'
 import { channelLedgerAbi } from '@/abi/channel-ledger-abi'
 import { factoryAbi } from '@/abi/factory-abi'
+import { followChannelsAbi } from '@/abi/follow-channels-abi'
 import { mainTowerAbi } from '@/abi/main-tower-abi'
 import { mediaPlatformAbi } from '@/abi/media-platform-abi'
 import { metadataAttributesAbi } from '@/abi/metadata-attributes-abi'
@@ -62,6 +63,13 @@ export default defineConfig(() => {
         abi: mainTowerAbi,
         address: {
           [defaultChain.id]: getAddress(process.env.NEXT_PUBLIC_MAIN_TOWER_ADDRESS!),
+        },
+      },
+      {
+        name: 'FollowChannels',
+        abi: followChannelsAbi,
+        address: {
+          [defaultChain.id]: getAddress(process.env.NEXT_PUBLIC_FOLLOW_CHANNELS_ADDRESS!),
         },
       },
     ],

@@ -2,7 +2,7 @@ import { getPublisherAddressFromSession } from '@/lib/utils/getPublisherAddressF
 import { cookies } from 'next/headers'
 import ChannelItem from './channel-item'
 import React from 'react'
-import getPublisherAllChannelsAction from '@/app/actions/getPublisherAllChannels.action'
+import getPublisherAllChannelsAction from '@/actions/getPublisherAllChannels.action'
 import { redirect } from 'next/navigation'
 
 export default async function MyChannelsList({ className }: { className?: string }) {

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { WagmiStore } from './entities/types/cookie'
-import { validateAdminSession } from './app/actions/admin/utils'
+import { validateAdminSession } from './actions/admin/utils'
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname

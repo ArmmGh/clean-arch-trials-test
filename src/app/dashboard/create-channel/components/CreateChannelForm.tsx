@@ -1,7 +1,7 @@
 // TODO: think about moving to RSC
 'use client'
 
-import AddChannelRequestAction from '@/app/actions/channels/add-channel-request.action'
+import AddChannelRequestAction from '@/actions/channels/add-channel-request.action'
 import WithAuth from '@/components/HOC/withAuth'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -52,7 +52,7 @@ function CreateChannelForm() {
       const { status } = await waitForTransactionReceipt(config, { hash })
 
       // TODO: Maybe remove the logics
-      // const { success } = await AddChannelRequestAction(hash)
+      const { success } = await AddChannelRequestAction(hash)
 
       if (status === 'success') {
         toast({
