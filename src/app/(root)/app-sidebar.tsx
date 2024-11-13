@@ -8,7 +8,7 @@ import {
   SidebarHeader,
 } from '@/components/ui/sidebar'
 import { Address } from 'viem'
-import SidebarNavigation from './sidebar-navigation'
+import SidebarNavigation from '@/components/layout/sidebar/sidebar-navigation'
 import getAllChannelsController from '@/controllers/channels/get-all-channels.controller'
 import getFollowingChannelsController from '@/controllers/channels/get-following-channels.controller'
 import ChannelItemInList from '@/components/channels/channel-item-in-list'
@@ -41,7 +41,7 @@ export default async function AppSidebar({ serverAddress }: { serverAddress?: Ad
   const showFollowButton = !!(isLeaderboard && serverAddress)
 
   return (
-    <Sidebar variant='inset'>
+    <Sidebar variant='sidebar'>
       <SidebarHeader />
       <SidebarNavigation />
 

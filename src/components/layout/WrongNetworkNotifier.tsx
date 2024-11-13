@@ -16,7 +16,7 @@ export default function WrongNetworkNotifier() {
   if (!isWrongNetwork || !supportedChain) return null
 
   return (
-    <div className='absolute left-0 right-0 z-20 flex w-full flex-col items-center gap-1 border-b-2 border-orange-600/20 bg-orange-600/40 p-4 text-center text-sm'>
+    <div className='fixed left-0 right-0 z-20 flex w-full flex-col items-center gap-1 border-b-2 border-orange-600/20 bg-orange-600/40 p-4 text-center text-sm'>
       <div className='flex items-center gap-1 text-orange-950'>
         <TriangleAlert />
         <p>

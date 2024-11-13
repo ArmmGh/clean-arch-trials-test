@@ -1,36 +1,23 @@
-// import OtherChannelsList from '@/components/channels/other-channels-list'
-// import AllChannelsList from '@/components/channels/all-channels-list'
-// import LoadingSkeleton from '@/components/layout/loading-skeleton'
-// import { ScrollArea } from '@/components/ui/scroll-area'
-// import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ReactNode, Suspense } from 'react'
+import getAddressFromSession from '@/actions/utils/get-address-from-session.util'
+import AddressChangeHandler from '@/components/layout/AddressChangeHandler'
+import AppNav from '@/components/layout/nav/app-nav'
+import AppSidebar from '@/app/(root)/app-sidebar'
+import React, { ReactNode } from 'react'
 
-export default function App({ children }: { children: ReactNode }) {
-  return <>{children}</>
-  // <Tabs
-  //   defaultValue='whitelist'
-  //   className='mx-auto flex w-full max-w-screen-xl flex-1 flex-col space-y-4 overflow-hidden py-6'
-  // >
-  //   <TabsList className='mx-auto grid w-[400px] grid-cols-2'>
-  //     <TabsTrigger value='whitelist'>Whitelist</TabsTrigger>
-  //     <TabsTrigger value='others'>Others</TabsTrigger>
-  //   </TabsList>
+export default async function App(props: { children: ReactNode }) {
+  const serverAddress = await getAddressFromSession()
 
-  //   <div className='border-1 flex flex-1 flex-row overflow-hidden'>
-  //     <ScrollArea className='w-1/3 flex-1 border-r'>
-  //       <TabsContent value='whitelist'>
-  //         <Suspense fallback={<LoadingSkeleton />}>
-  //           <AllChannelsList />
-  //         </Suspense>
-  //       </TabsContent>
-  //       <TabsContent value='others'>
-  //         <Suspense fallback={<LoadingSkeleton />}>
-  //           <OtherChannelsList />
-  //         </Suspense>
-  //       </TabsContent>
-  //     </ScrollArea>
+  return (
+    <React.Fragment>
+      <AppSidebar serverAddress={serverAddress} />
 
-  //     <ScrollArea className='w-2/3 p-6'>{children}</ScrollArea>
-  //   </div>
-  // </Tabs>
+      <main className='relative mx-auto flex max-w-screen-xl flex-1 flex-col overflow-hidden pl-6 pr-8'>
+        <AppNav className='fixed left-[--sidebar-width] right-0 z-10 pl-6 pr-8 pt-5' />
+
+        <div className='pt-[116px]'>{props.children}</div>
+      </main>
+
+      <AddressChangeHandler serverAddress={serverAddress} />
+    </React.Fragment>
+  )
 }

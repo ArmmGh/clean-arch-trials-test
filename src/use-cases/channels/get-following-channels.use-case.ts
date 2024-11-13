@@ -12,7 +12,6 @@ export default async function getFollowingChannelsUseCase(userAddress?: Address)
 
   const rawChannels = await channelsRepo.getFollowingChannels(userAddress)
 
-  console.log('channels', rawChannels)
   const [channels] = await Promise.all([
     Promise.all(rawChannels.map((address) => channelsRepo.getChannelByAddress(address))),
   ])

@@ -14,14 +14,14 @@ export default function SearchInput({ clasName }: { clasName?: string }) {
   return (
     <div
       className={cn(
-        'flex flex-1 items-center gap-3 rounded-[50px] border border-slate-300 bg-background px-4 py-[10px]',
+        'flex flex-1 items-center gap-3 rounded-[50px] border border-slate-300 bg-white px-4 py-[10px]',
         clasName,
       )}
     >
       <Input
         type='text'
         placeholder='Search...'
-        className='h-5 border-0 p-0 px-0.5 text-sm text-gray-900 ring-0 placeholder:text-slate-400 focus-visible:ring-0 focus-visible:ring-offset-0'
+        className='h-5 border-0 bg-white p-0 px-0.5 text-sm text-gray-900 ring-0 placeholder:text-slate-400 focus-visible:ring-0 focus-visible:ring-offset-0'
       />
 
       <div className='flex items-center gap-2'>

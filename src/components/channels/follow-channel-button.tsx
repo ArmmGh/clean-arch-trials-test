@@ -11,7 +11,10 @@ export default function FollowChannelButton({ channelAddress }: { channelAddress
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 
-  const onFollow = async () => {
+  const onFollow = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+
     if (!channelAddress || isLoading) return
 
     setIsLoading(true)

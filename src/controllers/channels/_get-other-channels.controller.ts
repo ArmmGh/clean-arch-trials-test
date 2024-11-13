@@ -1,6 +1,6 @@
 import { InputParseError, SupabaseError } from '@/entities/errors/common'
 import { Channel } from '@/entities/models/channel'
-import getOtherChannelsUseCase from '@/use-cases/channels/get-other-channels.use-case'
+import getOtherChannelsUseCase from '@/use-cases/channels/_get-other-channels.use-case'
 import { Address, isAddress } from 'viem'
 import { z } from 'zod'
 

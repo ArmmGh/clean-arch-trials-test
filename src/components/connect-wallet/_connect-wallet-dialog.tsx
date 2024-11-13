@@ -1,4 +1,4 @@
-import WalletOptions from './wallet-options'
+import WalletOptions from './_wallet-options'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,

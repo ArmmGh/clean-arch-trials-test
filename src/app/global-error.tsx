@@ -1,4 +1,6 @@
-'use client' // Error boundaries must be Client Components
+'use client'
+
+import Link from 'next/link'
 
 export default function GlobalError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   return (
@@ -6,7 +8,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
     <html>
       <body>
         <h2>Something went wrong!</h2>
-        <button onClick={() => reset()}>Try again</button>
+        <Link href={'/'}>Go Home</Link>
       </body>
     </html>
   )

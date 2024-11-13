@@ -1,12 +1,15 @@
 import ConnectWallet from '@/components/connect-wallet'
 import { ModeToggle } from '@/components/ModeToggle'
 import SearchInput from './search-input'
+import { cn } from '@/lib/utils'
 
-export default function AppNav() {
+export default function AppNav(props: { className?: string }) {
   return (
-    <nav className='flex-1'>
-      <div className='flex items-center gap-6'>
-        <SearchInput />
+    <nav className={cn('backdrop-blur-sm', props.className)}>
+      <div className='flex items-start gap-6'>
+        <div className='flex-1 border-b border-slate-300 pb-4'>
+          <SearchInput />
+        </div>
 
         <div className='flex items-center gap-1'>
           <div className='min-w-[171px]'>
