@@ -13,10 +13,7 @@ export default function SearchInput({ clasName }: { clasName?: string }) {
 
   return (
     <div
-      className={cn(
-        'flex flex-1 items-center gap-3 rounded-[50px] border border-slate-300 bg-white px-4 py-[10px]',
-        clasName,
-      )}
+      className={cn('flex items-center gap-3 rounded-[50px] border border-slate-300 bg-white px-4 py-[10px]', clasName)}
     >
       <Input
         type='text'
