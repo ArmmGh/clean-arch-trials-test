@@ -1,80 +1,58 @@
-'use client'
-
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import type { Channel } from '@/entities/models/channel'
-import { cn } from '@/lib/utils'
-import { Circle, Star } from 'lucide-react'
+import { Channel } from '@/entities/models/channel'
+import FollowChannelButton from './follow-channel-button'
 import Link from 'next/link'
+import { cn } from '@/lib/utils'
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
+import { useReadFollowChannelsIsFollowing } from '@/generated'
+import { useAppKitAccount } from '@reown/appkit/react'
 import { Address } from 'viem'
-import FollowButton from './_follow-button'
-import Ping from './ping'
-import { useSearchParams } from 'next/navigation'
-import ChannelStatusBadge from './channel-status-badge'
 
 export default function ChannelItem({
-  isOwner,
-  channel,
+  name,
+  symbol,
+  address,
+  withFollowButton = false,
   className,
   userAddress,
-  showStatusBadge = false,
 }: {
-  channel: Channel
-  isOwner: boolean
+  withFollowButton?: boolean
+  name: Channel['name']
+  symbol: Channel['symbol']
+  address: Channel['address']
   className?: string
   userAddress?: Address
-  showStatusBadge?: boolean
 }) {
-  const searchParams = useSearchParams()
-  const avatarFallback = channel.name.slice(0, 2)
-  const isClientActive = searchParams ? searchParams.get('channel') === channel.address : false
+  // const { data: isFollowing } = useReadFollowChannelsIsFollowing({
+  //   args: [userAddress!, address],
+  //   query: { enabled: !!(withFollowButton && userAddress) },
+  // })
 
+  // TODO: maybe shorten address with first and last chars for url
   return (
     <Link
-      className={cn(
-        `relative flex cursor-pointer flex-col p-4 transition-colors duration-200 ${isClientActive ? 'bg-accent' : 'hover:bg-accent/50'} ${isOwner && 'br-2'}`,
-        className,
-      )}
-      href={`?channel=${channel.address}`}
+      href={`/channel/${address}`}
       prefetch={true}
+      className={cn('flex items-center justify-between px-2 py-1', className)}
     >
-      {channel.isFollowing && userAddress && <Ping channelAddress={channel.address} userAddress={userAddress} />}
+      <div className='flex items-center gap-2 overflow-hidden'>
+        <Avatar className='relative h-10 w-10'>
+          <AvatarImage src='/placeholder.svg' alt={name} />
 
-      <div className='mb-3 flex items-center justify-between gap-1'>
-        <div className='flex flex-1 items-center gap-1 overflow-hidden'>
-          <Avatar className='h-8 w-8'>
-            <AvatarFallback>{avatarFallback}</AvatarFallback>
-          </Avatar>
-          <h2 className='overflow-hidden text-ellipsis text-nowrap text-sm font-semibold'>{channel.name}</h2>
+          <AvatarFallback>
+            {name
+              .split(' ')
+              .map((word) => word[0].toUpperCase())
+              .join('')}
+          </AvatarFallback>
+        </Avatar>
+
+        <div className='flex-1 overflow-hidden'>
+          <div className='overflow-hidden text-ellipsis whitespace-nowrap text-sm text-black'>{name}</div>
+          <div className='overflow-hidden text-ellipsis whitespace-nowrap text-xs text-slate-600'>{symbol}</div>
         </div>
-
-        {!isOwner && userAddress && (
-          <FollowButton
-            className=''
-            channelAddress={channel.address}
-            userAddress={userAddress}
-            isFollowing={channel.isFollowing}
-          />
-        )}
       </div>
 
-      {/* <p className='mb-2 text-sm text-muted-foreground'>Here should be channel description</p> */}
-      <div className='flex w-full items-center justify-between text-xs text-muted-foreground'>
-        <div className='flex flex-1 items-center gap-1 overflow-hidden'>
-          <Circle className='h-full max-h-3 w-full max-w-3' />
-          <span className='mr-2 overflow-hidden text-ellipsis text-nowrap'>{channel.symbol}</span>
-        </div>
-        <div className='flex items-center gap-1'>
-          {showStatusBadge && <ChannelStatusBadge status={channel.status} />}
-          <div className='flex items-center gap-1'>
-            <Star className='h-full max-h-3 w-full max-w-3' />
-            {/* <span className='mr-2'>{(20).toFixed(0)}k</span> */}
-            <span className=''>{channel.followersCount || 0}</span>
-            {/* TODO: || 0 is business logic, move to other place */}
-          </div>
-        </div>
-
-        {/* <span>Updated June 13 2024</span> */}
-      </div>
+      {withFollowButton && <FollowChannelButton channelAddress={address} />}
     </Link>
   )
 }

@@ -1,6 +1,6 @@
 import { getPublisherAddressFromSession } from '@/lib/utils/getPublisherAddressFromSession'
 import { cookies } from 'next/headers'
-import ChannelItem from './channel-item'
+import ChannelItem from './_channel-item'
 import React from 'react'
 import getPublisherAllChannelsAction from '@/actions/getPublisherAllChannels.action'
 import { redirect } from 'next/navigation'

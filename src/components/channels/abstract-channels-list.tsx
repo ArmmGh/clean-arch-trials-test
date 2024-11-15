@@ -1,4 +1,4 @@
-import ChannelItem from './channel-item'
+import ChannelItem from './_channel-item'
 import React from 'react'
 import { Channel } from '@/entities/models/channel'
 import { Address } from 'viem'

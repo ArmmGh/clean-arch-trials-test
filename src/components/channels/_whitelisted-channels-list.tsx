@@ -1,7 +1,7 @@
 // TODO: maybe remove this and all corresponsding whitelist stuff
 import { getPublisherAddressFromSession } from '@/lib/utils/getPublisherAddressFromSession'
 import { cookies } from 'next/headers'
-import ChannelItem from './channel-item'
+import ChannelItem from './_channel-item'
 import React from 'react'
 import getWhitelistedChannelsController from '@/controllers/channels/_get-whitelisted-channels.controller'
 import { Address } from 'viem'

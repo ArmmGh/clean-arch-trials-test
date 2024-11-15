@@ -8,7 +8,7 @@ import { projectId, wagmiAdapter } from '@/lib/config/wagmi'
 import QueryClientProvider from './query-client-provider'
 import { ThemeProvider } from './theme-provider'
 import { SidebarProvider } from '@/components/ui/sidebar'
-import { createAppKit } from '@reown/appkit'
+import { createAppKit } from '@reown/appkit/react'
 import { defaultChain, getSupportedChains } from '@/lib/config/chains'
 import { siweConfig } from '@/lib/siwe/config'
 
