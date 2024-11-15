@@ -29,9 +29,7 @@ export default function ArticleItemSmall(props: {
       </div>
 
       <div className='flex flex-col gap-2 px-5 pb-6 pt-5'>
-        <div className=''>
-          <p className='text-base font-bold text-black'>{props.description}</p>
-        </div>
+        <p className='text-base font-bold text-black'>{props.description}</p>
 
         <Separator />
 

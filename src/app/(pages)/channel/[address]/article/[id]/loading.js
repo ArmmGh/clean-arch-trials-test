@@ -1,5 +1,9 @@
-export default function ArticleSkeleton() {
+import ArticleSkeleton from '@/components/skeletons/article-skeleton'
+
+export default function Loading() {
   return (
-    'loading...'
+  <div className='space-y-4 py-5'>
+    <ArticleSkeleton />
+  </div>
   )
 }
