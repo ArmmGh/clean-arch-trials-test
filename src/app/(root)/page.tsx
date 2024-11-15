@@ -26,6 +26,8 @@ export default async function RootPage(props: { searchParams: Promise<SearchPara
     <div className='grid grid-cols-3 gap-[30px] py-6'>
       {articles.map((article, index) => (
         <ArticleItemSmall
+          id={article.id}
+          channelAddress={article.channelAddress}
           date={article.date}
           name={article.name}
           description={article.description}

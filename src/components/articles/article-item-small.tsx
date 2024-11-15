@@ -2,22 +2,27 @@ import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Separator } from '@/components/ui/separator'
+import { Article } from '@/entities/models/article'
+import { Address } from 'viem'
 
 export default function ArticleItemSmall(props: {
-  date: string
-  name: string
-  description: string
-  image: string
+  id: Article['id']
+  date: Article['date']
+  name: Article['name']
+  description: Article['description']
+  image: Article['image']
+  channelAddress: Address
   className?: string
 }) {
+  const url = `channel/${props.channelAddress}/article/${props.id}`
+
   return (
     <Link
       className={cn(
         `round flex flex-col overflow-hidden rounded-2xl border border-slate-300 bg-white`,
         props.className,
       )}
-      href='/'
-      prefetch={true}
+      href={url}
     >
       <div className='relative h-[170px] w-full'>
         <Image src={props.image} fill alt={props.name} style={{ objectFit: 'cover' }} />

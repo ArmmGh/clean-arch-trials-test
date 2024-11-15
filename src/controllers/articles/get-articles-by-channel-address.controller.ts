@@ -1,6 +1,6 @@
 import { InputParseError } from '@/entities/errors/common'
 import { Article } from '@/entities/models/article'
-import { gatewayedIpfsUrl, humanizeTimestamp, replaceAllUrlsToGateway } from '@/lib/utils'
+import { gatewayedIpfsUrl, humanizeTimestamp } from '@/lib/utils'
 import getArticlesByChannelAddressUseCase from '@/use-cases/get-articles-by-channel-address.use-case'
 import { ContractFunctionExecutionError, isAddress } from 'viem'
 import { z } from 'zod'
@@ -9,13 +9,15 @@ function presenter(articles: Article[]) {
   return articles
     .sort((a, b) => Number(b.date) - Number(a.date))
     .map((article) => ({
+      id: article.id,
       date: humanizeTimestamp(article.date),
       name: article.name,
       description: article.description,
       image: article.image.includes('ipfs')
         ? gatewayedIpfsUrl(article.image)
         : gatewayedIpfsUrl(`ipfs://${process.env.NEXT_PUBLIC_DEFAULT_METADATA_IMAGE}`),
-      htmlContent: replaceAllUrlsToGateway(article.htmlContent),
+      emojis: article.emojis,
+      htmlContent: article.htmlContent, // TODO: temporarily added to support old-article
     }))
 }
 

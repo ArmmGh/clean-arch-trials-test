@@ -6,10 +6,12 @@ import getLatestArticlesUseCase from '@/use-cases/articles/get-latest-articles.u
 import { isAddress } from 'viem'
 import { z } from 'zod'
 
-function presenter(articles: Array<Article & Partial<Channel>>) {
+function presenter(articles: Array<Article & { channelAddress: Channel['address'] }>) {
   return articles
     .sort((a, b) => Number(b.date) - Number(a.date))
     .map((article) => ({
+      channelAddress: article.channelAddress,
+      id: article.id,
       date: humanizeTimestamp(article.date),
       name: article.name,
       description: article.description,
@@ -35,7 +37,7 @@ export default async function getLatestArticlesController(input: z.infer<typeof 
       throw new InputParseError(inputParseError.message)
     }
 
-    const articles = await getLatestArticlesUseCase(data.userAddress)
+    const articles = await getLatestArticlesUseCase()
 
     return presenter(articles)
   } catch (error) {

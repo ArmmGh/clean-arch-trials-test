@@ -12,23 +12,40 @@ export default async function getArticlesByChannelAddressUseCase(channelAddress:
     return []
   }
 
-  const promisedArticles = []
+  const articleIds = Array.from({ length: Number(lastArticleId) }, (_, index) => index + 1)
 
-  for (let articleId = 1; articleId <= Number(lastArticleId); articleId++) {
-    promisedArticles.push(channelsRepo.getArticleById(channelAddress, articleId))
-  }
+  const promisedTokenURIs = articleIds.map((id) => articlesRepo.getArticleTokenURIById(channelAddress, id))
+  const tokenURIs = await Promise.all(promisedTokenURIs)
+  const articleTokenURIs = tokenURIs.map((tokenURI, index) => ({
+    tokenURI,
+    id: articleIds[index],
+  }))
 
-  const rawArticles = await Promise.all(promisedArticles)
-  const parsedArticles = rawArticles?.map((article) => base64ToJson<Article>(article))
+  const parsedArticles = articleTokenURIs.map(({ tokenURI, id }) => ({
+    ...base64ToJson<Article>(tokenURI),
+    id,
+  }))
 
-  const articles = parsedArticles?.map(async (article) => {
-    const htmlContent = await articlesRepo.getContentByCID(article.htmlContent)
+  const articlesWithContent = await Promise.all(
+    parsedArticles.map(async (article) => {
+      const htmlContent = await articlesRepo.getContentByCID(article.htmlContent)
+      return {
+        ...article,
+        htmlContent,
+        emojis: [
+          { emoji: '👍', count: 100 },
+          {
+            emoji: '🔥',
+            count: 5,
+          },
+          {
+            emoji: '👎',
+            count: 2,
+          },
+        ],
+      }
+    }),
+  )
 
-    return {
-      ...article,
-      htmlContent,
-    }
-  })
-
-  return Promise.all(articles)
+  return articlesWithContent
 }

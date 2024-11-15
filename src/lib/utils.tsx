@@ -1,6 +1,6 @@
 import { toast } from '@/hooks/use-toast'
 import { type ClassValue, clsx } from 'clsx'
-import { format, secondsToMilliseconds } from 'date-fns'
+import { differenceInSeconds, format, formatDistanceToNow, secondsToMilliseconds } from 'date-fns'
 import { Loader2 } from 'lucide-react'
 import { twMerge } from 'tailwind-merge'
 
@@ -99,5 +99,14 @@ export function openStatusToast(error: boolean = false) {
       title: 'Success!',
       variant: 'success',
     })
+  }
+}
+
+export const getTimeAgo = (date: Date) => {
+  const diff = differenceInSeconds(new Date(), date)
+  if (diff < 30) {
+    return 'now'
+  } else {
+    return formatDistanceToNow(date, { addSuffix: true, includeSeconds: true })
   }
 }

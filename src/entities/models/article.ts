@@ -10,7 +10,14 @@ const defaultArticleSchema = z.object({
 
 export const getArticleSchema = z.object({
   ...defaultArticleSchema.shape,
+  id: z.number(),
   htmlContent: z.string(),
+  emojis: z.array(
+    z.object({
+      emoji: z.string(),
+      count: z.number(),
+    }),
+  ),
 })
 
 export type Article = z.infer<typeof getArticleSchema>

@@ -2,9 +2,7 @@ import { Channel } from '@/entities/models/channel'
 import FollowChannelButton from './follow-channel-button'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
-import { useReadFollowChannelsIsFollowing } from '@/generated'
-import { useAppKitAccount } from '@reown/appkit/react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Address } from 'viem'
 
 export default function ChannelItem({

@@ -7,7 +7,6 @@ export interface IChannelsRepository {
   getAllPublisherChannelAddresses(publisherAddress: Address): Promise<string[]>
   getChannelByAddress(channelAddress: Address): Promise<ChannelInContract>
   getChannelOwnerById({ id }: { id: Address }): Promise<any>
-  getArticleById(channelAddress: Address, articleId: number): Promise<string> //TODO: article
   getLastArticleId(channelAddress: Address): Promise<bigint>
   isUserFollowingChannel(channelAddress: Address, userAddress: Address): Promise<boolean>
   followChannel(channelAddress: Address, userAddress: Address): Promise<boolean>

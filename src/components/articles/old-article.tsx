@@ -12,7 +12,7 @@ export default function Article({
   image,
   htmlContent,
   ...props
-}: Omit<Article, 'externalUrl'>) {
+}: Omit<Article, 'externalUrl' | 'emojis'>) {
   return (
     <div className='overflow-hidden rounded-lg border'>
       <div className='relative h-48 w-full'>

@@ -1,7 +1,7 @@
 import getArticlesByChannelAddressController from '@/controllers/articles/get-articles-by-channel-address.controller'
 import { Address } from 'viem'
-import Article from './article'
 import SuggestedChannels from './suggested-channels'
+import ArticlePreview from '@/components/articles/article-preview'
 
 const getArticles = async (channelAddress: Address) => {
   try {
@@ -25,25 +25,15 @@ export default async function ChannelPage({ params }: { params: Promise<{ addres
     <div className='grid gap-6 overflow-hidden md:grid-cols-[1fr,345px]'>
       <div className='space-y-[13px] pb-5'>
         {articles.map((article, index) => (
-          <Article
-            isPreview={true}
+          <ArticlePreview
+            id={article.id}
+            channelAddress={channelAddress}
             key={index}
             date={article.date}
             description={article.description}
             image={article.image}
-            htmlContent={article.htmlContent}
             name={article.name}
-            emojis={[
-              { emoji: '👍', count: 100 },
-              {
-                emoji: '🔥',
-                count: 5,
-              },
-              {
-                emoji: '👎',
-                count: 2,
-              },
-            ]}
+            emojis={article.emojis}
           />
         ))}
       </div>

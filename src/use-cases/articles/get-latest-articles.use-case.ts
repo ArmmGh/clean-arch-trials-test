@@ -1,45 +1,43 @@
 import { Article } from '@/entities/models/article'
+import { Channel } from '@/entities/models/channel'
 import { getInjection } from '@/lib/di/container'
 import { base64ToJson } from '@/lib/utils'
-import { Address } from 'viem'
 
-export default async function getLatestArticlesUseCase(userAddress?: Address): Promise<Article[]> {
+export default async function getLatestArticlesUseCase(): Promise<
+  Array<Article & { channelAddress: Channel['address'] }>
+> {
   const articlesRepo = getInjection('IArticlesRepository')
   const channelsRepo = getInjection('IChannelsRepository')
 
   const allChannelAddresses = await channelsRepo.getAllChannelAddresses()
 
-  // Get all last article IDs
   const lastArticleIds = await Promise.all(
     allChannelAddresses.map((channelAddress) => channelsRepo.getLastArticleId(channelAddress)),
   )
 
-  // Get articles with proper error handling and filtering
   const rawArticles = await Promise.all(
     allChannelAddresses.map(async (channelAddress, idx) => {
       const articleId = lastArticleIds[idx]
 
       if (!articleId) return null
 
-      const article = await channelsRepo.getArticleById(channelAddress, Number(articleId))
+      const tokenURI = await articlesRepo.getArticleTokenURIById(channelAddress, Number(articleId))
 
       return {
-        article,
+        tokenURI,
         channelAddress,
+        id: Number(articleId),
       }
     }),
   )
 
-  // Filter out null values and parse articles
-  const validRawArticles = rawArticles.filter(
-    (item): item is { article: string; channelAddress: Address } => !!item?.article,
-  )
+  const validRawArticles = rawArticles.filter((item) => item && item.tokenURI)
   const parsedArticles = validRawArticles.map((item) => ({
-    ...base64ToJson<Article>(item.article),
-    channelAddress: item.channelAddress,
+    ...base64ToJson<Article>(item?.tokenURI!),
+    channelAddress: item?.channelAddress!,
+    id: item?.id!,
   }))
 
-  // Get HTML content for valid articles
   const articlesWithContent = await Promise.all(
     parsedArticles.map(async (article) => {
       const htmlContent = await articlesRepo.getContentByCID(article.htmlContent)
@@ -52,6 +50,5 @@ export default async function getLatestArticlesUseCase(userAddress?: Address): P
     }),
   )
 
-  // Filter out any null results from HTML content fetching
-  return articlesWithContent.filter((article): article is Article & { channelAddress: Address } => !!article)
+  return articlesWithContent
 }

@@ -36,7 +36,7 @@ export default async function RootLayout(props: { children: ReactNode }) {
           <main className='relative mx-auto flex max-w-screen-xl flex-1 flex-col overflow-hidden pl-6 pr-8'>
             <AppNav className='fixed left-[--sidebar-width] right-0 z-10 pl-6 pr-8 pt-5' />
 
-            <div className='pt-[116px]'>{props.children}</div>
+            <div className='pb-5 pt-[116px]'>{props.children}</div>
           </main>
 
           <AddressChangeHandler serverAddress={serverAddress} />

@@ -86,17 +86,6 @@ export class ChannelsRepository implements IChannelsRepository {
     return lastArticleId
   }
 
-  async getArticleById(channelAddress: Address, articleId: number): Promise<string> {
-    const tokenURI = await this.client.readContract({
-      abi: channelAbi,
-      address: channelAddress,
-      functionName: 'tokenURI',
-      args: [BigInt(articleId)],
-    })
-
-    return tokenURI
-  }
-
   async isUserFollowingChannel(channelAddress: Address, userAddress: Address): Promise<boolean> {
     const supabase = await createClient()
 
