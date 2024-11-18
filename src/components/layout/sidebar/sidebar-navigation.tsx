@@ -5,6 +5,7 @@ import { Bookmark, Home, Rocket, Settings, TrendingUp } from 'lucide-react'
 import MenuItem from './menu-item'
 import { usePathname } from 'next/navigation'
 import { useAppKitAccount } from '@reown/appkit/react'
+import { Separator } from '@/components/ui/separator'
 
 const publicItems = [
   {
@@ -63,9 +64,12 @@ export default function SidebarNavigation() {
             ))}
           </SidebarMenu>
         </SidebarGroupContent>
+
+        <Separator className='mt-[6px]' />
       </SidebarGroup>
+
       {isConnected && (
-        <SidebarGroup>
+        <SidebarGroup className='pt-0'>
           <SidebarGroupContent>
             <SidebarMenu>
               {userItems.map((item, index) => (
@@ -82,6 +86,8 @@ export default function SidebarNavigation() {
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
+
+          <Separator className='mt-[6px]' />
         </SidebarGroup>
       )}
     </>

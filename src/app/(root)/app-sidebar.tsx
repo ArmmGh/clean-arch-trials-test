@@ -6,6 +6,9 @@ import { Suspense } from 'react'
 import { Channel } from '@/entities/models/channel'
 import getFollowingChannelsController from '@/controllers/channels/get-following-channels.controller'
 import getAllChannelsController from '@/controllers/channels/get-all-channels.controller'
+import Logo from '@/components/logo'
+import Link from 'next/link'
+import { Separator } from '@/components/ui/separator'
 
 async function getChannels({
   address,
@@ -29,12 +32,19 @@ async function getChannels({
   }
 }
 
-export default function AppSidebar({ serverAddress: userAddress }: { serverAddress?: Address }) {
+export default async function AppSidebar({ serverAddress: userAddress }: { serverAddress?: Address }) {
   const promisedChannels = getChannels({ address: userAddress })
 
   return (
     <Sidebar variant='sidebar'>
-      <SidebarHeader />
+      <SidebarHeader className='px-5 py-2'>
+        <Link href={'/'}>
+          <Logo />
+        </Link>
+
+        <Separator />
+      </SidebarHeader>
+
       <SidebarNavigation />
 
       <Suspense fallback={<div>Loading......</div>}>
