@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { Address } from 'viem'
 import { useAppKitAccount } from '@reown/appkit/react'
 
-const SECURE_PATHS = ['/dashboard'] as const
+const SECURE_PATHS = ['/dashboard', '/towers', '/admin'] as const
 const PUBLIC_REDIRECT = '/' as const
 
 export default function AddressChangeHandler({ serverAddress }: { serverAddress?: Address }) {
