@@ -1,4 +1,4 @@
-import { AppKitNetwork, type Chain, bahamut, hardhat } from '@reown/appkit/networks'
+import { type AppKitNetwork, bahamut, Chain, hardhat } from '@reown/appkit/networks'
 
 export const availableChains: Record<Chain['id'], Chain> = {
   [bahamut.id]: bahamut,

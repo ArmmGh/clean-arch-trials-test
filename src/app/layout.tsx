@@ -39,7 +39,7 @@ export default async function RootLayout(props: { children: ReactNode }) {
             <div className='pb-5 pt-[116px]'>{props.children}</div>
           </main>
 
-          <AddressChangeHandler serverAddress={serverAddress} />
+          <AddressChangeHandler />
         </Providers>
         <Toaster />
       </body>

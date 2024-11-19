@@ -43,16 +43,31 @@ export const siweConfig = createSIWEConfig({
       return false
     }
   },
+
   signOut: async () => {
+    const securePaths = ['/dashboard', '/admin', '/towers', '/saved', '/settings']
+    const currentPathname = window.location.pathname
+
     try {
+      const isProtectedRoute = securePaths.includes(currentPathname)
+      const callbackUrl = isProtectedRoute ? '/' : undefined
+      const redirect = isProtectedRoute ? true : false
+
       await signOut({
-        redirect: false,
+        redirect,
+        callbackUrl,
       })
+
+      if (!isProtectedRoute) {
+        window.postMessage({ type: 'sign-out' }, window.location.origin)
+      }
 
       return true
     } catch (error) {
       return false
     }
   },
-  onSignIn: (session) => {},
+  onSignIn: (session) => {
+    window.postMessage({ type: 'sign-in', session }, window.location.origin)
+  },
 })

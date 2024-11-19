@@ -20,7 +20,7 @@ const metadata = {
   name: 'social-media',
   description: 'Decentralized Social Media',
   // url: 'https://appkitexampleapp.com', // origin must match your domain & subdomain
-  url: 'http://localhost:3000',
+  url: process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'http://localhost:3000',
   icons: ['https://avatars.githubusercontent.com/u/179229932'],
 }
 
@@ -35,6 +35,7 @@ const modal = createAppKit({
     email: false,
     socials: false,
     analytics: true, // Optional - defaults to your Cloud configuration
+    swaps: false,
   },
   siweConfig,
 })

@@ -17,7 +17,7 @@ export default async function App(props: { children: ReactNode }) {
         <div className='pt-[116px]'>{props.children}</div>
       </main>
 
-      <AddressChangeHandler serverAddress={serverAddress} />
+      <AddressChangeHandler />
     </React.Fragment>
   )
 }

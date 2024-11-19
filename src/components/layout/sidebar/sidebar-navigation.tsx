@@ -41,9 +41,8 @@ const userItems = [
   },
 ]
 
-export default function SidebarNavigation() {
+export default function SidebarNavigation({ isConnected }: { isConnected: boolean }) {
   const pathname = usePathname()
-  const { isConnected } = useAppKitAccount()
 
   return (
     <>

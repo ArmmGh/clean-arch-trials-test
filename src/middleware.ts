@@ -19,12 +19,12 @@ export async function middleware(req: NextRequest) {
       response.cookies.delete('admin-session')
       return response
     }
-  }
+  } else {
+    const token = await getToken({ req })
 
-  const token = await getToken({ req })
-
-  if (!token || !token.sub) {
-    return NextResponse.redirect(new URL('/', req.url))
+    if (!token || !token.sub) {
+      return NextResponse.redirect(new URL('/', req.url))
+    }
   }
 
   return NextResponse.next()

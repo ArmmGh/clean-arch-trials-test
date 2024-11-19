@@ -45,7 +45,7 @@ export default async function AppSidebar({ serverAddress: userAddress }: { serve
         <Separator />
       </SidebarHeader>
 
-      <SidebarNavigation />
+      <SidebarNavigation isConnected={!!userAddress} />
 
       <Suspense fallback={<div>Loading......</div>}>
         <SidebarBody promisedChannels={promisedChannels} userAddress={userAddress} />
