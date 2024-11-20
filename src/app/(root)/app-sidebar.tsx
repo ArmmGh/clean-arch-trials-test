@@ -9,6 +9,7 @@ import getAllChannelsController from '@/controllers/channels/get-all-channels.co
 import Logo from '@/components/logo'
 import Link from 'next/link'
 import { Separator } from '@/components/ui/separator'
+import SidebarBodySkeleton from '@/components/skeletons/sidebar-body.skeleton'
 
 async function getChannels({
   address,
@@ -47,7 +48,7 @@ export default async function AppSidebar({ serverAddress: userAddress }: { serve
 
       <SidebarNavigation isConnected={!!userAddress} />
 
-      <Suspense fallback={<div>Loading......</div>}>
+      <Suspense fallback={<SidebarBodySkeleton />}>
         <SidebarBody promisedChannels={promisedChannels} userAddress={userAddress} />
       </Suspense>
 
