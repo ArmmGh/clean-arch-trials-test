@@ -19,6 +19,7 @@ import CoverImageTab from './cover-image-tab'
 import createArticleAction from '@/actions/articles/create-article.action'
 import prepareArticleMetadataAction from '@/actions/articles/prepare-article-metadata.action'
 import { prepareImagesGateway } from '@/lib/utils'
+import DOMPurify from 'isomorphic-dompurify'
 
 export type ArticleFormData = { content: string; metadata: MetadataItem[] }
 
@@ -160,7 +161,12 @@ export default function ArticleCreationStepper({ activeChannelAddress }: { activ
     setIsSaving(true)
 
     const articleContent = prepareImagesGateway(data.content)
-    const { metadata } = await prepareArticleMetadataAction({ content: articleContent, metadata: data.metadata })
+    const sanitizedArticleContent = DOMPurify.sanitize(articleContent)
+
+    const { metadata } = await prepareArticleMetadataAction({
+      content: sanitizedArticleContent,
+      metadata: data.metadata,
+    })
 
     if (metadata) {
       const hash = await writeContractAsync({

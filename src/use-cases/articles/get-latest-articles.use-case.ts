@@ -1,7 +1,7 @@
 import { Article } from '@/entities/models/article'
 import { Channel } from '@/entities/models/channel'
 import { getInjection } from '@/lib/di/container'
-import { base64ToJson } from '@/lib/utils'
+import { base64ToJson, prepareIpfsContent } from '@/lib/utils'
 
 export default async function getLatestArticlesUseCase(): Promise<
   Array<Article & { channelAddress: Channel['channel_address'] }>
@@ -44,7 +44,7 @@ export default async function getLatestArticlesUseCase(): Promise<
 
       return {
         ...article,
-        htmlContent,
+        htmlContent: await prepareIpfsContent(htmlContent),
         channelAddress: article.channelAddress,
       }
     }),

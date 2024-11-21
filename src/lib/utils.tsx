@@ -3,6 +3,8 @@ import { type ClassValue, clsx } from 'clsx'
 import { differenceInSeconds, format, formatDistanceToNow, secondsToMilliseconds } from 'date-fns'
 import { Loader2 } from 'lucide-react'
 import { twMerge } from 'tailwind-merge'
+import DOMPurify from 'isomorphic-dompurify'
+import { MAX_CONTENT_SIZE } from '@/constants/articles.constants'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -116,4 +118,82 @@ export const getTimeAgoFromTimestamp = (timestamp: number | string) => {
   const formattedDate = new Date(secondsToMilliseconds(formattedTimestamp))
 
   return getTimeAgo(formattedDate)
+}
+
+export const sanitizeArticleContent = (unsanitizedContent: string): string => {
+  const sanitizedContent = DOMPurify.sanitize(unsanitizedContent, {
+    ALLOWED_TAGS: [
+      // Text formatting
+      'p',
+      'strong',
+      'em',
+      's',
+      // Lists
+      'ol',
+      'ul',
+      'li',
+      // Headers
+      'h1',
+      'h2',
+      'h3',
+      'h4',
+      'h5',
+      'h6',
+      // Code
+      'pre',
+      'code',
+      // Media
+      'img',
+      'video',
+      // Other elements
+      'hr',
+      'blockquote',
+      'a',
+      'span',
+    ],
+
+    ALLOWED_ATTR: [
+      // Classes
+      'class',
+      // Media attributes
+      'src',
+      'alt',
+      'title',
+      'width',
+      'height',
+      'controls',
+      // Link attributes
+      'href',
+      'target',
+      // Styling
+      'style',
+    ],
+    ALLOW_DATA_ATTR: false,
+    FORBID_TAGS: ['script', 'iframe', 'style', 'form', 'embed', 'object'],
+    FORBID_ATTR: ['onclick', 'onload', 'onmouseover', 'onmouseout', 'onkeyup', 'onkeydown', 'onerror', 'onplay'],
+  })
+
+  return sanitizedContent
+}
+
+export const prepareIpfsContent = async (content: AsyncIterable<Uint8Array>): Promise<string> => {
+  let unsanitizedContent = ''
+  let totalSize = 0
+  const decoder = new TextDecoder('utf-8', { fatal: true })
+
+  for await (const chunk of content) {
+    totalSize += chunk.length
+
+    if (totalSize > MAX_CONTENT_SIZE) {
+      throw new Error('Content too large')
+    }
+
+    unsanitizedContent += decoder.decode(chunk, { stream: true })
+  }
+
+  unsanitizedContent += decoder.decode()
+
+  const sanitizedContent = sanitizeArticleContent(unsanitizedContent)
+
+  return sanitizedContent
 }

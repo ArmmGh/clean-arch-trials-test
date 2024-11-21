@@ -178,7 +178,7 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
           const [validImages, errors] = filterFiles(attrs, {
             allowedMimeTypes: this.options.allowedMimeTypes,
             maxFileSize: this.options.maxFileSize,
-            allowBase64: this.options.allowBase64,
+            allowBase64: false, //this.options.allowBase64,
           })
 
           if (errors.length > 0 && this.options.onValidationError) {

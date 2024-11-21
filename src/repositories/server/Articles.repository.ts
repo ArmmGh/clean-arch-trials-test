@@ -60,26 +60,9 @@ export class ArticlesRepository implements IArticlesRepository {
     return cid.toString()
   }
 
-  async getContentByCID(cid: string): Promise<string> {
-    const isKuboOnline = await this.kuboClient?.isOnline()
+  async getContentByCID(cid: string) {
+    const content = this.kuboClient.cat(cid)
 
-    if (!isKuboOnline) {
-      const res = await fetch(`${this.PUBLIC_GATEWAY}${cid}`)
-
-      if (res.status === 200) {
-        return res.text()
-      }
-
-      return ''
-    }
-
-    const content: AsyncIterable<Uint8Array> = await this.kuboClient.cat(cid)
-
-    let result = ''
-    for await (const chunk of content) {
-      result += new TextDecoder().decode(chunk)
-    }
-
-    return result
+    return content
   }
 }

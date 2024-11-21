@@ -1,6 +1,6 @@
 import { Article } from '@/entities/models/article'
 import { getInjection } from '@/lib/di/container'
-import { base64ToJson } from '@/lib/utils'
+import { base64ToJson, prepareIpfsContent } from '@/lib/utils'
 import { Address } from 'viem'
 
 export default async function getArticlesByChannelAddressUseCase(channelAddress: Address) {
@@ -34,7 +34,7 @@ export default async function getArticlesByChannelAddressUseCase(channelAddress:
 
       return {
         ...pub,
-        htmlContent,
+        htmlContent: await prepareIpfsContent(htmlContent),
         emojis: [
           { emoji: '👍', count: 100 },
           {

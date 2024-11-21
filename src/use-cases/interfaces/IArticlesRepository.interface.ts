@@ -8,5 +8,5 @@ export interface IArticlesRepository {
   uploadFile(file: File): Promise<string>
   prepareImagesGateway(content: string): Promise<string>
   uploadHtmlContent(content: string): Promise<string>
-  getContentByCID(cid: string): Promise<string>
+  getContentByCID(cid: string): Promise<AsyncIterable<Uint8Array>>
 }
