@@ -18,7 +18,7 @@ export default function ChannelItem({
   userAddress,
   showStatusBadge = false,
 }: {
-  channel: Channel
+  channel: any
   isOwner: boolean
   className?: string
   userAddress?: Address
@@ -42,7 +42,7 @@ export default function ChannelItem({
       <div className='mb-3 flex items-center justify-between gap-1'>
         <div className='flex flex-1 items-center gap-1 overflow-hidden'>
           <Avatar>
-            <AvatarImage src='https://github.com/shadcn.png' alt='@shadcn' />
+            <AvatarImage src='/placeholder.svg' alt='Avatar' />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <h2 className='overflow-hidden text-ellipsis text-nowrap text-sm font-semibold'>{channel.name}</h2>

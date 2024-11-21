@@ -40,6 +40,206 @@ export const adminsUpdateSchema = z.object({
 
 export const adminsRelationshipsSchema = z.tuple([]);
 
+export const announcementtypeSchema = z.union([
+  z.literal("ChannelAnnounced"),
+  z.literal("PublicationAnnounced"),
+  z.literal("MessageAnnounced"),
+]);
+
+export const announcementsInsertSchema = z.object({
+  announcement_type: announcementtypeSchema,
+  id: z.number().optional(),
+  message: z.string().optional().nullable(),
+  price_paid: z.number().optional().nullable(),
+  source_id: z.number().optional().nullable(),
+  source_type: z.string().optional().nullable(),
+  tower_id: z.number().optional().nullable(),
+});
+
+export const announcementsUpdateSchema = z.object({
+  announcement_type: announcementtypeSchema.optional(),
+  id: z.number().optional(),
+  message: z.string().optional().nullable(),
+  price_paid: z.number().optional().nullable(),
+  source_id: z.number().optional().nullable(),
+  source_type: z.string().optional().nullable(),
+  tower_id: z.number().optional().nullable(),
+});
+
+export const announcementsRelationshipsSchema = z.tuple([
+  z.object({
+    foreignKeyName: z.literal("announcements_tower_id_fkey"),
+    columns: z.tuple([z.literal("tower_id")]),
+    isOneToOne: z.literal(false),
+    referencedRelation: z.literal("towers"),
+    referencedColumns: z.tuple([z.literal("id")]),
+  }),
+]);
+
+export const behaviorBlockedChannelsRowSchema = z.object({
+  behavior_id: z.number().nullable(),
+  channel_id: z.number().nullable(),
+  id: z.number(),
+});
+
+export const behaviorBlockedChannelsInsertSchema = z.object({
+  behavior_id: z.number().optional().nullable(),
+  channel_id: z.number().optional().nullable(),
+  id: z.number().optional(),
+});
+
+export const behaviorBlockedChannelsUpdateSchema = z.object({
+  behavior_id: z.number().optional().nullable(),
+  channel_id: z.number().optional().nullable(),
+  id: z.number().optional(),
+});
+
+export const behaviorBlockedChannelsRelationshipsSchema = z.tuple([
+  z.object({
+    foreignKeyName: z.literal("behavior_blocked_channels_behavior_id_fkey"),
+    columns: z.tuple([z.literal("behavior_id")]),
+    isOneToOne: z.literal(false),
+    referencedRelation: z.literal("behaviors"),
+    referencedColumns: z.tuple([z.literal("id")]),
+  }),
+  z.object({
+    foreignKeyName: z.literal("behavior_blocked_channels_channel_id_fkey"),
+    columns: z.tuple([z.literal("channel_id")]),
+    isOneToOne: z.literal(false),
+    referencedRelation: z.literal("channels"),
+    referencedColumns: z.tuple([z.literal("id")]),
+  }),
+]);
+
+export const behaviorFollowedChannelsRowSchema = z.object({
+  behavior_id: z.number().nullable(),
+  channel_id: z.number().nullable(),
+  id: z.number(),
+});
+
+export const behaviorFollowedChannelsInsertSchema = z.object({
+  behavior_id: z.number().optional().nullable(),
+  channel_id: z.number().optional().nullable(),
+  id: z.number().optional(),
+});
+
+export const behaviorFollowedChannelsUpdateSchema = z.object({
+  behavior_id: z.number().optional().nullable(),
+  channel_id: z.number().optional().nullable(),
+  id: z.number().optional(),
+});
+
+export const behaviorFollowedChannelsRelationshipsSchema = z.tuple([
+  z.object({
+    foreignKeyName: z.literal("behavior_followed_channels_behavior_id_fkey"),
+    columns: z.tuple([z.literal("behavior_id")]),
+    isOneToOne: z.literal(false),
+    referencedRelation: z.literal("behaviors"),
+    referencedColumns: z.tuple([z.literal("id")]),
+  }),
+  z.object({
+    foreignKeyName: z.literal("behavior_followed_channels_channel_id_fkey"),
+    columns: z.tuple([z.literal("channel_id")]),
+    isOneToOne: z.literal(false),
+    referencedRelation: z.literal("channels"),
+    referencedColumns: z.tuple([z.literal("id")]),
+  }),
+]);
+
+export const topicSchema = z.union([
+  z.literal("Sports"),
+  z.literal("Politics"),
+  z.literal("Economics"),
+  z.literal("Technology"),
+  z.literal("Entertainment"),
+  z.literal("Health"),
+]);
+
+export const behaviorInterestedTopicsInsertSchema = z.object({
+  behavior_id: z.number().optional().nullable(),
+  id: z.number().optional(),
+  topic: topicSchema.optional().nullable(),
+});
+
+export const behaviorInterestedTopicsUpdateSchema = z.object({
+  behavior_id: z.number().optional().nullable(),
+  id: z.number().optional(),
+  topic: topicSchema.optional().nullable(),
+});
+
+export const behaviorInterestedTopicsRelationshipsSchema = z.tuple([
+  z.object({
+    foreignKeyName: z.literal("behavior_interested_topics_behavior_id_fkey"),
+    columns: z.tuple([z.literal("behavior_id")]),
+    isOneToOne: z.literal(false),
+    referencedRelation: z.literal("behaviors"),
+    referencedColumns: z.tuple([z.literal("id")]),
+  }),
+]);
+
+export const behaviorLikedPublicationsRowSchema = z.object({
+  behavior_id: z.number().nullable(),
+  id: z.number(),
+  publication_id: z.number().nullable(),
+});
+
+export const behaviorLikedPublicationsInsertSchema = z.object({
+  behavior_id: z.number().optional().nullable(),
+  id: z.number().optional(),
+  publication_id: z.number().optional().nullable(),
+});
+
+export const behaviorLikedPublicationsUpdateSchema = z.object({
+  behavior_id: z.number().optional().nullable(),
+  id: z.number().optional(),
+  publication_id: z.number().optional().nullable(),
+});
+
+export const behaviorLikedPublicationsRelationshipsSchema = z.tuple([
+  z.object({
+    foreignKeyName: z.literal("behavior_liked_publications_behavior_id_fkey"),
+    columns: z.tuple([z.literal("behavior_id")]),
+    isOneToOne: z.literal(false),
+    referencedRelation: z.literal("behaviors"),
+    referencedColumns: z.tuple([z.literal("id")]),
+  }),
+  z.object({
+    foreignKeyName: z.literal(
+      "behavior_liked_publications_publication_id_fkey",
+    ),
+    columns: z.tuple([z.literal("publication_id")]),
+    isOneToOne: z.literal(false),
+    referencedRelation: z.literal("publications"),
+    referencedColumns: z.tuple([z.literal("id")]),
+  }),
+]);
+
+export const behaviorsRowSchema = z.object({
+  consumer_address: z.string(),
+  created_at: z.string().nullable(),
+  id: z.number(),
+  profile_picture_url: z.string().nullable(),
+  username: z.string().nullable(),
+});
+
+export const behaviorsInsertSchema = z.object({
+  consumer_address: z.string(),
+  created_at: z.string().optional().nullable(),
+  id: z.number().optional(),
+  profile_picture_url: z.string().optional().nullable(),
+  username: z.string().optional().nullable(),
+});
+
+export const behaviorsUpdateSchema = z.object({
+  consumer_address: z.string().optional(),
+  created_at: z.string().optional().nullable(),
+  id: z.number().optional(),
+  profile_picture_url: z.string().optional().nullable(),
+  username: z.string().optional().nullable(),
+});
+
+export const behaviorsRelationshipsSchema = z.tuple([]);
+
 export const channelNotificationsRowSchema = z.object({
   channel_address: z.string(),
   created_at: z.string(),
@@ -92,6 +292,36 @@ export const channelRequestsUpdateSchema = z.object({
 
 export const channelRequestsRelationshipsSchema = z.tuple([]);
 
+export const verificationstatusSchema = z.union([
+  z.literal("Unverified"),
+  z.literal("Verified"),
+  z.literal("Pending"),
+]);
+
+export const channelsInsertSchema = z.object({
+  avatar_url: z.string().optional().nullable(),
+  channel_address: z.string(),
+  created_at: z.string().optional().nullable(),
+  description: z.string().optional().nullable(),
+  env_type: envTypeSchema.optional().nullable(),
+  id: z.number().optional(),
+  name: z.string().optional().nullable(),
+  verification_status: verificationstatusSchema.optional().nullable(),
+});
+
+export const channelsUpdateSchema = z.object({
+  avatar_url: z.string().optional().nullable(),
+  channel_address: z.string().optional(),
+  created_at: z.string().optional().nullable(),
+  description: z.string().optional().nullable(),
+  env_type: envTypeSchema.optional().nullable(),
+  id: z.number().optional(),
+  name: z.string().optional().nullable(),
+  verification_status: verificationstatusSchema.optional().nullable(),
+});
+
+export const channelsRelationshipsSchema = z.tuple([]);
+
 export const followersRowSchema = z.object({
   channel_address: z.string(),
   created_at: z.string(),
@@ -115,6 +345,132 @@ export const followersUpdateSchema = z.object({
 
 export const followersRelationshipsSchema = z.tuple([]);
 
+export const likelihoodSchema = z.union([
+  z.literal("Unknown"),
+  z.literal("VeryUnlikely"),
+  z.literal("Unlikely"),
+  z.literal("Possible"),
+  z.literal("Likely"),
+  z.literal("Verylikely"),
+]);
+
+export const publicationAssessmentInsertSchema = z.object({
+  adult_likelihood: likelihoodSchema.optional().nullable(),
+  assessed_at: z.string().optional().nullable(),
+  id: z.number().optional(),
+  medical_likelihood: likelihoodSchema.optional().nullable(),
+  publication_id: z.number().optional().nullable(),
+  racy_likelihood: likelihoodSchema.optional().nullable(),
+  spoof_likelihood: likelihoodSchema.optional().nullable(),
+  violence_likelihood: likelihoodSchema.optional().nullable(),
+});
+
+export const publicationAssessmentUpdateSchema = z.object({
+  adult_likelihood: likelihoodSchema.optional().nullable(),
+  assessed_at: z.string().optional().nullable(),
+  id: z.number().optional(),
+  medical_likelihood: likelihoodSchema.optional().nullable(),
+  publication_id: z.number().optional().nullable(),
+  racy_likelihood: likelihoodSchema.optional().nullable(),
+  spoof_likelihood: likelihoodSchema.optional().nullable(),
+  violence_likelihood: likelihoodSchema.optional().nullable(),
+});
+
+export const publicationAssessmentRelationshipsSchema = z.tuple([
+  z.object({
+    foreignKeyName: z.literal("publication_assessment_publication_id_fkey"),
+    columns: z.tuple([z.literal("publication_id")]),
+    isOneToOne: z.literal(false),
+    referencedRelation: z.literal("publications"),
+    referencedColumns: z.tuple([z.literal("id")]),
+  }),
+]);
+
+export const publicationTopicsRowSchema = z.object({
+  publication_id: z.number(),
+  topic: topicSchema,
+});
+
+export const publicationTopicsInsertSchema = z.object({
+  publication_id: z.number(),
+  topic: topicSchema,
+});
+
+export const publicationTopicsUpdateSchema = z.object({
+  publication_id: z.number().optional(),
+  topic: topicSchema.optional(),
+});
+
+export const publicationTopicsRelationshipsSchema = z.tuple([
+  z.object({
+    foreignKeyName: z.literal("publication_topics_publication_id_fkey"),
+    columns: z.tuple([z.literal("publication_id")]),
+    isOneToOne: z.literal(false),
+    referencedRelation: z.literal("publications"),
+    referencedColumns: z.tuple([z.literal("id")]),
+  }),
+]);
+
+export const publicationsRowSchema = z.object({
+  channel_id: z.number().nullable(),
+  id: z.number(),
+  publication_address: z.string(),
+  publication_index: z.number().nullable(),
+});
+
+export const publicationsInsertSchema = z.object({
+  channel_id: z.number().optional().nullable(),
+  id: z.number().optional(),
+  publication_address: z.string(),
+  publication_index: z.number().optional().nullable(),
+});
+
+export const publicationsUpdateSchema = z.object({
+  channel_id: z.number().optional().nullable(),
+  id: z.number().optional(),
+  publication_address: z.string().optional(),
+  publication_index: z.number().optional().nullable(),
+});
+
+export const publicationsRelationshipsSchema = z.tuple([
+  z.object({
+    foreignKeyName: z.literal("publications_channel_id_fkey"),
+    columns: z.tuple([z.literal("channel_id")]),
+    isOneToOne: z.literal(false),
+    referencedRelation: z.literal("channels"),
+    referencedColumns: z.tuple([z.literal("id")]),
+  }),
+]);
+
+export const towersRowSchema = z.object({
+  avatar_url: z.string().nullable(),
+  created_at: z.string().nullable(),
+  description: z.string().nullable(),
+  id: z.number(),
+  name: z.string().nullable(),
+  tower_address: z.string(),
+});
+
+export const towersInsertSchema = z.object({
+  avatar_url: z.string().optional().nullable(),
+  created_at: z.string().optional().nullable(),
+  description: z.string().optional().nullable(),
+  id: z.number().optional(),
+  name: z.string().optional().nullable(),
+  tower_address: z.string(),
+});
+
+export const towersUpdateSchema = z.object({
+  avatar_url: z.string().optional().nullable(),
+  created_at: z.string().optional().nullable(),
+  description: z.string().optional().nullable(),
+  id: z.number().optional(),
+  name: z.string().optional().nullable(),
+  tower_address: z.string().optional(),
+});
+
+export const towersRelationshipsSchema = z.tuple([]);
+
 export const adminsRowSchema = z.object({
   address: z.string(),
   environment: envTypeSchema,
@@ -124,6 +480,22 @@ export const adminsRowSchema = z.object({
   session_token: z.string().nullable(),
 });
 
+export const announcementsRowSchema = z.object({
+  announcement_type: announcementtypeSchema,
+  id: z.number(),
+  message: z.string().nullable(),
+  price_paid: z.number().nullable(),
+  source_id: z.number().nullable(),
+  source_type: z.string().nullable(),
+  tower_id: z.number().nullable(),
+});
+
+export const behaviorInterestedTopicsRowSchema = z.object({
+  behavior_id: z.number().nullable(),
+  id: z.number(),
+  topic: topicSchema.nullable(),
+});
+
 export const channelRequestsRowSchema = z.object({
   channel_address: z.string(),
   channel_owner: z.string(),
@@ -131,4 +503,26 @@ export const channelRequestsRowSchema = z.object({
   environment: envTypeSchema,
   id: z.number(),
   status: channelRequestStatusSchema,
+});
+
+export const channelsRowSchema = z.object({
+  avatar_url: z.string().nullable(),
+  channel_address: z.string(),
+  created_at: z.string().nullable(),
+  description: z.string().nullable(),
+  env_type: envTypeSchema.nullable(),
+  id: z.number(),
+  name: z.string().nullable(),
+  verification_status: verificationstatusSchema.nullable(),
+});
+
+export const publicationAssessmentRowSchema = z.object({
+  adult_likelihood: likelihoodSchema.nullable(),
+  assessed_at: z.string().nullable(),
+  id: z.number(),
+  medical_likelihood: likelihoodSchema.nullable(),
+  publication_id: z.number().nullable(),
+  racy_likelihood: likelihoodSchema.nullable(),
+  spoof_likelihood: likelihoodSchema.nullable(),
+  violence_likelihood: likelihoodSchema.nullable(),
 });

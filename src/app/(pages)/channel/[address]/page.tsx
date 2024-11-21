@@ -1,7 +1,8 @@
 import getArticlesByChannelAddressController from '@/controllers/articles/get-articles-by-channel-address.controller'
 import { Address } from 'viem'
 import SuggestedChannels from './suggested-channels'
-import ArticlePreview from '@/components/articles/article-preview'
+import getChannelMetadataController from '@/controllers/channels/get-channel-metadata.controller'
+import ArticlePreview from '@/components/articles/article/article-preview'
 
 const getArticles = async (channelAddress: Address) => {
   try {
@@ -11,10 +12,20 @@ const getArticles = async (channelAddress: Address) => {
   }
 }
 
+const getChannelMetadata = async (channelAddress: Address) => {
+  try {
+    return getChannelMetadataController({ channelAddress })
+  } catch (error) {
+    return null
+  }
+}
+
 export default async function ChannelPage({ params }: { params: Promise<{ address: Address }> }) {
   const { address: channelAddress } = await params
-
-  const articles = await getArticles(channelAddress)
+  const [channelMetadata, articles] = await Promise.all([
+    getChannelMetadata(channelAddress),
+    getArticles(channelAddress),
+  ])
   // TODO: Make sure that user is authorized to view the channel
 
   if (!articles.length) {
@@ -34,6 +45,7 @@ export default async function ChannelPage({ params }: { params: Promise<{ addres
             image={article.image}
             name={article.name}
             emojis={article.emojis}
+            channelMetadata={channelMetadata}
           />
         ))}
       </div>

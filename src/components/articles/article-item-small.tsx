@@ -11,7 +11,7 @@ export default function ArticleItemSmall(props: {
   name: Article['name']
   description: Article['description']
   image: Article['image']
-  channelAddress: Address
+  channelAddress: Address | string
   className?: string
 }) {
   const url = `channel/${props.channelAddress}/article/${props.id}`

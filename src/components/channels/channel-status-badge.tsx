@@ -1,7 +1,6 @@
-import { Channel } from '@/entities/models/channel'
 import { Badge } from '@/components/ui/badge'
 
-export default function ChannelStatusBadge({ status }: { status: Channel['status'] }) {
+export default function ChannelStatusBadge({ status }: { status: string }) {
   const isPending = status === 'pending'
   const isBlacklisted = status === 'blacklisted'
   const variant = isBlacklisted ? 'destructive' : isPending ? 'default' : 'success'

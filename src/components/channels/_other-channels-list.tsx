@@ -23,13 +23,7 @@ export default async function OtherChannelsList() {
   return (
     <React.Fragment>
       {channels.map((channel, index: any) => (
-        <ChannelItem
-          key={index}
-          channel={channel}
-          isOwner={address === channel.owner}
-          userAddress={address}
-          showStatusBadge={true}
-        />
+        <ChannelItem key={index} channel={channel} isOwner={true} userAddress={address} showStatusBadge={true} />
       ))}
     </React.Fragment>
   )

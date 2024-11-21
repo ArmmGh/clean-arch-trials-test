@@ -110,3 +110,10 @@ export const getTimeAgo = (date: Date) => {
     return formatDistanceToNow(date, { addSuffix: true, includeSeconds: true })
   }
 }
+
+export const getTimeAgoFromTimestamp = (timestamp: number | string) => {
+  const formattedTimestamp = typeof timestamp === 'number' ? timestamp : Number(timestamp)
+  const formattedDate = new Date(secondsToMilliseconds(formattedTimestamp))
+
+  return getTimeAgo(formattedDate)
+}

@@ -15,8 +15,8 @@ export default function ChannelItem({
 }: {
   withFollowButton?: boolean
   name: Channel['name']
-  symbol: Channel['symbol']
-  address: Channel['address']
+  symbol: Channel['description']
+  address: Address //Channel['channel_address']
   className?: string
   userAddress?: Address
 }) {
@@ -34,11 +34,11 @@ export default function ChannelItem({
     >
       <div className='flex items-center gap-2 overflow-hidden'>
         <Avatar className='relative h-10 w-10'>
-          <AvatarImage src='/placeholder.svg' alt={name} />
+          <AvatarImage src='/placeholder.svg' alt={name || ''} />
 
           <AvatarFallback>
             {name
-              .split(' ')
+              ?.split(' ')
               .map((word) => word[0].toUpperCase())
               .join('')}
           </AvatarFallback>

@@ -16,13 +16,7 @@ export default async function MyChannelsList({ className }: { className?: string
   return (
     <React.Fragment>
       {channels.map((channel, index: any) => (
-        <ChannelItem
-          className={className}
-          key={index}
-          channel={channel}
-          isOwner={address === channel.owner}
-          userAddress={address}
-        />
+        <ChannelItem className={className} key={index} channel={channel} isOwner={true} userAddress={address} />
       ))}
     </React.Fragment>
   )

@@ -7,20 +7,21 @@ import { use } from 'react'
 import { useParams } from 'next/navigation'
 import ChannelItem from '@/components/channels/channel-item'
 import CurrentChannelItem from '@/components/channels/current-channel-item'
+import { PresentedChannel } from '@/controllers/channels/get-all-channels.controller'
 
 export default function SidebarBody({
   promisedChannels,
   userAddress,
 }: {
-  promisedChannels: Promise<{ channels: Channel[]; isLeaderboard: boolean }>
+  promisedChannels: Promise<{ channels: PresentedChannel[]; isLeaderboard: boolean }>
   userAddress?: Address
 }) {
   const { channels, isLeaderboard } = use(promisedChannels)
   const { address } = useParams<{ address?: Address }>()
 
-  const activeChannel = channels?.find((channel) => channel.address === address)
+  const activeChannel = channels?.find(({ channel_address }) => channel_address === address)
   const showFollowButton = !!(isLeaderboard && userAddress)
-  const filteredChannels = channels?.filter((channel) => channel.address !== address)
+  const filteredChannels = channels?.filter(({ channel_address }) => channel_address !== address)
 
   return (
     <>
@@ -28,7 +29,7 @@ export default function SidebarBody({
         <SidebarGroup>
           <SidebarGroupLabel className='px-0 text-lg font-semibold text-black'>Current</SidebarGroupLabel>
 
-          <CurrentChannelItem address={activeChannel.address} name={activeChannel.name} />
+          <CurrentChannelItem address={activeChannel.channel_address} name={activeChannel?.name} />
         </SidebarGroup>
       )}
 
@@ -41,9 +42,9 @@ export default function SidebarBody({
             {filteredChannels?.map((channel, index) => (
               <ChannelItem
                 key={index}
-                address={channel.address}
+                address={channel.channel_address}
                 name={channel.name}
-                symbol={channel.symbol}
+                symbol={channel.description}
                 withFollowButton={showFollowButton}
               />
             ))}

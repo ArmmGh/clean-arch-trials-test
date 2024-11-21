@@ -6,7 +6,7 @@ import getLatestArticlesUseCase from '@/use-cases/articles/get-latest-articles.u
 import { isAddress } from 'viem'
 import { z } from 'zod'
 
-function presenter(articles: Array<Article & { channelAddress: Channel['address'] }>) {
+function presenter(articles: Array<Article & { channelAddress: Channel['channel_address'] }>) {
   return articles
     .sort((a, b) => Number(b.date) - Number(a.date))
     .map((article) => ({

@@ -1,21 +1,15 @@
 import { Bookmark, MessageSquare, Share2 } from 'lucide-react'
-import { ReactNode } from 'react'
 import { Input } from '@/components/ui/input'
-
-function Action({ children }: { children: ReactNode }) {
-  return <div className='flex cursor-not-allowed items-center gap-1 text-xs font-medium text-slate-700'>{children}</div>
-}
+import Action from './article-action'
 
 export default function ArticleInteractions() {
   return (
     <div className='flex flex-col px-6'>
       <div className='flex items-center justify-between'>
-        <div>
-          <Action>
-            <MessageSquare size={20} strokeWidth={1.3} />
-            {0} comments
-          </Action>
-        </div>
+        <Action>
+          <MessageSquare size={20} strokeWidth={1.3} />
+          {0} comments
+        </Action>
 
         <div className='flex items-center gap-2'>
           <Action>

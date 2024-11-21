@@ -18,10 +18,62 @@ enum SUPABASE_STATUSES {
 
 export class ChannelsRepository implements IChannelsRepository {
   private client: PublicClient
+  private envType: typeof process.env.NODE_ENV
 
   constructor() {
     this.client = createViemClient()
+    this.envType = process.env.NODE_ENV
   }
+
+  async getAllChannels() {
+    const supabase = await createClient()
+
+    const { data: channels, error } = await supabase.from('channels').select()
+
+    if (error) {
+      throw new SupabaseError(error.message)
+    }
+
+    return channels
+  }
+
+  async getChannelIdByAddress(channelAddress: Address) {
+    const supabase = await createClient()
+
+    const { data, error } = await supabase
+      .from('channels')
+      .select('id')
+      .eq('channel_address', channelAddress)
+      .eq('env_type', this.envType)
+      .limit(1)
+      .single()
+
+    if (error) {
+      throw new SupabaseError(error.message)
+    }
+
+    return data.id
+  }
+
+  async getChannelByAddress(channelAddress: Address) {
+    const supabase = await createClient()
+
+    const { data, error } = await supabase
+      .from('channels')
+      .select()
+      .eq('channel_address', channelAddress)
+      .eq('env_type', this.envType)
+      .limit(1)
+      .single()
+
+    if (error) {
+      throw new SupabaseError(error.message)
+    }
+
+    return data
+  }
+
+  // OLD
 
   async getAllPublisherChannelAddresses(publisherAddress: Address) {
     const addresses = await this.client.readContract({
@@ -34,7 +86,7 @@ export class ChannelsRepository implements IChannelsRepository {
     return addresses as Address[]
   }
 
-  async getChannelByAddress(channelAddress: Address) {
+  async _getChannelByAddress(channelAddress: Address) {
     const channelContract = {
       abi: channelAbi,
       address: channelAddress,

@@ -2,12 +2,13 @@ import { Channel } from '@/entities/models/channel'
 import { getInjection } from '@/lib/di/container'
 import { Address } from 'viem'
 
-export default async function getWhitelistedChannelsUseCase(userAddress?: Address): Promise<Channel[]> {
+export default async function getWhitelistedChannelsUseCase(userAddress?: Address): Promise<any[]> {
+  // TODO: Fix any
   const channelsRepo = getInjection('IChannelsRepository')
   const channelAddresses = await channelsRepo.getWhitelistedChannelAddresses()
 
   const [channels, followersCounts] = await Promise.all([
-    Promise.all(channelAddresses.map((channelAddress) => channelsRepo.getChannelByAddress(channelAddress))),
+    Promise.all(channelAddresses.map((channelAddress) => channelsRepo._getChannelByAddress(channelAddress))),
     Promise.all(channelAddresses.map((channelAddress) => channelsRepo.getFollowersCount(channelAddress))),
   ])
 

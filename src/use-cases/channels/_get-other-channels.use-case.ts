@@ -2,7 +2,8 @@ import { Channel, ChannelInContract } from '@/entities/models/channel'
 import { getInjection } from '@/lib/di/container'
 import { Address, getAddress } from 'viem'
 
-export default async function getOtherChannelsUseCase(userAddress?: Address): Promise<Channel[]> {
+export default async function getOtherChannelsUseCase(userAddress?: Address): Promise<any[]> {
+  //Channel
   const channelsRepo = getInjection('IChannelsRepository')
   const otherChannelRequests = await channelsRepo.getOtherChannelRequests()
 
@@ -14,7 +15,7 @@ export default async function getOtherChannelsUseCase(userAddress?: Address): Pr
 
   // Batch similar operations together
   const [channels, followersCounts] = await Promise.all([
-    Promise.all(processedRequests.map(({ channelAddress }) => channelsRepo.getChannelByAddress(channelAddress))),
+    Promise.all(processedRequests.map(({ channelAddress }) => channelsRepo._getChannelByAddress(channelAddress))),
     Promise.all(processedRequests.map(({ channelAddress }) => channelsRepo.getFollowersCount(channelAddress))),
   ])
 

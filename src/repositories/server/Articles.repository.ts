@@ -23,7 +23,7 @@ export class ArticlesRepository implements IArticlesRepository {
       `${process.env.KUBO_PROTOCOL}://${process.env.KUBO_HOST}:${process.env.KUBO_GATEWAY_PORT}/ipfs/`
   }
 
-  async getArticleTokenURIById(channelAddress: Address, articleId: number): Promise<string> {
+  async getArticleTokenURIByNftId(channelAddress: Address, articleId: number): Promise<string> {
     const tokenURI = await this.client.readContract({
       abi: channelAbi,
       address: channelAddress,

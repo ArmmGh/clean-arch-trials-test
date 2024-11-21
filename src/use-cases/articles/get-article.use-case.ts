@@ -6,7 +6,7 @@ import { Address } from 'viem'
 export default async function getArticleUseCase(channelAddress: Address, articleId: string): Promise<Article> {
   const articlesRepo = getInjection('IArticlesRepository')
 
-  const tokenURI = await articlesRepo.getArticleTokenURIById(channelAddress, articleId)
+  const tokenURI = await articlesRepo.getArticleTokenURIByNftId(channelAddress, articleId)
 
   const metadata = base64ToJson<Article>(tokenURI)
   const htmlContent = await articlesRepo.getContentByCID(metadata.htmlContent)

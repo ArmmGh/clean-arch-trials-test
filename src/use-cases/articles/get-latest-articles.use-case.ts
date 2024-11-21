@@ -4,7 +4,7 @@ import { getInjection } from '@/lib/di/container'
 import { base64ToJson } from '@/lib/utils'
 
 export default async function getLatestArticlesUseCase(): Promise<
-  Array<Article & { channelAddress: Channel['address'] }>
+  Array<Article & { channelAddress: Channel['channel_address'] }>
 > {
   const articlesRepo = getInjection('IArticlesRepository')
   const channelsRepo = getInjection('IChannelsRepository')
@@ -21,7 +21,7 @@ export default async function getLatestArticlesUseCase(): Promise<
 
       if (!articleId) return null
 
-      const tokenURI = await articlesRepo.getArticleTokenURIById(channelAddress, Number(articleId))
+      const tokenURI = await articlesRepo.getArticleTokenURIByNftId(channelAddress, Number(articleId))
 
       return {
         tokenURI,

@@ -1,6 +1,6 @@
 import { InputParseError } from '@/entities/errors/common'
 import { Article } from '@/entities/models/article'
-import { gatewayedIpfsUrl, humanizeTimestamp } from '@/lib/utils'
+import { gatewayedIpfsUrl, getTimeAgoFromTimestamp, humanizeTimestamp } from '@/lib/utils'
 import getArticlesByChannelAddressUseCase from '@/use-cases/get-articles-by-channel-address.use-case'
 import { ContractFunctionExecutionError, isAddress } from 'viem'
 import { z } from 'zod'
@@ -9,8 +9,9 @@ function presenter(articles: Article[]) {
   return articles
     .sort((a, b) => Number(b.date) - Number(a.date))
     .map((article) => ({
+      channelAvatarUrl: article.channelAvatarUrl,
       id: article.id,
-      date: humanizeTimestamp(article.date),
+      date: getTimeAgoFromTimestamp(article.date),
       name: article.name,
       description: article.description,
       image: article.image.includes('ipfs')
@@ -20,6 +21,8 @@ function presenter(articles: Article[]) {
       htmlContent: article.htmlContent, // TODO: temporarily added to support old-article
     }))
 }
+
+export type PresentedArticle = ReturnType<typeof presenter>[number]
 
 const inputSchema = z.object({
   channelAddress: z.string().refine((val) => isAddress(val), { message: 'Invalid Channel address' }),

@@ -1,6 +1,6 @@
-import { isAddress } from 'viem'
+import { isAddress, Omit } from 'viem'
 import { z } from 'zod'
-import { channelRequestStatusSchema } from '@/database.schemas'
+import { channelRequestStatusSchema, channelsRowSchema } from '@/database.schemas'
 
 export const channelInContractSchema = z.object({
   name: z.string(),
@@ -20,4 +20,4 @@ export const channelSchema = z.object({
 })
 
 export type ChannelInContract = z.infer<typeof channelInContractSchema>
-export type Channel = z.infer<typeof channelSchema>
+export type Channel = Omit<z.infer<typeof channelsRowSchema>, 'env_type' | 'verification_status'>

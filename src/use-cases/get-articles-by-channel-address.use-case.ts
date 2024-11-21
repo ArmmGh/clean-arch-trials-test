@@ -5,32 +5,35 @@ import { Address } from 'viem'
 
 export default async function getArticlesByChannelAddressUseCase(channelAddress: Address) {
   const channelsRepo = getInjection('IChannelsRepository')
+  const pubsRepo = getInjection('IPublicationsRepository')
   const articlesRepo = getInjection('IArticlesRepository')
-  const lastArticleId = await channelsRepo.getLastArticleId(channelAddress)
 
-  if (!lastArticleId) {
+  const channelId = await channelsRepo.getChannelIdByAddress(channelAddress)
+  const pubs = await pubsRepo.getPublicationsByChannelId(channelId)
+  const lastPubNftId = pubs.at(-1)?.publication_index
+
+  if (!lastPubNftId) {
     return []
   }
 
-  const articleIds = Array.from({ length: Number(lastArticleId) }, (_, index) => index + 1)
-
-  const promisedTokenURIs = articleIds.map((id) => articlesRepo.getArticleTokenURIById(channelAddress, id))
+  const pubNftIds = pubs.map((pub) => pub.publication_index).filter((nftId) => nftId !== null)
+  const pubIds = pubs.map((pub) => pub.publication_index).filter((nftId) => nftId !== null)
+  const promisedTokenURIs = pubNftIds.map((nftId) => articlesRepo.getArticleTokenURIByNftId(channelAddress, nftId))
   const tokenURIs = await Promise.all(promisedTokenURIs)
-  const articleTokenURIs = tokenURIs.map((tokenURI, index) => ({
-    tokenURI,
-    id: articleIds[index],
-  }))
 
-  const parsedArticles = articleTokenURIs.map(({ tokenURI, id }) => ({
+  // TODO: change <Article> to correct <Publication> type
+  const parsedPublications = tokenURIs.map((tokenURI, idx) => ({
     ...base64ToJson<Article>(tokenURI),
-    id,
+    nftId: pubNftIds[idx],
+    id: pubIds[idx],
   }))
 
-  const articlesWithContent = await Promise.all(
-    parsedArticles.map(async (article) => {
-      const htmlContent = await articlesRepo.getContentByCID(article.htmlContent)
+  const publicationsWithContent = await Promise.all(
+    parsedPublications.map(async (pub) => {
+      const htmlContent = await articlesRepo.getContentByCID(pub.htmlContent)
+
       return {
-        ...article,
+        ...pub,
         htmlContent,
         emojis: [
           { emoji: '👍', count: 100 },
@@ -47,5 +50,5 @@ export default async function getArticlesByChannelAddressUseCase(channelAddress:
     }),
   )
 
-  return articlesWithContent
+  return publicationsWithContent
 }

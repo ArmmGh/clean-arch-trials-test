@@ -10,6 +10,7 @@
     "start": "next start",
     "lint": "next lint",
     "prettier": "prettier --write src/**/*.{js,jsx,ts,tsx}",
+    "gen:types": "npx supabase gen types typescript --project-id shiryocerunbutrtachr > ./src/database.types.ts",
     "gen:schema": "supabase-to-zod --input ./src/database.types.ts --output ./src/database.schemas.ts",
     "gen:abi": "tsx ./scripts/generate-abis.ts"
   },
@@ -91,6 +92,7 @@
     "encoding": "^0.1.13",
     "eslint": "^8",
     "eslint-config-next": "15.0.1",
+    "eslint-config-prettier": "^9.1.0",
     "lokijs": "^1.5.12",
     "pino-pretty": "^10.3.1",
     "postcss": "^8.4.47",

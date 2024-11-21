@@ -1,8 +1,9 @@
 import getArticleController from '@/controllers/articles/get-article.controller'
 import { Address } from 'viem'
-import Article from '@/components/articles/article'
 import { Separator } from '@/components/ui/separator'
-import ArticleInteractions from '@/components/articles/article-interactions'
+import ArticleInteractions from '@/components/articles/article/article-interactions'
+import getChannelMetadataController from '@/controllers/channels/get-channel-metadata.controller'
+import ArticleDetailed from '@/components/articles/article/article-detailed'
 
 const getArticle = async (channelAddress: Address, articleId: string) => {
   try {
@@ -14,9 +15,21 @@ const getArticle = async (channelAddress: Address, articleId: string) => {
   }
 }
 
+const getChannelMetadata = async (channelAddress: Address) => {
+  try {
+    return getChannelMetadataController({ channelAddress })
+  } catch (error) {
+    return null
+  }
+}
+
 export default async function ArticlePage({ params }: { params: Promise<{ id: Address; address: Address }> }) {
   const { id: articleId, address: channelAddress } = await params
-  const article = await getArticle(channelAddress, articleId)
+
+  const [article, channelMetadata] = await Promise.all([
+    getArticle(channelAddress, articleId),
+    getChannelMetadata(channelAddress),
+  ])
 
   if (!article) return <div>Article not found</div>
 
@@ -24,7 +37,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: Ad
 
   return (
     <div className='space-y-4 py-5'>
-      <Article {...article} />
+      <ArticleDetailed {...article} channelMetadata={channelMetadata} />
       <Separator className='bg-slate-300' />
       <ArticleInteractions />
     </div>

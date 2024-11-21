@@ -12,14 +12,15 @@ import React from 'react'
 import Link from 'next/link'
 import { defaultChain } from '@/lib/config/chains'
 
-export default function CurrentChannelItem(props: { address: Address; name: string }) {
+export default function CurrentChannelItem(props: { address?: Address; name?: string }) {
   const { address: userAddress } = useAppKitAccount()
   const { data: isFollowing } = useReadFollowChannelsIsFollowing({
-    args: [userAddress as Address, props.address],
-    query: { enabled: !!userAddress },
+    args: [userAddress as Address, props.address!],
+    query: { enabled: !!(userAddress && props.address) },
   })
   const { data: followers = 0, isLoading: isLoadingFollowers } = useReadFollowChannelsChannelsFollowersCount({
-    args: [props.address],
+    args: [props.address!],
+    query: { enabled: !!props.address },
   })
   const { data: posts = 0, isLoading: isLoadingPosts } = useReadChannelArticleIDs({ address: props.address })
 
@@ -32,8 +33,8 @@ export default function CurrentChannelItem(props: { address: Address; name: stri
         <AvatarImage src='/placeholder.svg' alt={props.name} />
 
         <AvatarFallback>
-          {props.name
-            .split(' ')
+          {props?.name
+            ?.split(' ')
             .map((word) => word[0].toUpperCase())
             .join('')}
         </AvatarFallback>
@@ -54,11 +55,13 @@ export default function CurrentChannelItem(props: { address: Address; name: stri
             )}
           </div>
 
-          <FollowChannelButton
-            isFollowing={isFollowing}
-            channelAddress={props.address}
-            className='mt-2 border border-slate-200 bg-white focus-visible:ring-0 focus-visible:ring-offset-0'
-          />
+          {props.address && (
+            <FollowChannelButton
+              isFollowing={isFollowing}
+              channelAddress={props.address}
+              className='mt-2 border border-slate-200 bg-white focus-visible:ring-0 focus-visible:ring-offset-0'
+            />
+          )}
         </div>
         <Link href={scannerLink} target='_blank' prefetch={false}>
           <ExternalLink size={16} className='text-teal-700' />
