@@ -43,7 +43,7 @@ export default function ChannelItem({
         <div className='flex flex-1 items-center gap-1 overflow-hidden'>
           <Avatar>
             <AvatarImage src='/placeholder.svg' alt='Avatar' />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarFallback>AA</AvatarFallback>
           </Avatar>
           <h2 className='overflow-hidden text-ellipsis text-nowrap text-sm font-semibold'>{channel.name}</h2>
         </div>
