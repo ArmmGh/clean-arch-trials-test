@@ -1,5 +1,5 @@
 import {
-  useReadChannelArticleIDs,
+  useReadChannelPublicationIDs,
   useReadFollowChannelsChannelsFollowersCount,
   useReadFollowChannelsIsFollowing,
 } from '@/generated'
@@ -22,7 +22,7 @@ export default function CurrentChannelItem(props: { address?: Address; name?: st
     args: [props.address!],
     query: { enabled: !!props.address },
   })
-  const { data: posts = 0, isLoading: isLoadingPosts } = useReadChannelArticleIDs({ address: props.address })
+  const { data: posts = 0, isLoading: isLoadingPosts } = useReadChannelPublicationIDs({ address: props.address })
 
   const scannerLink = `${defaultChain.blockExplorers?.default.url}/token/${props.address}`
   const isLoadingMetadata = isLoadingFollowers || isLoadingPosts

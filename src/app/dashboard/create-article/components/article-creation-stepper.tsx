@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ToastAction } from '@/components/ui/toast'
-import { useReadMetadataAttributesGetDefaultMetadataAsArray, useWriteChannelCreateArticle } from '@/generated'
+import { useReadMetadataAttributesGetDefaultMetadataAsArray, useWriteChannelCreatePublication } from '@/generated'
 import { useToast } from '@/hooks/use-toast'
 import { Loader2 } from 'lucide-react'
 import { useRouter } from 'nextjs-toploader/app'
@@ -112,7 +112,7 @@ export default function ArticleCreationStepper({ activeChannelAddress }: { activ
   const [activeStep, setActiveStep] = useState('content')
   const [isSaving, setIsSaving] = useState(false)
   const { address: publisherAddress } = useAccount()
-  const { writeContractAsync } = useWriteChannelCreateArticle()
+  const { writeContractAsync } = useWriteChannelCreatePublication()
   const { toast } = useToast()
   const router = useRouter()
 

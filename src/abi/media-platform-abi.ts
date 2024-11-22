@@ -18,44 +18,6 @@ export const mediaPlatformAbi = [
         "internalType": "address",
         "name": "channelAddress",
         "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "articleID",
-        "type": "uint256"
-      }
-    ],
-    "name": "ArticleDisputed",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "channelAddress",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "articleID",
-        "type": "uint256"
-      }
-    ],
-    "name": "ArticleRecovered",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "channelAddress",
-        "type": "address"
       }
     ],
     "name": "ChannelBlacklisted",
@@ -111,6 +73,44 @@ export const mediaPlatformAbi = [
       }
     ],
     "name": "ChannelWhitelisted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "channelAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "publicationID",
+        "type": "uint256"
+      }
+    ],
+    "name": "PublicationDisputed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "channelAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "publicationID",
+        "type": "uint256"
+      }
+    ],
+    "name": "PublicationRecovered",
     "type": "event"
   },
   {
@@ -234,6 +234,19 @@ export const mediaPlatformAbi = [
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "blacklistedChannelsList",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "",
+        "type": "address[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -242,11 +255,11 @@ export const mediaPlatformAbi = [
       },
       {
         "internalType": "uint256",
-        "name": "articleID_",
+        "name": "publicationID_",
         "type": "uint256"
       }
     ],
-    "name": "disputeArticle",
+    "name": "disputePublication",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -440,11 +453,11 @@ export const mediaPlatformAbi = [
       },
       {
         "internalType": "uint256",
-        "name": "articleID_",
+        "name": "publicationID_",
         "type": "uint256"
       }
     ],
-    "name": "recoverArticle",
+    "name": "recoverPublication",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -544,6 +557,19 @@ export const mediaPlatformAbi = [
         "internalType": "address",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "verifiedChannelsList",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "",
+        "type": "address[]"
       }
     ],
     "stateMutability": "view",

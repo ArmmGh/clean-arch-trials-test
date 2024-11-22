@@ -1,32 +1,6 @@
-export const channelAbi = [
+export const behaviorAbi = [
   {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "channelName_",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "channelDescription_",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "symbol_",
-        "type": "string"
-      },
-      {
-        "internalType": "address",
-        "name": "owner_",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "metadataAttributes_",
-        "type": "address"
-      }
-    ],
+    "inputs": [],
     "stateMutability": "nonpayable",
     "type": "constructor"
   },
@@ -84,25 +58,19 @@ export const channelAbi = [
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "uint256",
-        "name": "_publicationID",
+        "name": "tokenId_",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "address",
-        "name": "_publicationAddress",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "_publisher",
+        "name": "channel_",
         "type": "address"
       }
     ],
-    "name": "PublicationCreated",
+    "name": "Blocked",
     "type": "event"
   },
   {
@@ -111,86 +79,42 @@ export const channelAbi = [
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "_publicationID",
+        "name": "tokenId_",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "channel_",
+        "type": "address"
+      }
+    ],
+    "name": "Followed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "tokenId_",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "channel_",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "publicationID",
         "type": "uint256"
       }
     ],
-    "name": "PublicationEdited",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "bytes32",
-        "name": "role",
-        "type": "bytes32"
-      },
-      {
-        "indexed": true,
-        "internalType": "bytes32",
-        "name": "previousAdminRole",
-        "type": "bytes32"
-      },
-      {
-        "indexed": true,
-        "internalType": "bytes32",
-        "name": "newAdminRole",
-        "type": "bytes32"
-      }
-    ],
-    "name": "RoleAdminChanged",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "bytes32",
-        "name": "role",
-        "type": "bytes32"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "sender",
-        "type": "address"
-      }
-    ],
-    "name": "RoleGranted",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "bytes32",
-        "name": "role",
-        "type": "bytes32"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "sender",
-        "type": "address"
-      }
-    ],
-    "name": "RoleRevoked",
+    "name": "Liked",
     "type": "event"
   },
   {
@@ -219,39 +143,63 @@ export const channelAbi = [
     "type": "event"
   },
   {
-    "inputs": [],
-    "name": "CREATE_PUBLICATION_TYPEHASH",
-    "outputs": [
+    "anonymous": false,
+    "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "tokenId_",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "channel_",
+        "type": "address"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    "name": "Unfollowed",
+    "type": "event"
   },
   {
-    "inputs": [],
-    "name": "DEFAULT_ADMIN_ROLE",
-    "outputs": [
+    "anonymous": false,
+    "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "tokenId_",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "channel_",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "publicationID",
+        "type": "uint256"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    "name": "Unliked",
+    "type": "event"
   },
   {
-    "inputs": [],
-    "name": "DOMAIN_SEPARATOR",
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenId_",
+        "type": "uint256"
+      }
+    ],
+    "name": "allFollows",
     "outputs": [
       {
-        "internalType": "bytes32",
+        "internalType": "address[]",
         "name": "",
-        "type": "bytes32"
+        "type": "address[]"
       }
     ],
     "stateMutability": "view",
@@ -261,16 +209,28 @@ export const channelAbi = [
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "tokenId_",
         "type": "uint256"
       }
     ],
-    "name": "allPublishers",
+    "name": "allLikes",
     "outputs": [
       {
-        "internalType": "address",
+        "components": [
+          {
+            "internalType": "address",
+            "name": "channel_",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "publicationID",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct IBehavior.Like[]",
         "name": "",
-        "type": "address"
+        "type": "tuple[]"
       }
     ],
     "stateMutability": "view",
@@ -314,119 +274,19 @@ export const channelAbi = [
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "channelDescription",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "to_",
-        "type": "address"
-      },
-      {
-        "components": [
-          {
-            "internalType": "string",
-            "name": "key",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "value",
-            "type": "string"
-          }
-        ],
-        "internalType": "struct KeyValuePairLib.KeyValuePair[]",
-        "name": "userMetadata_",
-        "type": "tuple[]"
-      }
-    ],
-    "name": "createPublication",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "to_",
-        "type": "address"
-      },
-      {
-        "components": [
-          {
-            "internalType": "string",
-            "name": "key",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "value",
-            "type": "string"
-          }
-        ],
-        "internalType": "struct KeyValuePairLib.KeyValuePair[]",
-        "name": "userMetadata_",
-        "type": "tuple[]"
-      },
-      {
-        "internalType": "address",
-        "name": "tower_",
-        "type": "address"
-      }
-    ],
-    "name": "createPublicationAndAnnounce",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "to_",
-        "type": "address"
-      },
-      {
-        "components": [
-          {
-            "internalType": "string",
-            "name": "key",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "value",
-            "type": "string"
-          }
-        ],
-        "internalType": "struct KeyValuePairLib.KeyValuePair[]",
-        "name": "userMetadata_",
-        "type": "tuple[]"
-      },
       {
         "internalType": "uint256",
-        "name": "nonce_",
+        "name": "tokenId_",
         "type": "uint256"
       },
       {
-        "internalType": "bytes",
-        "name": "signature_",
-        "type": "bytes"
+        "internalType": "address",
+        "name": "channel_",
+        "type": "address"
       }
     ],
-    "name": "createPublicationWithSignature",
+    "name": "blockChannel",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -435,28 +295,16 @@ export const channelAbi = [
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "publicationID_",
+        "name": "tokenId_",
         "type": "uint256"
       },
       {
-        "components": [
-          {
-            "internalType": "string",
-            "name": "key",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "value",
-            "type": "string"
-          }
-        ],
-        "internalType": "struct KeyValuePairLib.KeyValuePair[]",
-        "name": "newMetadata_",
-        "type": "tuple[]"
+        "internalType": "address",
+        "name": "channel_",
+        "type": "address"
       }
     ],
-    "name": "editPublication",
+    "name": "follow",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -483,17 +331,22 @@ export const channelAbi = [
   {
     "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "role",
-        "type": "bytes32"
+        "internalType": "uint256",
+        "name": "tokenId_",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
       }
     ],
-    "name": "getRoleAdmin",
+    "name": "getFollowByIndex",
     "outputs": [
       {
-        "internalType": "bytes32",
+        "internalType": "address",
         "name": "",
-        "type": "bytes32"
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -502,40 +355,84 @@ export const channelAbi = [
   {
     "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "role",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "tokenId_",
+        "type": "uint256"
       }
     ],
-    "name": "grantRole",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "name": "getFollowsCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "role",
-        "type": "bytes32"
+        "internalType": "uint256",
+        "name": "tokenId_",
+        "type": "uint256"
       },
       {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "getLikeByIndex",
+    "outputs": [
+      {
         "internalType": "address",
-        "name": "account",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenId_",
+        "type": "uint256"
+      }
+    ],
+    "name": "getLikesCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
         "type": "address"
       }
     ],
-    "name": "hasRole",
+    "name": "getTokenIdsOfUser",
     "outputs": [
       {
-        "internalType": "bool",
+        "internalType": "uint256[]",
         "name": "",
-        "type": "bool"
+        "type": "uint256[]"
       }
     ],
     "stateMutability": "view",
@@ -566,16 +463,39 @@ export const channelAbi = [
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "metadataAttributes",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "contract IMetadataAttributes",
-        "name": "",
+        "internalType": "uint256",
+        "name": "tokenId_",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "channel_",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "publicationID",
+        "type": "uint256"
       }
     ],
-    "stateMutability": "view",
+    "name": "like",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "mint",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -586,25 +506,6 @@ export const channelAbi = [
         "internalType": "string",
         "name": "",
         "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "nonces",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -627,87 +528,6 @@ export const channelAbi = [
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "publicationIDs",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "publications",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "publishers",
-    "outputs": [
-      {
-        "internalType": "address[]",
-        "name": "",
-        "type": "address[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "role",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "renounceRole",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "role",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "revokeRole",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -815,7 +635,7 @@ export const channelAbi = [
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "tokenId_",
+        "name": "tokenId",
         "type": "uint256"
       }
     ],
@@ -851,6 +671,71 @@ export const channelAbi = [
     "name": "transferFrom",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenId_",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "channel_",
+        "type": "address"
+      }
+    ],
+    "name": "unfollow",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenId_",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "channel_",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "publicationID",
+        "type": "uint256"
+      }
+    ],
+    "name": "unlike",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "userToTokenIds",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   }
 ] as const;

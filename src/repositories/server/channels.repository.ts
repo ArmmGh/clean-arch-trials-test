@@ -128,14 +128,14 @@ export class ChannelsRepository implements IChannelsRepository {
   }
 
   async getLastArticleId(channelAddress: Address) {
-    const lastArticleId = await this.client.readContract({
+    const lastPublicationId = await this.client.readContract({
       abi: channelAbi,
       address: channelAddress,
-      functionName: 'articleIDs',
+      functionName: 'publicationIDs',
       args: [],
     })
 
-    return lastArticleId
+    return lastPublicationId
   }
 
   async isUserFollowingChannel(channelAddress: Address, userAddress: Address): Promise<boolean> {

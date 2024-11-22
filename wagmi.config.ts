@@ -1,4 +1,5 @@
 import { articleAbi } from '@/abi/article-abi'
+import { behaviorAbi } from '@/abi/behavior-abi'
 import { channelAbi } from '@/abi/channel-abi'
 import { channelLedgerAbi } from '@/abi/channel-ledger-abi'
 import { factoryAbi } from '@/abi/factory-abi'
@@ -22,6 +23,13 @@ export default defineConfig(() => {
   return {
     out: 'src/generated.ts',
     contracts: [
+      {
+        name: 'Behavior',
+        abi: behaviorAbi,
+        address: {
+          [defaultChain.id]: getAddress(process.env.NEXT_PUBLIC_BEHAVIOR_ADDRESS!),
+        },
+      },
       {
         name: 'MediaPlatform',
         abi: mediaPlatformAbi,

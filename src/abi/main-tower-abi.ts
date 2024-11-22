@@ -1,76 +1,179 @@
 export const mainTowerAbi = [
   {
-    "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "channelAddress_",
-        "type": "address"
-      },
-      {
-        "indexed": false,
         "internalType": "uint256",
-        "name": "articleID_",
+        "name": "minPrice_",
         "type": "uint256"
-      }
-    ],
-    "name": "ArticleAdded",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "publisherAddress_",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "channelAddress_",
-        "type": "address"
-      }
-    ],
-    "name": "PublisherRegistered",
-    "type": "event"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "channelAddress_",
-        "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "articleID_",
+        "name": "windowSize_",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "priceIncrease_",
         "type": "uint256"
       }
     ],
-    "name": "newAarticleAnnouncement",
-    "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "string",
+        "name": "announcementName_",
+        "type": "string"
+      },
+      {
+        "indexed": true,
+        "internalType": "string",
+        "name": "arg1_",
+        "type": "string"
+      },
+      {
+        "indexed": true,
+        "internalType": "string",
+        "name": "arg2_",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "arg3_",
+        "type": "bytes"
+      }
+    ],
+    "name": "Announced",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "announcementName_",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "arg1_",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "arg2_",
+        "type": "string"
+      },
+      {
+        "internalType": "bytes",
+        "name": "arg3_",
+        "type": "bytes"
+      }
+    ],
+    "name": "announcement",
+    "outputs": [],
+    "stateMutability": "payable",
     "type": "function"
   },
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "publisherAddress_",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "channelAddress_",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
-    "name": "newPublisherAnnouncement",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "name": "announcementsPerBlock",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "minPrice",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "oldestTrackedBlock",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "price",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "priceIncrease",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "totalAnnouncementsInWindow",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "windowSize",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   }
 ] as const;
