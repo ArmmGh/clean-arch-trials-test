@@ -1,4 +1,3 @@
-import { Channel } from '@/entities/models/channel'
 import { getInjection } from '@/lib/di/container'
 import { Address } from 'viem'
 

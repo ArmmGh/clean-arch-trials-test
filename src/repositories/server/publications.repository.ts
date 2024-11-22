@@ -6,15 +6,18 @@ import { PublicClient } from 'viem'
 
 export class PublicationsRepository implements IPublicationsRepository {
   private client: PublicClient
+  private envType: typeof process.env.NODE_ENV
 
   constructor() {
     this.client = createViemClient()
+    this.envType = process.env.NODE_ENV
   }
 
   async getPublicationsByChannelId(channelId: number) {
     const supabase = await createClient()
 
     const { data: publications, error } = await supabase.from('publications').select().eq('channel_id', channelId)
+    // .eq('env_type', this.envType)
 
     if (error) {
       throw new SupabaseError(error.message)

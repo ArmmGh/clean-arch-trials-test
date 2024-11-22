@@ -1,5 +1,5 @@
 import { IArticlesRepository } from '@/use-cases/interfaces/IArticlesRepository.interface'
-import { IChannelsRepository } from '@/use-cases/interfaces/IChannelsRepository.interface'
+import { IChannelsRepository } from '@/use-cases/interfaces/channels-repository.interface'
 import { IPublicationsRepository } from '@/use-cases/interfaces/publications-repository.interface'
 
 export const DI_SYMBOLS = {

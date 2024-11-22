@@ -38,30 +38,30 @@ export type Database = {
       }
       announcements: {
         Row: {
-          announcement_type: Database["public"]["Enums"]["announcementtype"]
+          announcement_type: Database["public"]["Enums"]["announcement_type"]
+          entity_id: number | null
+          entity_type: Database["public"]["Enums"]["entity_type"] | null
           id: number
           message: string | null
           price_paid: number | null
-          source_id: number | null
-          source_type: string | null
           tower_id: number | null
         }
         Insert: {
-          announcement_type: Database["public"]["Enums"]["announcementtype"]
-          id?: number
+          announcement_type: Database["public"]["Enums"]["announcement_type"]
+          entity_id?: number | null
+          entity_type?: Database["public"]["Enums"]["entity_type"] | null
+          id: number
           message?: string | null
           price_paid?: number | null
-          source_id?: number | null
-          source_type?: string | null
           tower_id?: number | null
         }
         Update: {
-          announcement_type?: Database["public"]["Enums"]["announcementtype"]
+          announcement_type?: Database["public"]["Enums"]["announcement_type"]
+          entity_id?: number | null
+          entity_type?: Database["public"]["Enums"]["entity_type"] | null
           id?: number
           message?: string | null
           price_paid?: number | null
-          source_id?: number | null
-          source_type?: string | null
           tower_id?: number | null
         }
         Relationships: [
@@ -74,87 +74,85 @@ export type Database = {
           },
         ]
       }
-      behavior_blocked_channels: {
+      behavior_block: {
         Row: {
-          behavior_id: number | null
-          channel_id: number | null
-          id: number
+          behavior_id: number
+          created_at: string | null
+          entity_id: number
+          entity_type: Database["public"]["Enums"]["entity_type"]
+          id: number | null
         }
         Insert: {
-          behavior_id?: number | null
-          channel_id?: number | null
-          id?: number
+          behavior_id: number
+          created_at?: string | null
+          entity_id: number
+          entity_type: Database["public"]["Enums"]["entity_type"]
+          id?: number | null
         }
         Update: {
-          behavior_id?: number | null
-          channel_id?: number | null
-          id?: number
+          behavior_id?: number
+          created_at?: string | null
+          entity_id?: number
+          entity_type?: Database["public"]["Enums"]["entity_type"]
+          id?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "behavior_blocked_channels_behavior_id_fkey"
+            foreignKeyName: "behavior_block_behavior_id_fkey"
             columns: ["behavior_id"]
             isOneToOne: false
             referencedRelation: "behaviors"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "behavior_blocked_channels_channel_id_fkey"
-            columns: ["channel_id"]
-            isOneToOne: false
-            referencedRelation: "channels"
             referencedColumns: ["id"]
           },
         ]
       }
-      behavior_followed_channels: {
+      behavior_follow: {
         Row: {
-          behavior_id: number | null
-          channel_id: number | null
-          id: number
+          behavior_id: number
+          created_at: string | null
+          entity_id: number
+          entity_type: Database["public"]["Enums"]["entity_type"]
+          id: number | null
         }
         Insert: {
-          behavior_id?: number | null
-          channel_id?: number | null
-          id?: number
+          behavior_id: number
+          created_at?: string | null
+          entity_id: number
+          entity_type: Database["public"]["Enums"]["entity_type"]
+          id?: number | null
         }
         Update: {
-          behavior_id?: number | null
-          channel_id?: number | null
-          id?: number
+          behavior_id?: number
+          created_at?: string | null
+          entity_id?: number
+          entity_type?: Database["public"]["Enums"]["entity_type"]
+          id?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "behavior_followed_channels_behavior_id_fkey"
+            foreignKeyName: "behavior_follow_behavior_id_fkey"
             columns: ["behavior_id"]
             isOneToOne: false
             referencedRelation: "behaviors"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "behavior_followed_channels_channel_id_fkey"
-            columns: ["channel_id"]
-            isOneToOne: false
-            referencedRelation: "channels"
             referencedColumns: ["id"]
           },
         ]
       }
       behavior_interested_topics: {
         Row: {
-          behavior_id: number | null
-          id: number
-          topic: Database["public"]["Enums"]["topic"] | null
+          behavior_id: number
+          id: number | null
+          topic: Database["public"]["Enums"]["topic"]
         }
         Insert: {
-          behavior_id?: number | null
-          id?: number
-          topic?: Database["public"]["Enums"]["topic"] | null
+          behavior_id: number
+          id?: number | null
+          topic: Database["public"]["Enums"]["topic"]
         }
         Update: {
-          behavior_id?: number | null
-          id?: number
-          topic?: Database["public"]["Enums"]["topic"] | null
+          behavior_id?: number
+          id?: number | null
+          topic?: Database["public"]["Enums"]["topic"]
         }
         Relationships: [
           {
@@ -166,35 +164,34 @@ export type Database = {
           },
         ]
       }
-      behavior_liked_publications: {
+      behavior_like: {
         Row: {
-          behavior_id: number | null
-          id: number
-          publication_id: number | null
+          behavior_id: number
+          created_at: string | null
+          entity_id: number
+          entity_type: Database["public"]["Enums"]["entity_type"]
+          id: number | null
         }
         Insert: {
-          behavior_id?: number | null
-          id?: number
-          publication_id?: number | null
+          behavior_id: number
+          created_at?: string | null
+          entity_id: number
+          entity_type: Database["public"]["Enums"]["entity_type"]
+          id?: number | null
         }
         Update: {
-          behavior_id?: number | null
-          id?: number
-          publication_id?: number | null
+          behavior_id?: number
+          created_at?: string | null
+          entity_id?: number
+          entity_type?: Database["public"]["Enums"]["entity_type"]
+          id?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "behavior_liked_publications_behavior_id_fkey"
+            foreignKeyName: "behavior_like_behavior_id_fkey"
             columns: ["behavior_id"]
             isOneToOne: false
             referencedRelation: "behaviors"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "behavior_liked_publications_publication_id_fkey"
-            columns: ["publication_id"]
-            isOneToOne: false
-            referencedRelation: "publications"
             referencedColumns: ["id"]
           },
         ]
@@ -210,7 +207,7 @@ export type Database = {
         Insert: {
           consumer_address: string
           created_at?: string | null
-          id?: number
+          id: number
           profile_picture_url?: string | null
           username?: string | null
         }
@@ -284,7 +281,7 @@ export type Database = {
           id: number
           name: string | null
           verification_status:
-            | Database["public"]["Enums"]["verificationstatus"]
+            | Database["public"]["Enums"]["verification_status"]
             | null
         }
         Insert: {
@@ -293,10 +290,10 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           env_type?: Database["public"]["Enums"]["env_type"] | null
-          id?: number
+          id: number
           name?: string | null
           verification_status?:
-            | Database["public"]["Enums"]["verificationstatus"]
+            | Database["public"]["Enums"]["verification_status"]
             | null
         }
         Update: {
@@ -308,29 +305,47 @@ export type Database = {
           id?: number
           name?: string | null
           verification_status?:
-            | Database["public"]["Enums"]["verificationstatus"]
+            | Database["public"]["Enums"]["verification_status"]
             | null
         }
         Relationships: []
       }
-      followers: {
+      entity_metrics: {
         Row: {
-          channel_address: string
-          created_at: string
+          blocks: number | null
+          comments: number | null
+          dislikes: number | null
+          entity_id: number | null
+          entity_type: Database["public"]["Enums"]["entity_type"] | null
+          followers: number | null
           id: number
-          user_address: string
+          likes: number | null
+          saved: number | null
+          updated_at: string | null
         }
         Insert: {
-          channel_address: string
-          created_at?: string
-          id?: number
-          user_address: string
+          blocks?: number | null
+          comments?: number | null
+          dislikes?: number | null
+          entity_id?: number | null
+          entity_type?: Database["public"]["Enums"]["entity_type"] | null
+          followers?: number | null
+          id: number
+          likes?: number | null
+          saved?: number | null
+          updated_at?: string | null
         }
         Update: {
-          channel_address?: string
-          created_at?: string
+          blocks?: number | null
+          comments?: number | null
+          dislikes?: number | null
+          entity_id?: number | null
+          entity_type?: Database["public"]["Enums"]["entity_type"] | null
+          followers?: number | null
           id?: number
-          user_address?: string
+          likes?: number | null
+          saved?: number | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -348,7 +363,7 @@ export type Database = {
         Insert: {
           adult_likelihood?: Database["public"]["Enums"]["likelihood"] | null
           assessed_at?: string | null
-          id?: number
+          id: number
           medical_likelihood?: Database["public"]["Enums"]["likelihood"] | null
           publication_id?: number | null
           racy_likelihood?: Database["public"]["Enums"]["likelihood"] | null
@@ -377,16 +392,16 @@ export type Database = {
       }
       publication_topics: {
         Row: {
-          publication_id: number
-          topic: Database["public"]["Enums"]["topic"]
+          publication_id: number | null
+          topic: Database["public"]["Enums"]["topic"] | null
         }
         Insert: {
-          publication_id: number
-          topic: Database["public"]["Enums"]["topic"]
+          publication_id?: number | null
+          topic?: Database["public"]["Enums"]["topic"] | null
         }
         Update: {
-          publication_id?: number
-          topic?: Database["public"]["Enums"]["topic"]
+          publication_id?: number | null
+          topic?: Database["public"]["Enums"]["topic"] | null
         }
         Relationships: [
           {
@@ -401,18 +416,21 @@ export type Database = {
       publications: {
         Row: {
           channel_id: number | null
+          env_type: Database["public"]["Enums"]["env_type"] | null
           id: number
           publication_address: string
           publication_index: number | null
         }
         Insert: {
           channel_id?: number | null
-          id?: number
+          env_type?: Database["public"]["Enums"]["env_type"] | null
+          id: number
           publication_address: string
           publication_index?: number | null
         }
         Update: {
           channel_id?: number | null
+          env_type?: Database["public"]["Enums"]["env_type"] | null
           id?: number
           publication_address?: string
           publication_index?: number | null
@@ -440,7 +458,7 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string | null
           description?: string | null
-          id?: number
+          id: number
           name?: string | null
           tower_address: string
         }
@@ -462,11 +480,12 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      announcementtype:
+      announcement_type:
         | "ChannelAnnounced"
         | "PublicationAnnounced"
         | "MessageAnnounced"
       channel_request_status: "pending" | "whitelisted" | "blacklisted"
+      entity_type: "Channel" | "Publication" | "Tower"
       env_type: "development" | "test" | "production"
       likelihood:
         | "Unknown"
@@ -482,7 +501,7 @@ export type Database = {
         | "Technology"
         | "Entertainment"
         | "Health"
-      verificationstatus: "Unverified" | "Verified" | "Pending"
+      verification_status: "Unverified" | "Verified" | "Pending"
     }
     CompositeTypes: {
       [_ in never]: never

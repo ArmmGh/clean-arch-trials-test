@@ -40,29 +40,35 @@ export const adminsUpdateSchema = z.object({
 
 export const adminsRelationshipsSchema = z.tuple([]);
 
-export const announcementtypeSchema = z.union([
+export const announcementTypeSchema = z.union([
   z.literal("ChannelAnnounced"),
   z.literal("PublicationAnnounced"),
   z.literal("MessageAnnounced"),
 ]);
 
+export const entityTypeSchema = z.union([
+  z.literal("Channel"),
+  z.literal("Publication"),
+  z.literal("Tower"),
+]);
+
 export const announcementsInsertSchema = z.object({
-  announcement_type: announcementtypeSchema,
-  id: z.number().optional(),
+  announcement_type: announcementTypeSchema,
+  entity_id: z.number().optional().nullable(),
+  entity_type: entityTypeSchema.optional().nullable(),
+  id: z.number(),
   message: z.string().optional().nullable(),
   price_paid: z.number().optional().nullable(),
-  source_id: z.number().optional().nullable(),
-  source_type: z.string().optional().nullable(),
   tower_id: z.number().optional().nullable(),
 });
 
 export const announcementsUpdateSchema = z.object({
-  announcement_type: announcementtypeSchema.optional(),
+  announcement_type: announcementTypeSchema.optional(),
+  entity_id: z.number().optional().nullable(),
+  entity_type: entityTypeSchema.optional().nullable(),
   id: z.number().optional(),
   message: z.string().optional().nullable(),
   price_paid: z.number().optional().nullable(),
-  source_id: z.number().optional().nullable(),
-  source_type: z.string().optional().nullable(),
   tower_id: z.number().optional().nullable(),
 });
 
@@ -76,72 +82,70 @@ export const announcementsRelationshipsSchema = z.tuple([
   }),
 ]);
 
-export const behaviorBlockedChannelsRowSchema = z.object({
-  behavior_id: z.number().nullable(),
-  channel_id: z.number().nullable(),
-  id: z.number(),
+export const behaviorBlockRowSchema = z.object({
+  behavior_id: z.number(),
+  created_at: z.string().nullable(),
+  entity_id: z.number(),
+  entity_type: entityTypeSchema,
+  id: z.number().nullable(),
 });
 
-export const behaviorBlockedChannelsInsertSchema = z.object({
-  behavior_id: z.number().optional().nullable(),
-  channel_id: z.number().optional().nullable(),
-  id: z.number().optional(),
+export const behaviorBlockInsertSchema = z.object({
+  behavior_id: z.number(),
+  created_at: z.string().optional().nullable(),
+  entity_id: z.number(),
+  entity_type: entityTypeSchema,
+  id: z.number().optional().nullable(),
 });
 
-export const behaviorBlockedChannelsUpdateSchema = z.object({
-  behavior_id: z.number().optional().nullable(),
-  channel_id: z.number().optional().nullable(),
-  id: z.number().optional(),
+export const behaviorBlockUpdateSchema = z.object({
+  behavior_id: z.number().optional(),
+  created_at: z.string().optional().nullable(),
+  entity_id: z.number().optional(),
+  entity_type: entityTypeSchema.optional(),
+  id: z.number().optional().nullable(),
 });
 
-export const behaviorBlockedChannelsRelationshipsSchema = z.tuple([
+export const behaviorBlockRelationshipsSchema = z.tuple([
   z.object({
-    foreignKeyName: z.literal("behavior_blocked_channels_behavior_id_fkey"),
+    foreignKeyName: z.literal("behavior_block_behavior_id_fkey"),
     columns: z.tuple([z.literal("behavior_id")]),
     isOneToOne: z.literal(false),
     referencedRelation: z.literal("behaviors"),
-    referencedColumns: z.tuple([z.literal("id")]),
-  }),
-  z.object({
-    foreignKeyName: z.literal("behavior_blocked_channels_channel_id_fkey"),
-    columns: z.tuple([z.literal("channel_id")]),
-    isOneToOne: z.literal(false),
-    referencedRelation: z.literal("channels"),
     referencedColumns: z.tuple([z.literal("id")]),
   }),
 ]);
 
-export const behaviorFollowedChannelsRowSchema = z.object({
-  behavior_id: z.number().nullable(),
-  channel_id: z.number().nullable(),
-  id: z.number(),
+export const behaviorFollowRowSchema = z.object({
+  behavior_id: z.number(),
+  created_at: z.string().nullable(),
+  entity_id: z.number(),
+  entity_type: entityTypeSchema,
+  id: z.number().nullable(),
 });
 
-export const behaviorFollowedChannelsInsertSchema = z.object({
-  behavior_id: z.number().optional().nullable(),
-  channel_id: z.number().optional().nullable(),
-  id: z.number().optional(),
+export const behaviorFollowInsertSchema = z.object({
+  behavior_id: z.number(),
+  created_at: z.string().optional().nullable(),
+  entity_id: z.number(),
+  entity_type: entityTypeSchema,
+  id: z.number().optional().nullable(),
 });
 
-export const behaviorFollowedChannelsUpdateSchema = z.object({
-  behavior_id: z.number().optional().nullable(),
-  channel_id: z.number().optional().nullable(),
-  id: z.number().optional(),
+export const behaviorFollowUpdateSchema = z.object({
+  behavior_id: z.number().optional(),
+  created_at: z.string().optional().nullable(),
+  entity_id: z.number().optional(),
+  entity_type: entityTypeSchema.optional(),
+  id: z.number().optional().nullable(),
 });
 
-export const behaviorFollowedChannelsRelationshipsSchema = z.tuple([
+export const behaviorFollowRelationshipsSchema = z.tuple([
   z.object({
-    foreignKeyName: z.literal("behavior_followed_channels_behavior_id_fkey"),
+    foreignKeyName: z.literal("behavior_follow_behavior_id_fkey"),
     columns: z.tuple([z.literal("behavior_id")]),
     isOneToOne: z.literal(false),
     referencedRelation: z.literal("behaviors"),
-    referencedColumns: z.tuple([z.literal("id")]),
-  }),
-  z.object({
-    foreignKeyName: z.literal("behavior_followed_channels_channel_id_fkey"),
-    columns: z.tuple([z.literal("channel_id")]),
-    isOneToOne: z.literal(false),
-    referencedRelation: z.literal("channels"),
     referencedColumns: z.tuple([z.literal("id")]),
   }),
 ]);
@@ -156,15 +160,15 @@ export const topicSchema = z.union([
 ]);
 
 export const behaviorInterestedTopicsInsertSchema = z.object({
-  behavior_id: z.number().optional().nullable(),
-  id: z.number().optional(),
-  topic: topicSchema.optional().nullable(),
+  behavior_id: z.number(),
+  id: z.number().optional().nullable(),
+  topic: topicSchema,
 });
 
 export const behaviorInterestedTopicsUpdateSchema = z.object({
-  behavior_id: z.number().optional().nullable(),
-  id: z.number().optional(),
-  topic: topicSchema.optional().nullable(),
+  behavior_id: z.number().optional(),
+  id: z.number().optional().nullable(),
+  topic: topicSchema.optional(),
 });
 
 export const behaviorInterestedTopicsRelationshipsSchema = z.tuple([
@@ -177,39 +181,36 @@ export const behaviorInterestedTopicsRelationshipsSchema = z.tuple([
   }),
 ]);
 
-export const behaviorLikedPublicationsRowSchema = z.object({
-  behavior_id: z.number().nullable(),
-  id: z.number(),
-  publication_id: z.number().nullable(),
+export const behaviorLikeRowSchema = z.object({
+  behavior_id: z.number(),
+  created_at: z.string().nullable(),
+  entity_id: z.number(),
+  entity_type: entityTypeSchema,
+  id: z.number().nullable(),
 });
 
-export const behaviorLikedPublicationsInsertSchema = z.object({
-  behavior_id: z.number().optional().nullable(),
-  id: z.number().optional(),
-  publication_id: z.number().optional().nullable(),
+export const behaviorLikeInsertSchema = z.object({
+  behavior_id: z.number(),
+  created_at: z.string().optional().nullable(),
+  entity_id: z.number(),
+  entity_type: entityTypeSchema,
+  id: z.number().optional().nullable(),
 });
 
-export const behaviorLikedPublicationsUpdateSchema = z.object({
-  behavior_id: z.number().optional().nullable(),
-  id: z.number().optional(),
-  publication_id: z.number().optional().nullable(),
+export const behaviorLikeUpdateSchema = z.object({
+  behavior_id: z.number().optional(),
+  created_at: z.string().optional().nullable(),
+  entity_id: z.number().optional(),
+  entity_type: entityTypeSchema.optional(),
+  id: z.number().optional().nullable(),
 });
 
-export const behaviorLikedPublicationsRelationshipsSchema = z.tuple([
+export const behaviorLikeRelationshipsSchema = z.tuple([
   z.object({
-    foreignKeyName: z.literal("behavior_liked_publications_behavior_id_fkey"),
+    foreignKeyName: z.literal("behavior_like_behavior_id_fkey"),
     columns: z.tuple([z.literal("behavior_id")]),
     isOneToOne: z.literal(false),
     referencedRelation: z.literal("behaviors"),
-    referencedColumns: z.tuple([z.literal("id")]),
-  }),
-  z.object({
-    foreignKeyName: z.literal(
-      "behavior_liked_publications_publication_id_fkey",
-    ),
-    columns: z.tuple([z.literal("publication_id")]),
-    isOneToOne: z.literal(false),
-    referencedRelation: z.literal("publications"),
     referencedColumns: z.tuple([z.literal("id")]),
   }),
 ]);
@@ -225,7 +226,7 @@ export const behaviorsRowSchema = z.object({
 export const behaviorsInsertSchema = z.object({
   consumer_address: z.string(),
   created_at: z.string().optional().nullable(),
-  id: z.number().optional(),
+  id: z.number(),
   profile_picture_url: z.string().optional().nullable(),
   username: z.string().optional().nullable(),
 });
@@ -292,7 +293,7 @@ export const channelRequestsUpdateSchema = z.object({
 
 export const channelRequestsRelationshipsSchema = z.tuple([]);
 
-export const verificationstatusSchema = z.union([
+export const verificationStatusSchema = z.union([
   z.literal("Unverified"),
   z.literal("Verified"),
   z.literal("Pending"),
@@ -304,9 +305,9 @@ export const channelsInsertSchema = z.object({
   created_at: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
   env_type: envTypeSchema.optional().nullable(),
-  id: z.number().optional(),
+  id: z.number(),
   name: z.string().optional().nullable(),
-  verification_status: verificationstatusSchema.optional().nullable(),
+  verification_status: verificationStatusSchema.optional().nullable(),
 });
 
 export const channelsUpdateSchema = z.object({
@@ -317,33 +318,51 @@ export const channelsUpdateSchema = z.object({
   env_type: envTypeSchema.optional().nullable(),
   id: z.number().optional(),
   name: z.string().optional().nullable(),
-  verification_status: verificationstatusSchema.optional().nullable(),
+  verification_status: verificationStatusSchema.optional().nullable(),
 });
 
 export const channelsRelationshipsSchema = z.tuple([]);
 
-export const followersRowSchema = z.object({
-  channel_address: z.string(),
-  created_at: z.string(),
+export const entityMetricsRowSchema = z.object({
+  blocks: z.number().nullable(),
+  comments: z.number().nullable(),
+  dislikes: z.number().nullable(),
+  entity_id: z.number().nullable(),
+  entity_type: entityTypeSchema.nullable(),
+  followers: z.number().nullable(),
   id: z.number(),
-  user_address: z.string(),
+  likes: z.number().nullable(),
+  saved: z.number().nullable(),
+  updated_at: z.string().nullable(),
 });
 
-export const followersInsertSchema = z.object({
-  channel_address: z.string(),
-  created_at: z.string().optional(),
+export const entityMetricsInsertSchema = z.object({
+  blocks: z.number().optional().nullable(),
+  comments: z.number().optional().nullable(),
+  dislikes: z.number().optional().nullable(),
+  entity_id: z.number().optional().nullable(),
+  entity_type: entityTypeSchema.optional().nullable(),
+  followers: z.number().optional().nullable(),
+  id: z.number(),
+  likes: z.number().optional().nullable(),
+  saved: z.number().optional().nullable(),
+  updated_at: z.string().optional().nullable(),
+});
+
+export const entityMetricsUpdateSchema = z.object({
+  blocks: z.number().optional().nullable(),
+  comments: z.number().optional().nullable(),
+  dislikes: z.number().optional().nullable(),
+  entity_id: z.number().optional().nullable(),
+  entity_type: entityTypeSchema.optional().nullable(),
+  followers: z.number().optional().nullable(),
   id: z.number().optional(),
-  user_address: z.string(),
+  likes: z.number().optional().nullable(),
+  saved: z.number().optional().nullable(),
+  updated_at: z.string().optional().nullable(),
 });
 
-export const followersUpdateSchema = z.object({
-  channel_address: z.string().optional(),
-  created_at: z.string().optional(),
-  id: z.number().optional(),
-  user_address: z.string().optional(),
-});
-
-export const followersRelationshipsSchema = z.tuple([]);
+export const entityMetricsRelationshipsSchema = z.tuple([]);
 
 export const likelihoodSchema = z.union([
   z.literal("Unknown"),
@@ -357,7 +376,7 @@ export const likelihoodSchema = z.union([
 export const publicationAssessmentInsertSchema = z.object({
   adult_likelihood: likelihoodSchema.optional().nullable(),
   assessed_at: z.string().optional().nullable(),
-  id: z.number().optional(),
+  id: z.number(),
   medical_likelihood: likelihoodSchema.optional().nullable(),
   publication_id: z.number().optional().nullable(),
   racy_likelihood: likelihoodSchema.optional().nullable(),
@@ -387,18 +406,18 @@ export const publicationAssessmentRelationshipsSchema = z.tuple([
 ]);
 
 export const publicationTopicsRowSchema = z.object({
-  publication_id: z.number(),
-  topic: topicSchema,
+  publication_id: z.number().nullable(),
+  topic: topicSchema.nullable(),
 });
 
 export const publicationTopicsInsertSchema = z.object({
-  publication_id: z.number(),
-  topic: topicSchema,
+  publication_id: z.number().optional().nullable(),
+  topic: topicSchema.optional().nullable(),
 });
 
 export const publicationTopicsUpdateSchema = z.object({
-  publication_id: z.number().optional(),
-  topic: topicSchema.optional(),
+  publication_id: z.number().optional().nullable(),
+  topic: topicSchema.optional().nullable(),
 });
 
 export const publicationTopicsRelationshipsSchema = z.tuple([
@@ -413,6 +432,7 @@ export const publicationTopicsRelationshipsSchema = z.tuple([
 
 export const publicationsRowSchema = z.object({
   channel_id: z.number().nullable(),
+  env_type: envTypeSchema.nullable(),
   id: z.number(),
   publication_address: z.string(),
   publication_index: z.number().nullable(),
@@ -420,13 +440,15 @@ export const publicationsRowSchema = z.object({
 
 export const publicationsInsertSchema = z.object({
   channel_id: z.number().optional().nullable(),
-  id: z.number().optional(),
+  env_type: envTypeSchema.optional().nullable(),
+  id: z.number(),
   publication_address: z.string(),
   publication_index: z.number().optional().nullable(),
 });
 
 export const publicationsUpdateSchema = z.object({
   channel_id: z.number().optional().nullable(),
+  env_type: envTypeSchema.optional().nullable(),
   id: z.number().optional(),
   publication_address: z.string().optional(),
   publication_index: z.number().optional().nullable(),
@@ -455,7 +477,7 @@ export const towersInsertSchema = z.object({
   avatar_url: z.string().optional().nullable(),
   created_at: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
-  id: z.number().optional(),
+  id: z.number(),
   name: z.string().optional().nullable(),
   tower_address: z.string(),
 });
@@ -481,19 +503,19 @@ export const adminsRowSchema = z.object({
 });
 
 export const announcementsRowSchema = z.object({
-  announcement_type: announcementtypeSchema,
+  announcement_type: announcementTypeSchema,
+  entity_id: z.number().nullable(),
+  entity_type: entityTypeSchema.nullable(),
   id: z.number(),
   message: z.string().nullable(),
   price_paid: z.number().nullable(),
-  source_id: z.number().nullable(),
-  source_type: z.string().nullable(),
   tower_id: z.number().nullable(),
 });
 
 export const behaviorInterestedTopicsRowSchema = z.object({
-  behavior_id: z.number().nullable(),
-  id: z.number(),
-  topic: topicSchema.nullable(),
+  behavior_id: z.number(),
+  id: z.number().nullable(),
+  topic: topicSchema,
 });
 
 export const channelRequestsRowSchema = z.object({
@@ -513,7 +535,7 @@ export const channelsRowSchema = z.object({
   env_type: envTypeSchema.nullable(),
   id: z.number(),
   name: z.string().nullable(),
-  verification_status: verificationstatusSchema.nullable(),
+  verification_status: verificationStatusSchema.nullable(),
 });
 
 export const publicationAssessmentRowSchema = z.object({

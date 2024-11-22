@@ -15,7 +15,7 @@ export default async function createArticleUseCase(txHash: Hash, channelAddress:
       return true
     }
 
-    const notifications = followers.map((follower) => ({
+    const notifications = followers.map((follower: any) => ({
       channel_address: channelAddress.toString(),
       user_address: follower.user_address,
     }))

@@ -17,16 +17,19 @@ export interface IChannelsRepository {
   isUserFollowingChannel(channelAddress: Address, userAddress: Address): Promise<boolean>
   followChannel(channelAddress: Address, userAddress: Address): Promise<boolean>
   unfollowChannel(channelAddress: Address, userAddress: Address): Promise<boolean>
-  getFollowedChannels(userAddress: Address): Promise<
-    {
-      channel_address: string | null
-    }[]
-  >
+  getFollowedChannels(userAddress: Address):
+    | any
+    | Promise<
+        {
+          channel_address: string | null
+        }[]
+      >
   getFollowersCount(channelAddress: Address): Promise<number>
   getFollowers(channelAddress: Address): Promise<
-    {
-      user_address: string
-    }[]
+    | any
+    | {
+        user_address: string
+      }[]
   >
   addChannelNotifications(notifications: { channel_address: string; user_address: string }[]): Promise<boolean>
   markChannelAsRead(userAddress: Address, channelAddress: Address): Promise<boolean>
