@@ -2,7 +2,7 @@ import { channelLedgerAbi } from '@/abi/channel-ledger-abi'
 import { followChannelsAbi } from '@/abi/follow-channels-abi'
 import { mediaPlatformAbi } from '@/abi/media-platform-abi'
 import { SupabaseError } from '@/entities/errors/common'
-import { ChannelRequest } from '@/entities/types/channel/channel-request.type'
+import { ChannelRequest } from '@/entities/types/channels/channel-request.type'
 import { channelAbi } from '@/generated'
 import { contracts } from '@/lib/config/contracts'
 import { createClient } from '@/lib/utils/supabase/server'
@@ -23,6 +23,22 @@ export class ChannelsRepository implements IChannelsRepository {
   constructor() {
     this.client = createViemClient()
     this.envType = process.env.NODE_ENV
+  }
+
+  async getUserChannelRows(userAddress: Address) {
+    const supabase = await createClient()
+
+    const { data: channels, error } = await supabase
+      .from('channels')
+      .select()
+      .eq('verification_status', 'Verified')
+      .eq('owner_address', userAddress)
+
+    if (error) {
+      throw new SupabaseError(error.message)
+    }
+
+    return channels
   }
 
   async getAllChannels() {
@@ -132,7 +148,7 @@ export class ChannelsRepository implements IChannelsRepository {
       const lastPublicationId = await this.client.readContract({
         abi: channelAbi,
         address: channelAddress,
-        functionName: 'publicationIDs',
+        functionName: 'currentID',
         args: [],
       })
 

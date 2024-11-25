@@ -9,7 +9,8 @@ export default async function createArticleUseCase(txHash: Hash, channelAddress:
   if (tx.status === 'success') {
     const channelsRepo = getInjection('IChannelsRepository')
 
-    const followers = await channelsRepo.getFollowers(channelAddress)
+    // const followers = await channelsRepo.getFollowers(channelAddress)
+    const followers: any[] = []
 
     if (!followers.length) {
       return true

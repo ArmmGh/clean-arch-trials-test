@@ -13,7 +13,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Loader2, MoreHorizontal } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
-import { ChannelRequest } from '@/entities/types/channel/channel-request.type'
+import { ChannelRequest } from '@/entities/types/channels/channel-request.type'
 import { writeMediaPlatformRemoveWhitelistedChannel, writeMediaPlatformWhitelistChannels } from '@/generated'
 import { config } from '@/lib/config/wagmi'
 import { getAddress } from 'viem'

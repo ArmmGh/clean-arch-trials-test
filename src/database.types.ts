@@ -280,6 +280,7 @@ export type Database = {
           env_type: Database["public"]["Enums"]["env_type"] | null
           id: number
           name: string | null
+          owner_address: string | null
           verification_status:
             | Database["public"]["Enums"]["verification_status"]
             | null
@@ -290,8 +291,9 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           env_type?: Database["public"]["Enums"]["env_type"] | null
-          id: number
+          id?: number
           name?: string | null
+          owner_address?: string | null
           verification_status?:
             | Database["public"]["Enums"]["verification_status"]
             | null
@@ -304,6 +306,7 @@ export type Database = {
           env_type?: Database["public"]["Enums"]["env_type"] | null
           id?: number
           name?: string | null
+          owner_address?: string | null
           verification_status?:
             | Database["public"]["Enums"]["verification_status"]
             | null

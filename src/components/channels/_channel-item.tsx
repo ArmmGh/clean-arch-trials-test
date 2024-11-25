@@ -34,7 +34,7 @@ export default function ChannelItem({
         `relative flex cursor-pointer flex-col p-4 transition-colors duration-200 ${isClientActive ? 'bg-accent' : 'hover:bg-accent/50'} ${isOwner && 'br-2'}`,
         className,
       )}
-      href={`?channel=${channel.address}`}
+      href={`?channel=${channel.channel_address}`}
       prefetch={true}
     >
       {channel.isFollowing && userAddress && <Ping channelAddress={channel.address} userAddress={userAddress} />}

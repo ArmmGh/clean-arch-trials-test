@@ -2,6 +2,16 @@ export const mainTowerAbi = [
   {
     "inputs": [
       {
+        "internalType": "string",
+        "name": "towerName_",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "towerDescription_",
+        "type": "string"
+      },
+      {
         "internalType": "uint256",
         "name": "minPrice_",
         "type": "uint256"
@@ -26,7 +36,7 @@ export const mainTowerAbi = [
       {
         "indexed": true,
         "internalType": "string",
-        "name": "announcementName_",
+        "name": "announcemenType_",
         "type": "string"
       },
       {
@@ -55,7 +65,7 @@ export const mainTowerAbi = [
     "inputs": [
       {
         "internalType": "string",
-        "name": "announcementName_",
+        "name": "announcemenType_",
         "type": "string"
       },
       {
@@ -158,6 +168,32 @@ export const mainTowerAbi = [
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "towerDescription",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "towerName",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
       }
     ],
     "stateMutability": "view",

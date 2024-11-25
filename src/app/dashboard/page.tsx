@@ -5,7 +5,7 @@ import { getPublisherAddressFromSession } from '@/lib/utils/getPublisherAddressF
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
-import getPublisherAllChannelsAction from '@/actions/getPublisherAllChannels.action'
+import getPublisherAllChannelsAction from '@/actions/_getPublisherAllChannels.action'
 import NoChannels from '@/components/channels/no-channels'
 import AbstractChannelsList from '@/components/channels/abstract-channels-list'
 

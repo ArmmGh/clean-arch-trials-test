@@ -1,13 +1,15 @@
 import { Channel, ChannelInContract } from '@/entities/models/channel'
-import { ChannelRequest } from '@/entities/types/channel/channel-request.type'
+import { ChannelRequest } from '@/entities/types/channels/channel-request.type'
 import { channelsRowSchema } from '@/database.schemas'
 import { Address } from 'viem'
 import { z } from 'zod'
+import { ChannelRow } from '@/entities/types/channels/index.types'
 
 export interface IChannelsRepository {
   getAllChannels(): Promise<z.infer<typeof channelsRowSchema>[]>
   getChannelIdByAddress(channelAddress: Address): Promise<number>
   getChannelByAddress(channelAddress: Address): Promise<Channel> //TODO: fix Channel Type
+  getUserChannelRows(userAddress: Address): Promise<ChannelRow[]>
   // OLD
   getWhitelistedChannelAddresses(): Promise<Address[]>
   getAllPublisherChannelAddresses(publisherAddress: Address): Promise<string[]>

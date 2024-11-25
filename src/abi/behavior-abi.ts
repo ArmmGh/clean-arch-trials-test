@@ -8,6 +8,62 @@ export const behaviorAbi = [
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "tokenId_",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "actionType_",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "entityType_",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "arguments_",
+        "type": "bytes"
+      }
+    ],
+    "name": "ActionDone",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "tokenId_",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "actionType_",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "arguments_",
+        "type": "bytes"
+      }
+    ],
+    "name": "AntiActionDone",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "address",
         "name": "owner",
@@ -58,69 +114,6 @@ export const behaviorAbi = [
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "tokenId_",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "channel_",
-        "type": "address"
-      }
-    ],
-    "name": "Blocked",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "tokenId_",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "channel_",
-        "type": "address"
-      }
-    ],
-    "name": "Followed",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "tokenId_",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "channel_",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "publicationID",
-        "type": "uint256"
-      }
-    ],
-    "name": "Liked",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": true,
         "internalType": "address",
         "name": "from",
@@ -143,48 +136,32 @@ export const behaviorAbi = [
     "type": "event"
   },
   {
-    "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
         "internalType": "uint256",
         "name": "tokenId_",
         "type": "uint256"
       },
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "channel_",
-        "type": "address"
-      }
-    ],
-    "name": "Unfollowed",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "tokenId_",
-        "type": "uint256"
+        "internalType": "string",
+        "name": "actionType_",
+        "type": "string"
       },
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "channel_",
-        "type": "address"
+        "internalType": "string",
+        "name": "entityType_",
+        "type": "string"
       },
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "publicationID",
-        "type": "uint256"
+        "internalType": "bytes",
+        "name": "arguments_",
+        "type": "bytes"
       }
     ],
-    "name": "Unliked",
-    "type": "event"
+    "name": "action",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "inputs": [
@@ -192,14 +169,31 @@ export const behaviorAbi = [
         "internalType": "uint256",
         "name": "tokenId_",
         "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "actionType_",
+        "type": "string"
       }
     ],
-    "name": "allFollows",
+    "name": "allActions",
     "outputs": [
       {
-        "internalType": "address[]",
+        "components": [
+          {
+            "internalType": "string",
+            "name": "entityType",
+            "type": "string"
+          },
+          {
+            "internalType": "bytes",
+            "name": "arguments",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct IBehavior.Action[]",
         "name": "",
-        "type": "address[]"
+        "type": "tuple[]"
       }
     ],
     "stateMutability": "view",
@@ -211,29 +205,21 @@ export const behaviorAbi = [
         "internalType": "uint256",
         "name": "tokenId_",
         "type": "uint256"
-      }
-    ],
-    "name": "allLikes",
-    "outputs": [
+      },
       {
-        "components": [
-          {
-            "internalType": "address",
-            "name": "channel_",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "publicationID",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct IBehavior.Like[]",
-        "name": "",
-        "type": "tuple[]"
+        "internalType": "string",
+        "name": "actionType_",
+        "type": "string"
+      },
+      {
+        "internalType": "bytes",
+        "name": "arguments_",
+        "type": "bytes"
       }
     ],
-    "stateMutability": "view",
+    "name": "antiAction",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -281,14 +267,30 @@ export const behaviorAbi = [
         "type": "uint256"
       },
       {
-        "internalType": "address",
-        "name": "channel_",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "index_",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "actionType_",
+        "type": "string"
       }
     ],
-    "name": "blockChannel",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "name": "getActionByIndex",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "entityTipe_",
+        "type": "string"
+      },
+      {
+        "internalType": "bytes",
+        "name": "arguments",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -299,14 +301,20 @@ export const behaviorAbi = [
         "type": "uint256"
       },
       {
-        "internalType": "address",
-        "name": "channel_",
-        "type": "address"
+        "internalType": "string",
+        "name": "actionType_",
+        "type": "string"
       }
     ],
-    "name": "follow",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "name": "getActionCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -323,97 +331,6 @@ export const behaviorAbi = [
         "internalType": "address",
         "name": "",
         "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId_",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "index",
-        "type": "uint256"
-      }
-    ],
-    "name": "getFollowByIndex",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId_",
-        "type": "uint256"
-      }
-    ],
-    "name": "getFollowsCount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId_",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "index",
-        "type": "uint256"
-      }
-    ],
-    "name": "getLikeByIndex",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId_",
-        "type": "uint256"
-      }
-    ],
-    "name": "getLikesCount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -460,29 +377,6 @@ export const behaviorAbi = [
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId_",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "channel_",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "publicationID",
-        "type": "uint256"
-      }
-    ],
-    "name": "like",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -669,47 +563,6 @@ export const behaviorAbi = [
       }
     ],
     "name": "transferFrom",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId_",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "channel_",
-        "type": "address"
-      }
-    ],
-    "name": "unfollow",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId_",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "channel_",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "publicationID",
-        "type": "uint256"
-      }
-    ],
-    "name": "unlike",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
