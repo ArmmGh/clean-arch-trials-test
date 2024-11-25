@@ -2,6 +2,7 @@ import { Article } from '@/entities/models/article'
 import { Channel } from '@/entities/models/channel'
 import { getInjection } from '@/lib/di/container'
 import { base64ToJson, prepareIpfsContent } from '@/lib/utils'
+import { Address } from 'viem'
 
 export default async function getLatestArticlesUseCase(): Promise<
   Array<Article & { channelAddress: Channel['channel_address'] }>
@@ -9,7 +10,8 @@ export default async function getLatestArticlesUseCase(): Promise<
   const articlesRepo = getInjection('IArticlesRepository')
   const channelsRepo = getInjection('IChannelsRepository')
 
-  const allChannelAddresses = await channelsRepo.getAllChannelAddresses()
+  const allChannels = await channelsRepo.getAllChannels()
+  const allChannelAddresses = allChannels.map((channel) => channel.channel_address as Address)
 
   const lastArticleIds = await Promise.all(
     allChannelAddresses.map((channelAddress) => channelsRepo.getLastArticleId(channelAddress)),

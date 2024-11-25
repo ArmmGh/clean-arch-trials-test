@@ -4,8 +4,9 @@ import { SidebarGroup, SidebarGroupContent, SidebarMenu } from '@/components/ui/
 import { Bookmark, Home, Rocket, Settings, TrendingUp } from 'lucide-react'
 import MenuItem from './menu-item'
 import { usePathname } from 'next/navigation'
-import { useAppKitAccount } from '@reown/appkit/react'
 import { Separator } from '@/components/ui/separator'
+import { Address, isAddress } from 'viem'
+import { use } from 'react'
 
 const publicItems = [
   {
@@ -41,8 +42,15 @@ const userItems = [
   },
 ]
 
-export default function SidebarNavigation({ isConnected }: { isConnected: boolean }) {
+// export default function SidebarNavigation({ isConnected }: { isConnected: boolean }) {
+export default function SidebarNavigation({
+  promisedUserAddress,
+}: {
+  promisedUserAddress: Promise<Address | undefined>
+}) {
+  const userAddress = use(promisedUserAddress ?? Promise.resolve(undefined))
   const pathname = usePathname()
+  const isConnected = userAddress ? isAddress(userAddress) : false
 
   return (
     <>

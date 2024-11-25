@@ -69,9 +69,6 @@ export default defineConfig(() => {
       {
         name: 'MainTower',
         abi: mainTowerAbi,
-        address: {
-          [defaultChain.id]: getAddress(process.env.NEXT_PUBLIC_MAIN_TOWER_ADDRESS!),
-        },
       },
       {
         name: 'FollowChannels',

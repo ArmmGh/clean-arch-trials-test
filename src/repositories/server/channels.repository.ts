@@ -28,7 +28,7 @@ export class ChannelsRepository implements IChannelsRepository {
   async getAllChannels() {
     const supabase = await createClient()
 
-    const { data: channels, error } = await supabase.from('channels').select()
+    const { data: channels, error } = await supabase.from('channels').select().eq('verification_status', 'Verified')
 
     if (error) {
       throw new SupabaseError(error.message)
@@ -128,14 +128,18 @@ export class ChannelsRepository implements IChannelsRepository {
   }
 
   async getLastArticleId(channelAddress: Address) {
-    const lastPublicationId = await this.client.readContract({
-      abi: channelAbi,
-      address: channelAddress,
-      functionName: 'publicationIDs',
-      args: [],
-    })
+    try {
+      const lastPublicationId = await this.client.readContract({
+        abi: channelAbi,
+        address: channelAddress,
+        functionName: 'publicationIDs',
+        args: [],
+      })
 
-    return lastPublicationId
+      return lastPublicationId
+    } catch (error) {
+      return BigInt(0)
+    }
   }
 
   async isUserFollowingChannel(channelAddress: Address, userAddress: Address): Promise<boolean> {

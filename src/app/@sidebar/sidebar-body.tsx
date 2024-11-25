@@ -2,7 +2,6 @@
 
 import { Address } from 'viem'
 import { SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel } from '@/components/ui/sidebar'
-import { Channel } from '@/entities/models/channel'
 import { use } from 'react'
 import { useParams } from 'next/navigation'
 import ChannelItem from '@/components/channels/channel-item'

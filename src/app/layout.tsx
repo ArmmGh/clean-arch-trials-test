@@ -9,7 +9,6 @@ import { Providers } from '../providers'
 import NextTopLoader from 'nextjs-toploader'
 import AddressChangeHandler from '@/components/layout/AddressChangeHandler'
 import AppNav from '@/components/layout/nav/app-nav'
-import AppSidebar from './(root)/app-sidebar'
 import getAddressFromSession from '@/actions/utils/get-address-from-session.util'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -19,7 +18,7 @@ export const metadata: Metadata = {
   description: 'Decentralized social media platform',
 }
 
-export default async function RootLayout(props: { children: ReactNode }) {
+export default async function RootLayout(props: { children: ReactNode; sidebar: ReactNode }) {
   const headersData = await headers()
   const serverAddress = await getAddressFromSession()
 
@@ -31,7 +30,7 @@ export default async function RootLayout(props: { children: ReactNode }) {
         <Providers cookies={headersData.get('cookie')}>
           <WrongNetworkNotifier />
 
-          <AppSidebar serverAddress={serverAddress} />
+          {props.sidebar}
 
           <main className='relative mx-auto flex max-w-screen-xl flex-1 flex-col overflow-hidden pl-6 pr-8'>
             <AppNav className='fixed left-[--sidebar-width] right-0 z-10 pl-6 pr-8 pt-5' />

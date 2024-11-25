@@ -1,5 +1,7 @@
-export default function TowersPage() {
-  console.log('In Towers page')
-
-  return <div>Towers page</div>
+export default async function TowersPage() {
+  return (
+    <div>
+      <h1>Towers</h1>
+    </div>
+  )
 }
