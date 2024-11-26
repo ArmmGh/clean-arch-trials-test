@@ -6,9 +6,9 @@ export default async function getAllChannelsUseCase(userAddress?: Address) {
   const channelsRepo = getInjection('IChannelsRepository')
   // const channelAddresses = await channelsRepo.getAllChannelAddresses()
 
-  const channels = await channelsRepo.getAllChannels()
+  const channelRows = await channelsRepo.getAllChannelRows()
 
-  return channels
+  return channelRows
 
   // const [channels /*followersCounts*/] = await Promise.all([
   //   Promise.all(channelAddresses.map((channelAddress) => channelsRepo.getChannelByAddress(channelAddress))),

@@ -22,7 +22,7 @@ function presenter(articles: Article[]) {
     }))
 }
 
-export type PresentedArticle = ReturnType<typeof presenter>[number]
+export type PresentedPublication = ReturnType<typeof presenter>[number]
 
 const inputSchema = z.object({
   channelAddress: z.string().refine((val) => isAddress(val), { message: 'Invalid Channel address' }),

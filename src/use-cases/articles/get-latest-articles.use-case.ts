@@ -10,7 +10,7 @@ export default async function getLatestArticlesUseCase(): Promise<
   const articlesRepo = getInjection('IArticlesRepository')
   const channelsRepo = getInjection('IChannelsRepository')
 
-  const allChannels = await channelsRepo.getAllChannels()
+  const allChannels = await channelsRepo.getAllChannelRows()
   const allChannelAddresses = allChannels.map((channel) => channel.channel_address as Address)
 
   const lastArticleIds = await Promise.all(

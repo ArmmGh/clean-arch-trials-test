@@ -2,9 +2,12 @@ import getArticlesByChannelAddressController from '@/controllers/articles/get-ar
 import { Address } from 'viem'
 import SuggestedChannels from './suggested-channels'
 import getChannelMetadataController from '@/controllers/channels/get-channel-metadata.controller'
-import ArticlePreview from '@/components/articles/article/article-preview'
+import { Suspense } from 'react'
+import Publications from './publications'
+import ChannelPublicationsSkeleton from '@/components/skeletons/channel-publications-skeleton'
+import SuggestedChannelsSkeleton from '@/components/skeletons/suggested-channels-skeleton'
 
-const getArticles = async (channelAddress: Address) => {
+const getPublications = async (channelAddress: Address) => {
   try {
     return getArticlesByChannelAddressController({ channelAddress })
   } catch (error) {
@@ -22,36 +25,23 @@ const getChannelMetadata = async (channelAddress: Address) => {
 
 export default async function ChannelPage({ params }: { params: Promise<{ address: Address }> }) {
   const { address: channelAddress } = await params
-  const [channelMetadata, articles] = await Promise.all([
-    getChannelMetadata(channelAddress),
-    getArticles(channelAddress),
-  ])
-  // TODO: Make sure that user is authorized to view the channel
 
-  if (!articles.length) {
-    return <div>No articles found</div>
-  }
+  // TODO: Make sure that user is authorized to view the channel
 
   return (
     <div className='grid gap-6 overflow-hidden md:grid-cols-[1fr,345px]'>
-      <div className='space-y-[13px] pb-5'>
-        {articles.map((article, index) => (
-          <ArticlePreview
-            id={article.id}
-            channelAddress={channelAddress}
-            key={index}
-            date={article.date}
-            description={article.description}
-            image={article.image}
-            name={article.name}
-            emojis={article.emojis}
-            channelMetadata={channelMetadata}
-          />
-        ))}
-      </div>
+      <Suspense fallback={<ChannelPublicationsSkeleton />}>
+        <Publications
+          promisedChannelMetadata={getChannelMetadata(channelAddress)}
+          promisedPublications={getPublications(channelAddress)}
+          channelAddress={channelAddress}
+        />
+      </Suspense>
 
       <div className=''>
-        <SuggestedChannels className='fixed top-[116px] w-[345px]' />
+        <Suspense fallback={<SuggestedChannelsSkeleton />}>
+          <SuggestedChannels className='fixed top-[116px] w-[345px]' />
+        </Suspense>
       </div>
     </div>
   )

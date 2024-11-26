@@ -177,23 +177,31 @@ export const sanitizeArticleContent = (unsanitizedContent: string): string => {
 }
 
 export const prepareIpfsContent = async (content: AsyncIterable<Uint8Array>): Promise<string> => {
-  let unsanitizedContent = ''
-  let totalSize = 0
-  const decoder = new TextDecoder('utf-8', { fatal: true })
-
-  for await (const chunk of content) {
-    totalSize += chunk.length
-
-    if (totalSize > MAX_CONTENT_SIZE) {
-      throw new Error('Content too large')
+  try {
+    if (!(content instanceof Uint8Array)) {
+      throw new Error('Invalid content')
     }
 
-    unsanitizedContent += decoder.decode(chunk, { stream: true })
+    let unsanitizedContent = ''
+    let totalSize = 0
+    const decoder = new TextDecoder('utf-8', { fatal: true })
+
+    for await (const chunk of content) {
+      totalSize += chunk.length
+
+      if (totalSize > MAX_CONTENT_SIZE) {
+        throw new Error('Content too large')
+      }
+
+      unsanitizedContent += decoder.decode(chunk, { stream: true })
+    }
+
+    unsanitizedContent += decoder.decode()
+
+    const sanitizedContent = sanitizeArticleContent(unsanitizedContent)
+
+    return sanitizedContent
+  } catch (error) {
+    return ''
   }
-
-  unsanitizedContent += decoder.decode()
-
-  const sanitizedContent = sanitizeArticleContent(unsanitizedContent)
-
-  return sanitizedContent
 }

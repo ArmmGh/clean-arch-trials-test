@@ -41,7 +41,7 @@ export class ChannelsRepository implements IChannelsRepository {
     return channels
   }
 
-  async getAllChannels() {
+  async getAllChannelRows() {
     const supabase = await createClient()
 
     const { data: channels, error } = await supabase.from('channels').select().eq('verification_status', 'Verified')

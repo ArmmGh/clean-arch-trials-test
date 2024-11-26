@@ -6,7 +6,7 @@ import { z } from 'zod'
 import { ChannelRow } from '@/entities/types/channels/index.types'
 
 export interface IChannelsRepository {
-  getAllChannels(): Promise<z.infer<typeof channelsRowSchema>[]>
+  getAllChannelRows(): Promise<ChannelRow[]>
   getChannelIdByAddress(channelAddress: Address): Promise<number>
   getChannelByAddress(channelAddress: Address): Promise<Channel> //TODO: fix Channel Type
   getUserChannelRows(userAddress: Address): Promise<ChannelRow[]>

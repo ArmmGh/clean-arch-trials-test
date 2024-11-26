@@ -19,5 +19,8 @@ export const channelSchema = z.object({
     .refine((val) => isAddress(val)),
 })
 
+export type ChannelRow = z.infer<typeof channelsRowSchema>
 export type ChannelInContract = z.infer<typeof channelInContractSchema>
 export type Channel = Omit<z.infer<typeof channelsRowSchema>, 'env_type' | 'verification_status'>
+export type SuggestedChannel = ChannelRow & { followersCount: number; isFollowing: boolean }
+// export type Channel = ChannelRow & { followersCount: number }

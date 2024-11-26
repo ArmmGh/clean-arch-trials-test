@@ -15,6 +15,8 @@ function presenter(metadata: { avatarUrl: string | null; followers: number; name
   }
 }
 
+export type PresentedChannelMetadata = ReturnType<typeof presenter>
+
 export default async function getChannelMetadataController(input: z.infer<typeof inputSchema>) {
   try {
     const { data, error: inputParseError } = inputSchema.safeParse(input)
