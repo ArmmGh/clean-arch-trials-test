@@ -8,8 +8,9 @@ import { ChannelRow } from '@/entities/types/channels/index.types'
 export interface IChannelsRepository {
   getAllChannelRows(): Promise<ChannelRow[]>
   getChannelIdByAddress(channelAddress: Address): Promise<number>
-  getChannelByAddress(channelAddress: Address): Promise<Channel> //TODO: fix Channel Type
+  getChannelRowByAddress(channelAddress: Address): Promise<ChannelRow> //TODO: fix Channel Type
   getUserChannelRows(userAddress: Address): Promise<ChannelRow[]>
+  getChannelInContract(channelAddress: Address): Promise<ChannelInContract>
   // OLD
   getWhitelistedChannelAddresses(): Promise<Address[]>
   getAllPublisherChannelAddresses(publisherAddress: Address): Promise<string[]>

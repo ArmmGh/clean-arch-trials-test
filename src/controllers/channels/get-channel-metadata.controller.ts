@@ -7,7 +7,7 @@ const inputSchema = z.object({
   channelAddress: z.string().refine((val) => isAddress(val), { message: 'Invalid Channel address' }),
 })
 
-function presenter(metadata: { avatarUrl: string | null; followers: number; name: string | null }) {
+function presenter(metadata: { avatarUrl?: string | null; followers?: number; name?: string | null }) {
   return {
     avatarUrl: metadata.avatarUrl || '/placeholder.svg',
     followers: String(metadata.followers) || '0',

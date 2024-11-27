@@ -300,25 +300,19 @@ export const verificationStatusSchema = z.union([
 ]);
 
 export const channelsInsertSchema = z.object({
-  avatar_url: z.string().optional().nullable(),
   channel_address: z.string(),
   created_at: z.string().optional().nullable(),
-  description: z.string().optional().nullable(),
   env_type: envTypeSchema.optional().nullable(),
   id: z.number().optional(),
-  name: z.string().optional().nullable(),
   owner_address: z.string().optional().nullable(),
   verification_status: verificationStatusSchema.optional().nullable(),
 });
 
 export const channelsUpdateSchema = z.object({
-  avatar_url: z.string().optional().nullable(),
   channel_address: z.string().optional(),
   created_at: z.string().optional().nullable(),
-  description: z.string().optional().nullable(),
   env_type: envTypeSchema.optional().nullable(),
   id: z.number().optional(),
-  name: z.string().optional().nullable(),
   owner_address: z.string().optional().nullable(),
   verification_status: verificationStatusSchema.optional().nullable(),
 });
@@ -530,13 +524,10 @@ export const channelRequestsRowSchema = z.object({
 });
 
 export const channelsRowSchema = z.object({
-  avatar_url: z.string().nullable(),
   channel_address: z.string(),
   created_at: z.string().nullable(),
-  description: z.string().nullable(),
   env_type: envTypeSchema.nullable(),
   id: z.number(),
-  name: z.string().nullable(),
   owner_address: z.string().nullable(),
   verification_status: verificationStatusSchema.nullable(),
 });

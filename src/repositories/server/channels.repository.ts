@@ -3,12 +3,13 @@ import { followChannelsAbi } from '@/abi/follow-channels-abi'
 import { mediaPlatformAbi } from '@/abi/media-platform-abi'
 import { SupabaseError } from '@/entities/errors/common'
 import { ChannelRequest } from '@/entities/types/channels/channel-request.type'
-import { channelAbi } from '@/generated'
+import { channelAbi, readChannelChannelDescription, readChannelName } from '@/generated'
 import { contracts } from '@/lib/config/contracts'
+import { config } from '@/lib/config/wagmi'
 import { createClient } from '@/lib/utils/supabase/server'
 import { createViemClient } from '@/lib/utils/viemClient'
 import { IChannelsRepository } from '@/use-cases/interfaces/channels-repository.interface'
-import { Address, PublicClient, zeroAddress } from 'viem'
+import { Address, getAddress, PublicClient, zeroAddress } from 'viem'
 
 // TODO: move to a common file
 enum SUPABASE_STATUSES {
@@ -71,7 +72,7 @@ export class ChannelsRepository implements IChannelsRepository {
     return data.id
   }
 
-  async getChannelByAddress(channelAddress: Address) {
+  async getChannelRowByAddress(channelAddress: Address) {
     const supabase = await createClient()
 
     const { data, error } = await supabase
@@ -87,6 +88,18 @@ export class ChannelsRepository implements IChannelsRepository {
     }
 
     return data
+  }
+
+  async getChannelInContract(channelAddress: Address) {
+    const [name, description /*symbol*/] = await Promise.all([
+      readChannelName(config, { address: channelAddress }),
+      readChannelChannelDescription(config, { address: channelAddress }),
+    ])
+
+    return {
+      name,
+      description,
+    }
   }
 
   // OLD
@@ -108,7 +121,7 @@ export class ChannelsRepository implements IChannelsRepository {
       address: channelAddress,
     }
 
-    const [name, symbol, owner] = await Promise.all([
+    const [name, symbol, description] = await Promise.all([
       this.client.readContract({
         ...channelContract,
         functionName: 'name',
@@ -117,17 +130,14 @@ export class ChannelsRepository implements IChannelsRepository {
         ...channelContract,
         functionName: 'symbol',
       }),
-      zeroAddress,
-      // this.client.readContract({
-      //   ...channelContract,
-      //   functionName: 'owner',
-      // }),
+      'Hardcoded Default Descripton Example',
     ])
 
     return {
       name,
+      description,
       symbol,
-      owner,
+      owner: getAddress(zeroAddress),
       address: channelAddress,
     }
   }

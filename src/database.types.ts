@@ -273,39 +273,30 @@ export type Database = {
       }
       channels: {
         Row: {
-          avatar_url: string | null
           channel_address: string
           created_at: string | null
-          description: string | null
           env_type: Database["public"]["Enums"]["env_type"] | null
           id: number
-          name: string | null
           owner_address: string | null
           verification_status:
             | Database["public"]["Enums"]["verification_status"]
             | null
         }
         Insert: {
-          avatar_url?: string | null
           channel_address: string
           created_at?: string | null
-          description?: string | null
           env_type?: Database["public"]["Enums"]["env_type"] | null
           id?: number
-          name?: string | null
           owner_address?: string | null
           verification_status?:
             | Database["public"]["Enums"]["verification_status"]
             | null
         }
         Update: {
-          avatar_url?: string | null
           channel_address?: string
           created_at?: string | null
-          description?: string | null
           env_type?: Database["public"]["Enums"]["env_type"] | null
           id?: number
-          name?: string | null
           owner_address?: string | null
           verification_status?:
             | Database["public"]["Enums"]["verification_status"]

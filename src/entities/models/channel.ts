@@ -1,26 +1,10 @@
-import { isAddress, Omit } from 'viem'
+import { Omit } from 'viem'
 import { z } from 'zod'
-import { channelRequestStatusSchema, channelsRowSchema } from '@/database.schemas'
-
-export const channelInContractSchema = z.object({
-  name: z.string(),
-  owner: z.string(),
-  symbol: z.string(),
-})
-
-export const channelSchema = z.object({
-  ...channelInContractSchema.shape,
-  isFollowing: z.boolean().optional(),
-  followersCount: z.number().optional(),
-  status: channelRequestStatusSchema,
-  address: z
-    .string()
-    .min(1)
-    .refine((val) => isAddress(val)),
-})
+import { channelsRowSchema } from '@/database.schemas'
+import { channelInContractSchema } from '../schemas/channels'
 
 export type ChannelRow = z.infer<typeof channelsRowSchema>
 export type ChannelInContract = z.infer<typeof channelInContractSchema>
-export type Channel = Omit<z.infer<typeof channelsRowSchema>, 'env_type' | 'verification_status'>
-export type SuggestedChannel = ChannelRow & { followersCount: number; isFollowing: boolean }
+export type Channel = ChannelRow & ChannelInContract
+export type SuggestedChannel = Channel & { followersCount: number; isFollowing: boolean }
 // export type Channel = ChannelRow & { followersCount: number }

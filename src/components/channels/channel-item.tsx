@@ -14,8 +14,8 @@ export default function ChannelItem({
   userAddress,
 }: {
   withFollowButton?: boolean
-  name: Channel['name']
-  symbol: Channel['description']
+  name: string
+  symbol: string
   address: Address //Channel['channel_address']
   className?: string
   userAddress?: Address
