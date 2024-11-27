@@ -20,7 +20,6 @@ export default function SidebarBody({
 
   const activeChannel = channels?.find(({ channel_address }) => channel_address === address)
   const showFollowButton = !!(isLeaderboard && userAddress)
-  const filteredChannels = channels?.filter(({ channel_address }) => channel_address !== address)
 
   return (
     <>
@@ -38,7 +37,7 @@ export default function SidebarBody({
       <SidebarContent>
         <SidebarGroup className='gap-3'>
           <SidebarGroupContent>
-            {filteredChannels?.map((channel, index) => (
+            {channels?.map((channel, index) => (
               <ChannelItem
                 key={index}
                 address={channel.channel_address}
