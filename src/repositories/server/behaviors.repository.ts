@@ -1,11 +1,20 @@
+import 'server-only'
+
 import { SupabaseError } from '@/entities/errors/common'
 import { EntityType } from '@/entities/types/behaviors'
 import { createClient } from '@/lib/utils/supabase/server'
+import { createViemClient } from '@/lib/utils/viemClient'
 import { IBehaviorsRepository } from '@/use-cases/interfaces/behaviors-repository.interface'
-import { Address } from 'viem'
+import { Address, PublicClient } from 'viem'
+import { readBehaviorGetTokenIdsOfUser, readBehaviorUserToTokenIds } from '@/generated'
+import { config } from '@/lib/config/wagmi'
 
 export class BehaviorsRepository implements IBehaviorsRepository {
-  constructor() {}
+  // private client: PublicClient
+
+  constructor() {
+    // this.client = createViemClient()
+  }
 
   async getBehaviorByConsumerAddress(address: Address) {
     const supabase = await createClient()
@@ -42,4 +51,18 @@ export class BehaviorsRepository implements IBehaviorsRepository {
 
     return data
   }
+
+  async getUserBehaviorTokenId(address: Address) {
+    const defaultBehaviorIndex = 0
+    const tokenIds = await readBehaviorGetTokenIdsOfUser(config, { args: [address] })
+
+    return tokenIds[defaultBehaviorIndex]
+  }
+
+  async getAction(tokenId: number, actionType: ActionsEnum, entityType: EntityType) {}
+}
+
+enum ActionsEnum {
+  LIKE,
+  FOLLOW,
 }
