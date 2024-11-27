@@ -1,10 +1,10 @@
 import OldArticle from '@/components/articles/old-article'
 import { Address, isAddress } from 'viem'
 import NoArticles from './no-articles'
-import getArticlesByChannelAddressController from '@/controllers/articles/get-articles-by-channel-address.controller'
+import getPublicationsByChannelAddressController from '@/controllers/publications/get-publications-by-channel-address.controller'
 
 async function getArticles(channelAddress: Address) {
-  return getArticlesByChannelAddressController({ channelAddress })
+  return getPublicationsByChannelAddressController({ channelAddress })
 }
 
 export default async function ArticlesList({

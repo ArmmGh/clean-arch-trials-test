@@ -5,14 +5,7 @@ import Image from 'next/image'
 import ArticleHtmlDialog from './ArticleHtmlDialog'
 import type { Article } from '@/entities/models/article'
 
-export default function Article({
-  name,
-  description,
-  date,
-  image,
-  htmlContent,
-  ...props
-}: Omit<Article, 'externalUrl' | 'emojis' | 'nftId'>) {
+export default function Article({ name, description, date, image, htmlContent, ...props }: any) {
   return (
     <div className='overflow-hidden rounded-lg border'>
       <div className='relative h-48 w-full'>

@@ -1,16 +1,32 @@
 import { SupabaseError } from '@/entities/errors/common'
+import { readChannelCurrentId, readChannelTokenUri } from '@/generated'
+import { config } from '@/lib/config/wagmi'
 import { createClient } from '@/lib/utils/supabase/server'
-import { createViemClient } from '@/lib/utils/viemClient'
 import { IPublicationsRepository } from '@/use-cases/interfaces/publications-repository.interface'
-import { PublicClient } from 'viem'
+import { create, KuboRPCClient } from 'kubo-rpc-client'
+import { Address } from 'viem'
 
 export class PublicationsRepository implements IPublicationsRepository {
-  private client: PublicClient
-  private envType: typeof process.env.NODE_ENV
+  private kuboClient: KuboRPCClient
 
   constructor() {
-    this.client = createViemClient()
-    this.envType = process.env.NODE_ENV
+    this.kuboClient = create({
+      host: process.env.KUBO_HOST,
+      port: process.env.KUBO_PORT,
+      protocol: process.env.KUBO_PROTOCOL,
+    })
+  }
+
+  async getPublicationTokenUri(channelAddress: Address, publicationIndex: bigint) {
+    const tokenUri = await readChannelTokenUri(config, { address: channelAddress, args: [publicationIndex] })
+
+    return tokenUri
+  }
+
+  async getLastPublicationIndexByChannel(channelAddress: Address) {
+    const currentId = readChannelCurrentId(config, { address: channelAddress })
+
+    return currentId
   }
 
   async getPublicationsByChannelId(channelId: number) {
@@ -24,5 +40,11 @@ export class PublicationsRepository implements IPublicationsRepository {
     }
 
     return publications
+  }
+
+  async getContentByCID(cid: string) {
+    const content = this.kuboClient.cat(cid)
+
+    return content
   }
 }

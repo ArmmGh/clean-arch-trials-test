@@ -1,5 +1,5 @@
-import ArticlePreview from '@/components/articles/article/article-preview'
-import { PresentedPublication } from '@/controllers/articles/get-articles-by-channel-address.controller'
+import PublicationPreview from '@/components/publications/publication-preview'
+import { PresentedPublication } from '@/controllers/publications/get-publications-by-channel-address.controller'
 import { PresentedChannelMetadata } from '@/controllers/channels/get-channel-metadata.controller'
 import { use } from 'react'
 import { Address } from 'viem'
@@ -19,17 +19,12 @@ export default function Publications({
     <div>
       {publications.length ? (
         <div className='space-y-[13px] pb-5'>
-          {publications.map((article: any, index: number) => (
-            <ArticlePreview
-              id={article.id}
+          {publications.map((publication, index: number) => (
+            <PublicationPreview
               channelAddress={channelAddress}
               key={index}
-              date={article.date}
-              description={article.description}
-              image={article.image}
-              name={article.name}
-              emojis={article.emojis}
               channelMetadata={channelMetadata}
+              {...publication}
             />
           ))}
         </div>

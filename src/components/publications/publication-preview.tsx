@@ -1,32 +1,31 @@
+// TODO: rename publication to article
 import { Card } from '@/components/ui/card'
 import { type Article } from '@/entities/models/article'
 import Link from 'next/link'
 import { Address } from 'viem'
-import ArticleHeader from './article-header'
-import ArticleContent from './article-content'
-import ArticlePreviewFooter from './article-preview-footer'
+import ArticleHeader from '../articles/article/article-header'
+import ArticleContent from '../articles/article/article-content'
+import ArticlePreviewFooter from '../articles/article/article-preview-footer'
+import { type PublicationPreview } from '@/entities/models/publication'
 
-export default function ArticlePreview({
-  id,
+export default function PublicationPreview({
   image,
   date,
   name,
   description,
-  emojis = [],
   channelAddress,
   channelMetadata,
+  index,
 }: {
   image: Article['image']
   date: Article['date']
   name: Article['name']
+  index: PublicationPreview['index']
   description: Article['description']
-  id: Article['id']
-  isPreview?: boolean
-  emojis: Article['emojis']
   channelAddress: Address
   channelMetadata: { avatarUrl: string; followers: string; name: string } | null
 }) {
-  const url = `/channel/${channelAddress}/article/${id}`
+  const url = `/channel/${channelAddress}/publication/${index}`
 
   return (
     <Card className='rounded-xl border border-slate-200 bg-white shadow-none'>
@@ -36,7 +35,7 @@ export default function ArticlePreview({
         <ArticleContent description={description} image={image} name={name} />
       </Link>
 
-      <ArticlePreviewFooter emojis={emojis} />
+      <ArticlePreviewFooter />
     </Card>
   )
 }

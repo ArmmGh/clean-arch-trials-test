@@ -1,4 +1,4 @@
-import getArticlesByChannelAddressController from '@/controllers/articles/get-articles-by-channel-address.controller'
+import getPublicationsByChannelAddressController from '@/controllers/publications/get-publications-by-channel-address.controller'
 import { Address } from 'viem'
 import SuggestedChannels from './suggested-channels'
 import getChannelMetadataController from '@/controllers/channels/get-channel-metadata.controller'
@@ -9,7 +9,7 @@ import SuggestedChannelsSkeleton from '@/components/skeletons/suggested-channels
 
 const getPublications = async (channelAddress: Address) => {
   try {
-    return getArticlesByChannelAddressController({ channelAddress })
+    return getPublicationsByChannelAddressController({ channelAddress })
   } catch (error) {
     return []
   }

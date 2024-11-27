@@ -1,14 +1,13 @@
 import { Card, CardFooter } from '@/components/ui/card'
 import { type Article } from '@/entities/models/article'
 import React from 'react'
-import ArticleEditor from '../article-editor'
-import ArticleHeader from './article-header'
-import ArticleContent from './article-content'
-import ArticleEmojis from './article-emojis'
+import ArticleEditor from '../articles/article-editor'
+import ArticleHeader from '../articles/article/article-header'
+import ArticleContent from '../articles/article/article-content'
+import ArticleEmojis from '../articles/article/article-emojis'
 
-export default function ArticleDetailed({
+export default function PublicationDetailed({
   htmlContent,
-  id,
   emojis,
   name,
   image,
@@ -17,7 +16,7 @@ export default function ArticleDetailed({
   channelMetadata,
   ...props
 }: {
-  id: Article['id']
+  index: number
   htmlContent: Article['htmlContent']
   name: Article['name']
   image: Article['image']

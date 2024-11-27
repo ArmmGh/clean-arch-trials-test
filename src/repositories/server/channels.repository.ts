@@ -54,24 +54,6 @@ export class ChannelsRepository implements IChannelsRepository {
     return channels
   }
 
-  async getChannelIdByAddress(channelAddress: Address) {
-    const supabase = await createClient()
-
-    const { data, error } = await supabase
-      .from('channels')
-      .select('id')
-      .eq('channel_address', channelAddress)
-      // .eq('env_type', this.envType)
-      .limit(1)
-      .single()
-
-    if (error) {
-      throw new SupabaseError(error.message)
-    }
-
-    return data.id
-  }
-
   async getChannelRowByAddress(channelAddress: Address) {
     const supabase = await createClient()
 

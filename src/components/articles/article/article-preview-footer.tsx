@@ -3,7 +3,7 @@ import Action from './article-action'
 import { Bookmark, MessageSquare, Share2 } from 'lucide-react'
 import ArticleEmojis from './article-emojis'
 
-export default function ArticlePreviewFooter({ emojis = [] }: { emojis: { emoji: string; count?: number }[] }) {
+export default function ArticlePreviewFooter({ emojis = [] }: { emojis?: { emoji: string; count?: number }[] }) {
   return (
     <CardFooter className='items-center justify-between px-5 pb-6'>
       <ArticleEmojis emojis={emojis} />

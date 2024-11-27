@@ -13,13 +13,6 @@ export const getArticleSchema = z.object({
   id: z.number(),
   nftId: z.number(),
   htmlContent: z.string(),
-  emojis: z.array(
-    z.object({
-      emoji: z.string(),
-      count: z.number(),
-    }),
-  ),
-  channelAvatarUrl: z.string(),
 })
 
 export type Article = z.infer<typeof getArticleSchema>

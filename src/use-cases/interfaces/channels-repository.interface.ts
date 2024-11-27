@@ -1,13 +1,10 @@
-import { Channel, ChannelInContract } from '@/entities/models/channel'
+import { ChannelInContract } from '@/entities/models/channel'
 import { ChannelRequest } from '@/entities/types/channels/channel-request.type'
-import { channelsRowSchema } from '@/database.schemas'
 import { Address } from 'viem'
-import { z } from 'zod'
 import { ChannelRow } from '@/entities/types/channels/index.types'
 
 export interface IChannelsRepository {
   getAllChannelRows(): Promise<ChannelRow[]>
-  getChannelIdByAddress(channelAddress: Address): Promise<number>
   getChannelRowByAddress(channelAddress: Address): Promise<ChannelRow> //TODO: fix Channel Type
   getUserChannelRows(userAddress: Address): Promise<ChannelRow[]>
   getChannelInContract(channelAddress: Address): Promise<ChannelInContract>
