@@ -178,7 +178,7 @@ export const sanitizeArticleContent = (unsanitizedContent: string): string => {
 
 export const prepareIpfsContent = async (content: AsyncIterable<Uint8Array>): Promise<string> => {
   try {
-    if (!(content instanceof Uint8Array)) {
+    if (!content) {
       throw new Error('Invalid content')
     }
 

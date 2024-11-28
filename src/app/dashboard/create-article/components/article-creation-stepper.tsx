@@ -125,7 +125,6 @@ export default function ArticleCreationStepper({ activeChannelAddress }: { activ
             if (key && values[index]) {
               const isImage = key === 'image'
               const defaultImage = `ipfs://${process.env.NEXT_PUBLIC_DEFAULT_METADATA_IMAGE}`
-
               acc.push({ key, value: isImage ? defaultImage : values[index], isDefault: true })
             }
             return acc
@@ -167,6 +166,8 @@ export default function ArticleCreationStepper({ activeChannelAddress }: { activ
       content: sanitizedArticleContent,
       metadata: data.metadata,
     })
+
+    console.log(metadata)
 
     if (metadata) {
       const hash = await writeContractAsync({
