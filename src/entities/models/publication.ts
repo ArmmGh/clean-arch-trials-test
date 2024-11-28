@@ -7,4 +7,13 @@ export type PublicationRow = z.infer<typeof publicationsRowSchema>
 export type PublicationMetadata = z.infer<typeof publicationMetadataSchema>
 export type PublicationPreview = PublicationMetadata & { index: number }
 export type Publication = PublicationPreview
-export type PublicationInHomePage = Publication & { channelAddress: Address }
+
+type ChannelInPublication = {
+  channel: {
+    address?: Address
+    name?: string
+    avatarUrl?: string
+  }
+}
+
+export type PublicationInHomePage = Publication & ChannelInPublication

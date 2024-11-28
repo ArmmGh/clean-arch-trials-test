@@ -81,6 +81,7 @@ export class ChannelsRepository implements IChannelsRepository {
     return {
       name,
       description,
+      // avatar_url TODO: in ffuture
     }
   }
 

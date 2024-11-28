@@ -1,6 +1,5 @@
 import getAddressFromSession from '@/actions/utils/get-address-from-session.util'
-import ArticleItemSmall from '@/components/articles/article-item-small'
-import getLatestArticlesController from '@/controllers/articles/get-latest-articles.controller'
+import PublicationSmall from '@/components/publications/publication-small'
 import getAllPublicationsController from '@/controllers/publications/get-all-publications.controller'
 import React from 'react'
 import { Address } from 'viem'
@@ -26,15 +25,17 @@ export default async function RootPage(props: { searchParams: Promise<SearchPara
   return (
     <div className='grid grid-cols-3 gap-[30px] py-6'>
       {publications.map((publication, index) => (
-        <ArticleItemSmall
-          id={index}
-          // id={publication.id}
+        <PublicationSmall
+          index={publication.index}
+          href={publication.href}
           channelAddress={publication.channelAddress}
           date={publication.date}
           name={publication.name}
           description={publication.description}
           image={publication.image}
-          key={index}
+          key={`${publication.index}:${index}`}
+          channelImage={publication.channelImage}
+          channelName={publication.channelName}
         />
       ))}
     </div>

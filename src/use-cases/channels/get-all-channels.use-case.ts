@@ -25,6 +25,7 @@ export default async function getAllChannelsUseCase(userAddress?: Address) {
     .map((channelRow, index) => {
       const channelInContract = channelsInContracts[index]
       if (!channelInContract) return null
+
       return {
         ...channelRow,
         ...channelInContract,

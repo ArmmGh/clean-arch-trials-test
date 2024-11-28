@@ -10,5 +10,6 @@ export default async function getChannelMetadataUseCase(channelAddress: Address)
     avatarUrl: channel.avatar_url,
     followers: 0,
     name: channel.name,
+    address: channelAddress,
   }
 }

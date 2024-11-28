@@ -5,13 +5,7 @@ import { z } from 'zod'
 export const channelInContractSchema = z.object({
   name: z.string(),
   description: z.string(),
-  owner: z.string().optional(),
-  symbol: z.string().optional(),
   avatar_url: z.string().optional(),
-  address: z
-    .string()
-    .refine((val) => isAddress(val))
-    .optional(),
 })
 
 export const channelSchema = z.object({
